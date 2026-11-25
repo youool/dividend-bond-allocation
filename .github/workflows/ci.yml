@@ -1,0 +1,28 @@
+name: 自检
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 只装回测内核真正需要的两个库。
+      # 不装 akshare：自检不该依赖外部数据接口，否则接口抖动会让 CI 变红。
+      - name: 安装依赖
+        run: pip install "pandas>=2.2,<4" "numpy>=1.26"
+
+      - name: 内核自检（与买入持有对齐）
+        run: python src/backtest.py --test
+
+      - name: 未来函数三关
+        run: python src/check_lookahead.py

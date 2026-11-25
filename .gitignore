@@ -13,3 +13,4 @@ output/*.log
 output/*.txt
 *.tmp
 ~$*
+report/_backup*.docx
