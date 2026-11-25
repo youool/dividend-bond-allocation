@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>策略自检 · 第七、八轮：灵活化的边界与唯一增量</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f6f6f3; --card: #ffffff; --line: #e7e5df; --line-2: #d8d5cc;
+    --text: #23221e; --text-2: #5d5c57; --text-3: #8b897f;
+    --blue: #378ADD; --blue-deep: #185FA5; --blue-bg: #E6F1FB;
+    --green: #1D9E75; --green-bg: #E1F5EE;
+    --amber: #BA7517; --amber-bg: #FAEEDA;
+    --red: #C0392B; --red-bg: #FCEBEB;
+    --purple: #534AB7; --purple-bg: #EEEDFE;
+  }
+  body { background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px 100px; }
+
+  header { padding: 40px 0 26px; border-bottom: 1px solid var(--line-2); margin-bottom: 30px; }
+  .kicker { font-size: 12px; color: var(--text-3); letter-spacing: .4px; text-transform: uppercase; }
+  h1 { font-size: 26px; font-weight: 500; letter-spacing: -.4px; margin: 8px 0 12px; }
+  .lede { font-size: 15px; color: var(--text-2); max-width: 680px; }
+  .lede strong { color: var(--text); font-weight: 500; }
+
+  h2 { font-size: 17px; font-weight: 500; margin: 44px 0 6px; letter-spacing: -.2px; }
+  .h2sub { font-size: 13px; color: var(--text-3); margin-bottom: 16px; }
+  h3 { font-size: 14px; font-weight: 500; margin: 22px 0 8px; color: var(--text-2); }
+  p { margin: 10px 0; color: var(--text-2); }
+  p strong { color: var(--text); font-weight: 500; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px; margin: 14px 0; }
+  .card.tight { padding: 14px 16px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0; }
+  th { text-align: left; font-weight: 500; color: var(--text-3); font-size: 11.5px;
+    padding: 7px 8px; border-bottom: 1px solid var(--line-2); white-space: nowrap; }
+  td { padding: 7px 8px; border-bottom: 1px solid var(--line); color: var(--text-2); }
+  tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.name { color: var(--text); }
+  .muted { color: var(--text-3); }
+  .win { color: var(--green); font-weight: 500; }
+  .lose { color: var(--red); font-weight: 500; }
+  .hl { background: #fbfaf6; }
+
+  .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 5px;
+    vertical-align: 1px; }
+  .t-ok { background: var(--green-bg); color: #0F6E56; }
+  .t-no { background: var(--red-bg); color: #9B2C1E; }
+  .t-warn { background: var(--amber-bg); color: #8A5A12; }
+  .t-info { background: var(--blue-bg); color: var(--blue-deep); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; }
+  .stat .k { font-size: 11.5px; color: var(--text-3); }
+  .stat .v { font-size: 21px; font-weight: 500; letter-spacing: -.4px; margin-top: 3px;
+    font-variant-numeric: tabular-nums; }
+  .stat .n { font-size: 11.5px; color: var(--text-3); margin-top: 2px; }
+
+  /* 仓位分布条 */
+  .hist { display: flex; align-items: flex-end; gap: 3px; height: 120px; margin: 8px 0 4px; }
+  .hist .col { flex: 1; background: var(--line-2); border-radius: 2px 2px 0 0; position: relative; }
+  .hist .col.on { background: var(--green); }
+  .hist-x { display: flex; gap: 3px; font-size: 10px; color: var(--text-3); }
+  .hist-x span { flex: 1; text-align: center; }
+
+  /* 横向条 */
+  .row { display: grid; grid-template-columns: 86px 1fr 74px; gap: 10px; align-items: center;
+    margin: 7px 0; font-size: 12.5px; }
+  .row .lbl { color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .row .track { height: 16px; background: #efeee8; border-radius: 3px; overflow: hidden; }
+  .row .fill { height: 100%; border-radius: 3px; }
+  .row .val { text-align: right; color: var(--text-2); font-variant-numeric: tabular-nums; }
+
+  .callout { border-left: 3px solid var(--amber); background: var(--amber-bg);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 13px; color: #6B470E; }
+  .callout.blue { border-color: var(--blue); background: var(--blue-bg); color: var(--blue-deep); }
+  .callout.red { border-color: var(--red); background: var(--red-bg); color: #8B2A1D; }
+  .callout.green { border-color: var(--green); background: var(--green-bg); color: #0B5B47; }
+  .callout b { font-weight: 600; }
+
+  ol, ul { margin: 10px 0 10px 20px; color: var(--text-2); }
+  li { margin: 6px 0; }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 12px;
+    background: #f0efea; padding: 1px 5px; border-radius: 4px; color: #4a4943; }
+
+  .foot { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--text-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">策略自检 · 第七轮</div>
+  <h1>还能不能更灵活：十个实验的结论</h1>
+  <p class="lede">
+    主线（40% 红利低波 + 60% 国债 + 波动率闸门）已经跑通。<strong>这一轮的问题是：配置是不是太死板、加个盈亏线能不能更好。</strong>
+    答案是——<strong>盈亏线不是提升来源，是保险；「更灵活」这条路走到头了；唯一还没动过的六成仓位（国债久期）才是真金，但它正在失效。</strong>
+    <br><span style="font-size:12.5px;color:var(--text-3);">文末已更新：内核隐患已修复并逐字节验证，债端久期已落地为可复现支线。</span>
+  </p>
+</header>
+
+<h2>0 · 先确认地基没塌</h2>
+<div class="h2sub">任何结论之前，先证明算得对</div>
+
+<div class="grid3">
+  <div class="stat"><div class="k">回测内核自检</div><div class="v" style="color:var(--green)">通过</div><div class="n">与买入持有偏离 0.044%</div></div>
+  <div class="stat"><div class="k">未来函数三关</div><div class="v" style="color:var(--green)">通过</div><div class="n">执行日晚于信号日 / 不用未来价 / 滞后测试</div></div>
+  <div class="stat"><div class="k">新框架复刻 v3</div><div class="v" style="color:var(--green)">零差异</div><div class="n">143 / 95 个月仓位逐月一致</div></div>
+</div>
+
+<p>第三项是新做的：为了把「灵活化」拆成可单独开关的旋钮，重写了一套机制库。如果它复刻不出 v3 的数字，后面所有对比都不作数。结果<strong>逐月零差异</strong>，说明尺子是同一把。</p>
+
+<h2>1 · 「死板」不是感觉，是仓位分布</h2>
+<div class="h2sub">为什么会死板：代码里上限被锁死了</div>
+
+<p>原策略有两行关键设定：<code>MAX_EQUITY = BASE_EQUITY = 0.40</code>，以及 <code>scale = min(1.0, 目标波动/实际波动)</code>。
+两者合起来意味着：<strong>仓位只能往下走，永远回不到 40% 以上</strong>。所谓「动态」只有一个方向。</p>
+
+<div class="card">
+  <div style="font-size:12.5px;color:var(--text-3);margin-bottom:8px;">长周期版 143 个月的红利仓位分布</div>
+  <div class="hist" id="hist"></div>
+  <div class="hist-x" id="histx"></div>
+  <div style="font-size:12px;color:var(--text-3);margin-top:10px;">
+    <span style="display:inline-block;width:9px;height:9px;background:var(--green);border-radius:2px;margin-right:5px;"></span>112 个月（78%）停在 40%
+    <span style="display:inline-block;width:9px;height:9px;background:var(--line-2);border-radius:2px;margin:0 5px 0 14px;"></span>其余 31 个月：13 个月落在 35–39%，18 个月更低（最低 20%）
+  </div>
+</div>
+
+<p>可交易版更极端：95 个月里 <strong>82 个月（86%）</strong> 就停在 40%。所以「死板」这个判断是准确的——它不是一个偶尔调节的策略，是一个<strong>固定 40/60、外加偶发小幅减仓</strong>的策略。</p>
+
+<h2>2 · 你提的盈亏线：数据说它是保险，不是提升</h2>
+<div class="h2sub">这里有个必须先跨过的坑，否则会把「减仓」误读成「机制有效」</div>
+
+<div class="callout blue">
+  <b>暴露匹配：这轮最重要的方法论。</b>
+  仓位越低，Calmar 天然越高——因为国债占比高时组合波动小、回撤也小。
+  所以「Calmar 变好」根本不能证明机制有效，只能证明它减了仓。
+  正确做法：先画出「固定比例 30%→60%」的 Calmar 曲线，再用候选策略的平均仓位去曲线上插值，
+  得到「同等仓位但完全不做动态」的基准，两者相减才是机制的真实贡献。
+</div>
+
+<div class="card">
+<table>
+  <thead><tr>
+    <th>机制</th><th class="num">平均仓位</th><th class="num">全区间 Calmar</th>
+    <th class="num">同仓位固定版</th><th class="num">真实超额</th><th>判定</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="name">现状（波动闸门 8%）</td><td class="num">38%</td><td class="num">0.52</td><td class="num">0.37</td><td class="num">+0.16</td><td><span class="tag t-info">基准</span></td></tr>
+    <tr class="hl"><td class="name">止盈线：涨 10% 减到 30%</td><td class="num">32%</td><td class="num">0.45</td><td class="num">0.41</td><td class="num">+0.04</td><td><span class="tag t-no">无效</span></td></tr>
+    <tr><td class="name">回撤线：回撤 5% 压到 20%</td><td class="num">34%</td><td class="num">0.61</td><td class="num">0.39</td><td class="num">+0.22</td><td><span class="tag t-warn">仅在灾难年</span></td></tr>
+    <tr><td class="name">分档定仓（五档阶梯）</td><td class="num">39%</td><td class="num">0.60</td><td class="num">0.36</td><td class="num">+0.24</td><td><span class="tag t-warn">样本外退化</span></td></tr>
+    <tr><td class="name">打开上限（允许加到 50%）</td><td class="num">44%</td><td class="num">0.58</td><td class="num">0.34</td><td class="num">+0.24</td><td><span class="tag t-no">换手否决</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>止盈线是这轮最干净的一次证伪。</strong>它全区间 Calmar 1.28、回撤只 −5.1%，看起来是全场最优。但它的平均仓位只有 32%——把仓位压到 32% 再谈 Calmar，等于跑步比赛里少跑一圈。
+一旦和「固定 32%」对照，真实超额只剩 <strong>+0.04</strong>，等于零。</p>
+
+<p><strong>回撤线的表现分裂，而且分裂得很有规律：</strong>长周期版（含 2015 股灾、2018 熊市）真实超额 +0.22，是有价值的；可交易版（2019 年后）是 −0.03，纯成本；两个版本的样本外都是负的（−0.10 / −0.05）。
+一句话：<strong>它是灾难保险，买保险当然要付保费，而 2019 年后没发生过需要理赔的灾难。</strong></p>
+
+<h2>3 · 「更灵活」这条路，走到头了</h2>
+<div class="h2sub">这是本轮最重要的证伪，也是我自己上一轮判断被推翻的地方</div>
+
+<p>把上限从 40% 打开到 50%（简称 UP50），全区间表现确实全面胜出：长周期 Calmar 0.58 vs 0.52，可交易版 1.28 vs 1.14，回撤基本不动。到这一步，看上去「更灵活 = 更好」已经成立。</p>
+
+<p>然后我去看了它<strong>每个月到底动了多少</strong>：</p>
+
+<div class="card">
+  <div style="font-size:12.5px;color:var(--text-3);margin-bottom:10px;">仓位调整的激烈程度（长周期版 143 个月）</div>
+  <div class="row"><div class="lbl">UP50 原版</div>
+    <div class="track"><div class="fill" style="width:100%;background:var(--red)"></div></div>
+    <div class="val">6.5%/月</div></div>
+  <div class="row"><div class="lbl">加平滑后</div>
+    <div class="track"><div class="fill" style="width:32%;background:var(--green)"></div></div>
+    <div class="val">2.1%/月</div></div>
+  <div style="font-size:12px;color:var(--text-3);margin-top:8px;">
+    UP50 原版：方向切换 103 次，最大单月跳 23 个百分点。加平滑后：切换降到 48 次，达到可执行标准。
+  </div>
+</div>
+
+<p>把换手压到能实盘执行（每月平均动 2.1 个点、方向切换 48 次）之后：</p>
+
+<div class="card tight">
+<table>
+  <thead><tr><th>方案</th><th class="num">月均变动</th><th class="num">方向切换</th><th class="num">年化</th><th class="num">回撤</th><th class="num">Calmar</th></tr></thead>
+  <tbody>
+    <tr><td class="name">现状</td><td class="num">1.8%</td><td class="num">44</td><td class="num">6.3%</td><td class="num">−12.1%</td><td class="num">0.52</td></tr>
+    <tr><td class="name">UP50 原版</td><td class="num lose">6.5%</td><td class="num lose">103</td><td class="num">7.1%</td><td class="num">−12.4%</td><td class="num win">0.58</td></tr>
+    <tr class="hl"><td class="name">UP50 + 平滑（可执行）</td><td class="num win">2.1%</td><td class="num">48</td><td class="num">6.8%</td><td class="num lose">−13.0%</td><td class="num lose">0.53</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout red">
+  <b>结论：那点超额，一多半是靠高频调仓换来的。</b>
+  平滑之后 Calmar 从 0.58 掉回 0.53（几乎等于现状 0.52），回撤反而恶化 0.9 个百分点。
+  一个每月要把权益仓位翻来覆去、方向切换上百次的策略，纸面再漂亮也执行不了——
+  滑点没算、心理扛不住，而且那一百多次小决策里，任何一次微调都可能只是噪声。
+</div>
+
+<p>我也验证了它的优势<strong>不是</strong>「红利这十年涨得好」带来的：把红利年化整体扣掉 1/2/3 个百分点重跑，UP50 相对现状的优势（长周期 +0.5~0.8pct）并没消失。机制本身确实携带信息——<strong>但可执行性独立地把它否决了</strong>。两件事要分开说，不能混成一句「没用」。</p>
+
+<h2>4 · 真正的改进，在没人动过的那六成仓位</h2>
+<div class="h2sub">前面所有实验都在调 40% 的权益，国债那 60% 一次都没碰过</div>
+
+<p>补了十年国债（511260）和三十年国债（511090）的数据，后复权口径与现有数据同源。检验方式刻意做干净：<strong>权重表一个字不改，只把债券换掉</strong>，差异 100% 来自「持有了什么」。</p>
+
+<div class="card">
+<table>
+  <thead><tr><th>版本 / 起点</th><th>国债腿</th><th class="num">年化</th><th class="num">最大回撤</th><th class="num">Calmar</th><th>变化</th></tr></thead>
+  <tbody>
+    <tr><td class="name" rowspan="2">长周期 2017-09 起</td><td>五年 511010</td><td class="num">5.5%</td><td class="num">−9.7%</td><td class="num">0.56</td><td class="muted">—</td></tr>
+    <tr class="hl"><td>十年 511260</td><td class="num win">5.9%</td><td class="num win">−9.3%</td><td class="num win">0.64</td><td><span class="tag t-ok">更好</span></td></tr>
+    <tr><td class="name" rowspan="2">可交易 2019-02 起</td><td>五年 511010</td><td class="num">6.9%</td><td class="num">−6.3%</td><td class="num">1.09</td><td class="muted">—</td></tr>
+    <tr class="hl"><td>十年 511260</td><td class="num win">7.5%</td><td class="num">−6.3%</td><td class="num win">1.19</td><td><span class="tag t-ok">更好</span></td></tr>
+    <tr><td class="name" rowspan="2">共同区间 2023-07 起</td><td>十年 511260</td><td class="num">6.4%</td><td class="num">−4.8%</td><td class="num win">1.34</td><td><span class="tag t-ok">最优</span></td></tr>
+    <tr><td>三十年 511090</td><td class="num">8.5%</td><td class="num lose">−8.3%</td><td class="num lose">1.02</td><td><span class="tag t-no">不划算</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>十年的改进很干净：<strong>年化 +0.4~0.6 个百分点，最大回撤不恶化（甚至改善），Calmar +0.08~0.10</strong>。三十年是反面教材——收益最高，但把回撤从 −5.0% 拉到 −8.3%，Calmar 反而最低。「收益最高」不等于「配置最优」。</p>
+
+<p>顺手也测了权益端分散：拿 30% 权益给沪深300，结果<strong>更差</strong>（长周期 5.3% vs 5.9%，可交易 6.5% vs 7.5%）。沪深300 年化远低于红利，分散的代价大于收益——这和 v2 时代「把仓位让给沪深300」是同一个教训。</p>
+
+<h3>但久期的优势正在失效，这才是关键</h3>
+
+<div class="card">
+  <div style="font-size:12.5px;color:var(--text-3);margin-bottom:10px;">十年国债 减 五年国债 的年度收益差（后复权，2017–2026）</div>
+  <div id="yrs"></div>
+  <div style="font-size:12px;color:var(--text-3);margin-top:8px;">
+    9 年 6 胜 3 负。但 <b>2024 一年（+2.70%）就占了总差异的 29%</b>；2025 年起连续吃亏，2025Q1 回撤十年 −2.18% vs 五年 −1.56%。
+  </div>
+</div>
+
+<div class="callout">
+  <b>为什么不能全押十年：</b>2019 年十年期国债收益率约 3.3%，现在 1.8% 附近，已经下行 150bp。
+  久期赚的是「利率下行」的钱，而利率不可能无限往下。过去七年十年国债跑赢的那部分里，
+  票息是可持续的（约 30–50bp），资本利得是不可持续的。
+  <b>所以结论不是「换成十年」，而是「可以考虑 5:5 混合」</b>——长周期 5.7%/Calmar 0.60、可交易 7.2%/1.14，介于两者之间。
+</div>
+
+<h2>5 · 顺带查出一个内核隐患（已修）</h2>
+
+<p><code>backtest.py</code> 里有一句 <code>nav if nav &gt; 0 else INIT_CAPITAL</code>。当价格缺失导致净值算不出来（NaN）时，<code>NaN &gt; 0</code> 是 False，于是<strong>静默返回 1.0</strong>——把数据缺口伪装成「净值不动」。</p>
+
+<p>这次跑三十年国债（2019 年还没有数据）时踩到了。后来做了个干净的复现：把可交易版权重表整体前移 4 年（512890 那时还没上市），结果是<strong>净值唯一值只有 1 个、年化 0.00%、没有任何报警</strong>。</p>
+
+<div class="callout" style="margin:14px 0;">
+  <b>已经修好了，而且没有改动任何结论。</b> 现在把三种情况分开处理：<br>
+  ① 首个执行日之前 = 尚未建仓，记初始资金（这是「现金」，不是「数据缺失」）；<br>
+  ② 持仓资产价格 NaN = 直接抛错，并指出是哪一天、哪个资产；<br>
+  ③ 目标权重为 0 的资产不参与除法（<code>0/NaN</code> 仍是 NaN，会把整条持仓污染）。<br>
+  另外加了两条前置校验：权重表重复日期、资产首个价格晚于首个执行日（报错里直接给出建议的 <code>start</code> 值）。<br>
+  <b>验证方式：</b>修完后 <code>final_nav_*</code> / <code>final_metrics_*</code> 四个文件的 md5 与修复前<strong>逐字节一致</strong>——改的是错误处理，不是算术。
+</div>
+
+<p>顺带修了 <code>allocation.py</code> 一处同类问题：波动率窗口里若有缺失，<code>std()</code> 会跳过 NaN 用剩下的算，可长度检查照样通过。可交易版 2019-01 的 60 日窗口里只有 <strong>9 个有效样本</strong>（512890 到 1 月 18 日才有数据），估出来的组合波动是 <strong>1.81%</strong>，真实约 6%，失真三倍。现在要求「有效值数 = 窗口长度」，否则退回固定比例。影响仅限于那 3 期的诊断列变成 NaN，仓位与净值完全不变。</p>
+
+<h2>6 · 所以，还能怎么优化</h2>
+
+<div class="grid2">
+  <div class="card tight" style="border-color:#C9E5DA;background:#FAFEFC;">
+    <div style="font-size:12px;color:#0B5B47;margin-bottom:6px;">值得做</div>
+    <ul style="margin-left:16px;font-size:13px;">
+      <li><b>债端 5:5 混合久期</b>：+0.2~0.3pct 年化，不赌方向　<span style="color:#0B5B47">✓ 已落地为支线</span></li>
+      <li><b>把「为什么没加盈亏线」写进报告</b>：完整证伪过程比结果更有说服力</li>
+      <li><b>报告补一节「Calmar 有偏」</b>：说明为什么用暴露匹配、为什么还要看年化</li>
+    </ul>
+  </div>
+  <div class="card tight" style="border-color:#F0D9D4;background:#FFFCFB;">
+    <div style="font-size:12px;color:#8B2A1D;margin-bottom:6px;">不建议</div>
+    <ul style="margin-left:16px;font-size:13px;">
+      <li><b>止盈线</b>：真实超额 ≈ 0，纯属把仓位压低</li>
+      <li><b>回撤止损作为常规配置</b>：平静期是纯成本</li>
+      <li><b>打开上限 + 高频调仓</b>：可执行性一票否决</li>
+      <li><b>全押十年国债</b>：久期优势 2025 起已在衰减</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout green" style="margin-top:18px;">
+  <b>一句话交代这一轮：</b>主线不用改。它的「死板」不是缺陷，是这套策略在证伪了择时之后必然的样子——
+  既然方向不可预测，能做的就只剩「持有什么」和「持多少」，而「持多少」的灵活度已被换手成本吃干净。
+  <b>真正还剩的空间只有「持有什么」，也就是国债久期，而它正在随利率下行空间收窄而失效。</b>
+</div>
+
+<div class="callout" style="margin-top:14px;">
+  <b>支线已落地（第八轮）：</b>债端久期对比做成了可复现代码，入口 <code>src/run_side.py</code>，
+  结果在 <code>output/side_duration_*.csv</code>，图在 <code>charts/15_支线_久期_*.png</code>。
+  权重表冻结、只替换国债标的：5:5 混合在长周期版 +0.24pct、可交易版 +0.28pct，回撤反而略降。
+  <b>但结论是「成立但边际很薄」</b>：收益随十年占比完全单调（没有最优拐点），
+  股灾时十年债对冲更强、债熊时跌幅却是五年的 1.5 倍，而优势四成来自 2024 一年。
+  所以默认不进主线。
+</div>
+
+<div class="foot">
+  数据区间：长周期版 2015-01 至 2026-11（债端久期对比受十年国债上市时间限制，自 2017-08 起）；
+  可交易版 2019-01 至 2026-11。<br>
+  口径：后复权（分红再投资）、月末信号次日成交、双边万 2、份额法回测。<br>
+  复现：<code>src/mechanism.py</code> + <code>experiment_v4.py / v4b / v4c / v4d</code> + <code>experiment_duration.py / v4e</code>，
+  结果在 <code>output/exp/v4_*.csv</code>；支线在 <code>src/bond_duration.py</code> + <code>src/run_side.py</code>。
+</div>
+
+</div>
+
+<script>
+// 仓位分布：40% 一档单独高亮
+const bins = [
+  {label:'20-24', n:3}, {label:'25-29', n:7}, {label:'30-34', n:8},
+  {label:'35-39', n:13}, {label:'40', n:112}, {label:'41-44', n:0}, {label:'45-49', n:0}, {label:'50', n:0}
+];
+const maxN = Math.max(...bins.map(b=>b.n));
+const hist = document.getElementById('hist'), histx = document.getElementById('histx');
+bins.forEach(b=>{
+  const d = document.createElement('div');
+  d.className = 'col' + (b.label==='40' ? ' on' : '');
+  d.style.height = Math.max(2, b.n/maxN*100) + '%';
+  d.title = `${b.label}%：${b.n} 个月`;
+  hist.appendChild(d);
+  const s = document.createElement('span');
+  s.textContent = b.label==='40' ? '40' : (b.n ? b.label : '');
+  histx.appendChild(s);
+});
+
+// 分年度差异（十年 - 五年）
+const yrs = [
+  {y:'2018', v:1.62}, {y:'2019', v:-0.83}, {y:'2020', v:0.00}, {y:'2021', v:1.17},
+  {y:'2022', v:0.43}, {y:'2023', v:1.00}, {y:'2024', v:2.70}, {y:'2025', v:-0.73}, {y:'2026', v:1.61}
+];
+const box = document.getElementById('yrs');
+const vmax = Math.max(...yrs.map(d=>Math.abs(d.v)));
+yrs.forEach(d=>{
+  const row = document.createElement('div');
+  row.className = 'row';
+  const w = Math.abs(d.v)/vmax*100;
+  const color = d.v >= 0 ? 'var(--red)' : 'var(--green)';
+  row.innerHTML = `<div class="lbl">${d.y}</div>
+    <div class="track"><div class="fill" style="width:${Math.max(1,w)}%;background:${color};opacity:${d.v>=0?0.75:0.6}"></div></div>
+    <div class="val" style="color:${color}">${d.v>0?'+':''}${d.v.toFixed(2)}%</div>`;
+  box.appendChild(row);
+});
+</script>
+</body>
+</html>

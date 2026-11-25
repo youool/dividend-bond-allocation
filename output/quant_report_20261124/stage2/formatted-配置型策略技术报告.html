@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="docx-page-size" content="A4">
+<title>红利低波与国债的配置型策略：一次以证伪为主线的量化研究</title>
+<style>
+:root {
+  /* 字体 */
+  --ff-heading: "SimHei", "Microsoft YaHei", sans-serif;
+  --ff-body: "SimSun", "宋体", serif;
+  --ff-mono: "Consolas", "Courier New", monospace;
+
+  /* 字号 */
+  --fs-cover-title: 26pt;
+  --fs-cover-sub: 14pt;
+  --fs-cover-meta: 12pt;
+  --fs-h1: 17pt;
+  --fs-h2: 13.5pt;
+  --fs-h3: 12pt;
+  --fs-body: 12pt;
+  --fs-table: 10.5pt;
+  --fs-caption: 10pt;
+  --fs-mono: 9.5pt;
+  --fs-toc: 11pt;
+  --fs-toc-sub: 10.5pt;
+
+  --lh-body: 1.75;
+  --lh-heading: 1.45;
+  --lh-table: 1.45;
+
+  /* 颜色 */
+  --color-primary: #1A3D6D;
+  --color-accent: #8B2E2E;
+  --color-text: #1A1A1A;
+  --color-muted: #5F5F5F;
+  --color-border: #C9CDD4;
+  --color-thead: #EDF1F6;
+  --color-callout: #F2F5F9;
+
+  /* 间距 */
+  --spacing-paragraph: 0.6em;
+  --spacing-section: 1.9em;
+  --spacing-block: 1.0em;
+
+  --page-content-width: 15.6cm;
+}
+
+@page {
+  margin: 2.4cm 2.2cm 2.2cm 2.6cm;
+  @bottom-center { content: counter(page); }
+}
+@page cover {
+  @bottom-center { content: none; }
+}
+section[role="cover"] { page: cover; }
+
+body {
+  max-width: var(--page-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+}
+
+/* 封面 */
+.cover-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-cover-title);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+  text-indent: 0;
+  line-height: var(--lh-heading);
+  margin-top: 5.6cm;
+  margin-bottom: 0.5em;
+}
+.cover-sub {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-cover-sub);
+  color: var(--color-muted);
+  text-align: center;
+  text-indent: 0;
+  margin-bottom: 2.6em;
+}
+.cover-meta {
+  font-family: var(--ff-body);
+  font-size: var(--fs-cover-meta);
+  color: var(--color-text);
+  text-align: center;
+  text-indent: 0;
+  line-height: 2.1;
+  margin: 0;
+}
+
+/* 标题 */
+h1 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: var(--lh-heading);
+  text-indent: 0;
+  margin-top: var(--spacing-section);
+  margin-bottom: 0.55em;
+}
+h2 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: var(--lh-heading);
+  text-indent: 0;
+  margin-top: 1.5em;
+  margin-bottom: 0.45em;
+}
+
+/* 正文 */
+p {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-indent: 2em;
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: var(--spacing-paragraph);
+}
+
+ul, ol {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin-top: 0.35em;
+  margin-bottom: var(--spacing-paragraph);
+  padding-left: 2.4em;
+}
+li {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-align: justify;
+  margin-bottom: 0.25em;
+}
+
+/* 强调段落 */
+.callout {
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-callout);
+  padding: 0.55em 0.8em;
+  text-indent: 0;
+  margin-bottom: var(--spacing-block);
+}
+
+/* 表格 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ff-body);
+  font-size: var(--fs-table);
+  line-height: var(--lh-table);
+  margin-top: 0.5em;
+  margin-bottom: var(--spacing-block);
+}
+caption {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-align: left;
+  text-indent: 0;
+  padding-bottom: 0.35em;
+}
+th {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-table);
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--color-thead);
+  border: 1px solid var(--color-border);
+  padding: 0.38em 0.5em;
+  text-align: center;
+  line-height: var(--lh-table);
+}
+td {
+  font-family: var(--ff-body);
+  font-size: var(--fs-table);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: 0.34em 0.5em;
+  text-align: center;
+  line-height: var(--lh-table);
+}
+td.t-left { text-align: left; }
+td.t-strong { font-weight: 700; }
+
+/* 摘要卡 */
+.abstract-card td {
+  background: var(--color-callout);
+  border: 1px solid var(--color-border);
+  text-align: justify;
+  padding: 0.9em 1.1em;
+}
+.abstract-card p {
+  text-indent: 2em;
+  margin-bottom: 0.5em;
+}
+.abstract-card p.card-h {
+  font-family: var(--ff-heading);
+  font-weight: 700;
+  text-indent: 0;
+  margin-bottom: 0.55em;
+  color: var(--color-primary);
+}
+
+/* 图 */
+figure {
+  margin-top: 0.9em;
+  margin-bottom: var(--spacing-block);
+}
+figure p {
+  text-align: center;
+  text-indent: 0;
+  margin-bottom: 0.3em;
+}
+figure img {
+  max-width: 100%;
+}
+figcaption p {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-align: center;
+  text-indent: 0;
+  line-height: 1.5;
+}
+
+/* 代码 */
+pre {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.55;
+  background: var(--color-callout);
+  border-left: 3px solid var(--color-border);
+  padding: 0.6em 0.9em;
+  margin-top: 0.5em;
+  margin-bottom: var(--spacing-block);
+  white-space: pre-wrap;
+}
+
+/* 目录 */
+.toc-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+  text-indent: 0;
+  margin-top: 0.4em;
+  margin-bottom: 1.1em;
+}
+.toc-list, .toc-list ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-toc);
+  line-height: 1.85;
+}
+.toc-list > li {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-toc);
+  font-weight: 700;
+  margin-top: 0.45em;
+}
+.toc-list ol li {
+  font-family: var(--ff-body);
+  font-size: var(--fs-toc-sub);
+  font-weight: 400;
+  margin-top: 0.1em;
+}
+.toc-list a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<section role="cover">
+  <p class="cover-title">红利低波与国债的配置型策略</p>
+  <p class="cover-sub">——一次以证伪为主线的量化研究</p>
+  <p class="cover-meta">课程：量化交易</p>
+  <p class="cover-meta">组号：第 ＿＿ 组</p>
+  <p class="cover-meta">组长：＿＿＿＿</p>
+  <p class="cover-meta">成员：＿＿＿＿　＿＿＿＿</p>
+  <p class="cover-meta">2026 年 11 月</p>
+</section>
+
+<section role="cover">
+<nav class="doc-toc" aria-label="文档目录">
+  <p class="toc-title">目　录</p>
+  <ol class="toc-list">
+    <li><a href="#section-1">摘要</a></li>
+    <li><a href="#section-2">一、研究背景与问题</a>
+      <ol>
+        <li><a href="#section-2-1">1.1　出发点</a></li>
+        <li><a href="#section-2-2">1.2　本研究要回答的问题</a></li>
+        <li><a href="#section-2-3">1.3　报告结构</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-3">二、数据与回测设置</a>
+      <ol>
+        <li><a href="#section-3-1">2.1　数据来源</a></li>
+        <li><a href="#section-3-2">2.2　复权处理与三个数据处理问题</a></li>
+        <li><a href="#section-3-3">2.3　两个回测版本</a></li>
+        <li><a href="#section-3-4">2.4　回测内核</a></li>
+        <li><a href="#section-3-5">2.5　基准的选择</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-4">三、策略设计与迭代：六组实验</a>
+      <ol>
+        <li><a href="#section-4-1">3.1　初版：一个直觉上合理的择时策略</a></li>
+        <li><a href="#section-4-2">3.2　实验一：换估值锚，能不能救回来</a></li>
+        <li><a href="#section-4-3">3.3　实验二：把择时整个拆掉，对照一次</a></li>
+        <li><a href="#section-4-4">3.4　实验三：参数网格，24 组全输</a></li>
+        <li><a href="#section-4-5">3.5　实验四：如果只做配置，比例该定多少</a></li>
+        <li><a href="#section-4-6">3.6　实验五与六：窄幅择时与安慰剂检验</a></li>
+        <li><a href="#section-4-7">3.7　收敛：配置型策略 v3</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-5">四、回测结果</a>
+      <ol>
+        <li><a href="#section-5-1">4.1　指标表</a></li>
+        <li><a href="#section-5-2">4.2　净值与回撤</a></li>
+        <li><a href="#section-5-3">4.3　结果解读</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-6">五、讨论</a>
+      <ol>
+        <li><a href="#section-6-1">5.1　为什么趋势信号在这里失效</a></li>
+        <li><a href="#section-6-2">5.2　本研究的局限</a></li>
+        <li><a href="#section-6-3">5.3　可扩展的方向</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-7">六、边界检验：策略还能不能更灵活</a>
+      <ol>
+        <li><a href="#section-7-1">6.1　"死板"的技术来源</a></li>
+        <li><a href="#section-7-2">6.2　先换一把尺子：Calmar 对本组合有偏</a></li>
+        <li><a href="#section-7-3">6.3　换手：一票否决</a></li>
+        <li><a href="#section-7-4">6.4　再平衡本身值多少</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-8">七、支线与资产端扩展</a>
+      <ol>
+        <li><a href="#section-8-1">7.1　债端久期：十年比五年好吗</a></li>
+        <li><a href="#section-8-2">7.2　黄金：是保险，不是收益来源</a></li>
+        <li><a href="#section-8-3">7.3　创业板：同一标的，两个样本给出相反答案</a></li>
+        <li><a href="#section-8-4">7.4　任意时点进场，持有三年会怎样</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-9">八、结论</a></li>
+    <li><a href="#section-10">附录 A　复现步骤</a></li>
+  </ol>
+</nav>
+</section>
+
+<section role="body" data-page-restart="1">
+
+<h1 id="section-1">摘要</h1>
+
+<table class="abstract-card executive-summary">
+  <tbody>
+  <tr><td>
+    <p class="card-h">核心内容</p>
+    <p>本文记录一个量化策略从提出、被证伪到重构的完整过程。我们最初设计的是"以红利低波为底仓、用沪深300 估值分位定仓位、用 120 日均线做趋势扣减"的择时型策略。它在直觉上相当合理，样本内表现也不错（2015—2020 年年化 9.1%，跑赢两个基准），但样本外迅速失效：2021 年以后年化只有 1.2%，同期红利低波买入持有是 12.1%。</p>
+    <p>我们没有靠调参去挽救它，而是设计了六组对照实验，逐层排查原因。结论是：换估值锚无效；把择时整体拆掉、换成一个暴露完全相同但不做任何判断的固定配置，样本外年化从 1.5% 提升到 5.0%；24 组参数网格全部输给"什么都不做"；最后用 100 次随机重排的安慰剂检验证明，看起来有效的窄幅择时（夏普 0.99）落在随机分布的 14% 位置，估值方向没有信息量。</p>
+    <p>据此我们把策略重构为配置型：长期持有 40% 红利低波 + 60% 国债，每月末把比例拉回目标；当组合近 60 日已实现波动超过年化 8% 时按比例收缩权益（下限 20%），波动回落即恢复。该策略在可交易口径（2019—2026）实现年化 7.2%、最大回撤 −6.3%、夏普 0.80、Calmar 1.14，样本内与样本外表现一致。</p>
+    <p>主线之外，我们补了两组边界检验与三项资产端实验。边界检验的结论是：仓位层面的"灵活化"没有免费午餐——四组机制在暴露匹配后的真实超额只有 0.04–0.27，唯一双赢的 UP50 在被压到可执行换手后优势消失；真正确定的收益是再平衡溢价，同平均仓位下约 0.5–0.6 个百分点/年。资产端：十年国债单调改善但依赖利率下行，只做支线；黄金能把回撤腰斩，收益却完全靠金价，扣减 4 个百分点后即输给基准，是保险不是收益来源；创业板在同一标的的两个样本里结论相反，判为不稳健。最后，任意时点买入并持有三年的最差年化为 +1.17%，没有出现亏损窗口。</p>
+  </td></tr>
+  </tbody>
+</table>
+
+<p><strong>关键词</strong>：资产配置；波动率目标化；择时有效性；安慰剂检验；样本外检验</p>
+
+<h1 id="section-2">一、研究背景与问题</h1>
+
+<h2 id="section-2-1">1.1　出发点</h2>
+
+<p>本项目的起点不是"想做一个赚钱的策略"，而是一个具体的投资判断。组内成员是稳健型投资者，认同以股息为核心的收益来源，也认同在市场情绪低迷、估值处于历史低位时增加权益暴露。把这些判断翻译成可以计算的形式，最初得到的是三条规则：</p>
+
+<ol>
+  <li>底仓长期持有红利低波资产，因为股息是不依赖他人接盘的收益来源；</li>
+  <li>用沪深300 的市盈率分位判断整体贵贱，低估时加仓、高估时减仓；</li>
+  <li>用 120 日均线判断趋势，跌破就撤出，避免在下跌趋势里硬扛。</li>
+</ol>
+
+<p>这三条规则各自都有道理，合在一起也像是一个完整的策略。问题在于："有道理"和"有效"是两件不同的事，而区分这两件事，恰好是量化方法能提供、而主观判断提供不了的东西。</p>
+
+<h2 id="section-2-2">1.2　本研究要回答的问题</h2>
+
+<p>围绕这一点，我们把研究问题拆成三个层次，后一个以前一个的答案为前提：</p>
+
+<p><strong>问题一（是否存在）</strong>：这套择时规则是否真的创造了超额收益？换句话说，如果同时期什么都不判断、只是按同样的比例持有，结果会更好还是更差？</p>
+
+<p><strong>问题二（从哪里来）</strong>：如果存在超额，它来自哪里？是估值判断、趋势判断，还是仅仅因为承受了不同的市场暴露？</p>
+
+<p><strong>问题三（如何重建）</strong>：如果不存在，那么在承认"我们判断不了方向"的前提下，一个稳健型投资者能做出什么？</p>
+
+<p>必须强调的是，问题一的提法决定了整个研究的方法论。很多策略研究只报告策略本身的收益，然后与一个风险特征完全不同的基准（例如满仓沪深300）比较，得出"跑赢基准"的结论。这种比较无法回答择时是否有用，因为两者的权益暴露根本不同。要回答"择时有没有用"，对照组必须在暴露上与实验组对齐。</p>
+
+<h2 id="section-2-3">1.3　报告结构</h2>
+
+<p>本文第二节说明数据与回测设置；第三节按时间顺序记录六组实验，这是全文的核心；第四节给出最终策略的回测结果；第五节讨论机制与局限；<strong>第六节做边界检验</strong>，回答"能不能更灵活"；<strong>第七节把资产端没做完的三件事做完</strong>，并补一个任意时点进场的稳健性检验；第八节给出结论。所有数字均可在仓库 <code>output/</code> 目录下的 CSV 中追溯，复现步骤见附录。</p>
+
+<h1 id="section-3">二、数据与回测设置</h1>
+
+<h2 id="section-3-1">2.1　数据来源</h2>
+
+<p>数据全部来自公开免费接口，覆盖两个层次：</p>
+
+<ul>
+  <li><strong>ETF 实际价格</strong>：红利低波 ETF（512890）、沪深300 ETF（510300）、国债 ETF（511010）、货币 ETF（511880）。价格与分红记录来自新浪财经接口。</li>
+  <li><strong>指数数据</strong>：中证红利低波动全收益指数（H20269）、沪深300 全收益指数（H00300），来自中证指数有限公司官网，覆盖 2015 年起。注意均取<strong>全收益</strong>版本而非价格指数（H30269 / 000300）：两者在 2015 年的峰值分别为 14395.48 与 11188.01，差异见 4.1 节表 8 附。</li>
+</ul>
+
+<p>选择数据源时遇到一个具体障碍：东方财富的行情接口对同一 IP 的连续请求有频率限制，实测在连续拉取四只 ETF 全历史后会被封锁四十分钟以上。我们的处理不是等待，而是换源——ETF 走新浪，指数走中证官网。这件事写在这里，是因为它对应一个更普遍的原则：数据管道要有备用路径，不要在一个接口上死磕。</p>
+
+<h2 id="section-3-2">2.2　复权处理与三个数据处理问题</h2>
+
+<p>这一节记录实际踩到的三个坑，它们都会在无声无息中让回测结果失真。</p>
+
+<p><strong>第一，红利类资产必须用后复权价格。</strong>红利低波这类资产的分红收益是策略的核心来源，如果使用不复权价格，除息日的价格下跌会被计入亏损，等于把这部分收益整段删除。我们的做法是从接口取原始价格与分红记录，自行计算后复权因子。经核查，512890 本身不进行现金分红（股息留在净值内再投资），而 510300 分红 14 次、累计每股 0.88 元，511880 累计分红超过 33 元，后两者若不复权会严重低估。</p>
+
+<p><strong>第二，份额折算会被误记为分红。</strong>512890 在 2021 年 10 月 25 日进行过 1:2 的份额折算，价格从 1.639 直接变为 0.801，而接口把这次折算记录成了一条金额为 0 的分红。如果按常规方式处理，回测会看到一次 −51% 的"假暴跌"，净值曲线直接塌掉一块。我们在数据层单独识别这类事件并按倍数补回。</p>
+
+<p><strong>第三，指数化版本必须使用全收益指数。</strong>长周期版用指数替代 ETF，此时若使用价格指数而非全收益指数，红利的股息收益会被整体漏掉，长周期结论会系统性失真。</p>
+
+<p>处理完成后做了三项体检：行数是否足够、日期是否连续、是否存在空值或零价格。两张验真图显示 2015 年牛市顶、2018 年熊市、2022 年下跌段的位置都正确，序列没有断裂。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/01_价格曲线_验真.png" alt="数据验真" width="560"></p>
+  <figcaption><p>图 1　数据验真：四条归一化价格曲线，2015 年牛市顶、2018 熊市、2022 下跌起点位置均正确</p></figcaption>
+</figure>
+
+<h2 id="section-3-3">2.3　两个回测版本</h2>
+
+<p>单一数据区间无法同时满足"样本足够长"和"真实可执行"两个要求，因此我们并行报告两个版本：</p>
+
+<table>
+  <caption>表 1　两个回测版本的对比</caption>
+  <thead>
+    <tr><th>版本</th><th>数据</th><th>区间</th><th>回答什么问题</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">长周期版</td><td class="t-left">两条全收益指数 + 国债 ETF</td><td>2015-01-30 起</td><td class="t-left">策略在 2015 股灾、2018 熊市里扛不扛得住</td></tr>
+    <tr><td class="t-left">可交易版</td><td class="t-left">四只 ETF 实际价格</td><td>2019-01-31 起</td><td class="t-left">扣掉真实费用与跟踪误差后还剩多少</td></tr>
+  </tbody>
+</table>
+
+<p>长周期版证明逻辑成立，可交易版证明真的能执行。可交易版的起点由 512890 的上市日决定——它 2019 年 1 月 18 日才上市，这一只标的直接限制了整个样本的长度。这也是我们坚持保留指数版本的直接原因。</p>
+
+<h2 id="section-3-4">2.4　回测内核</h2>
+
+<p>回测采用<strong>份额法</strong>而非"每日按目标权重计算收益"。两者的区别很关键：后者等价于假设每天都在再平衡，会凭空产生收益、也凭空产生成本。份额法的做法是：在调仓日按目标权重换一次份额，之后份额不动，价值随价格自然漂移，权重因此缓慢偏离目标，直到下一个调仓日再拉回。这才是真实发生的事。</p>
+
+<p>三个必须对齐的细节：</p>
+
+<ol>
+  <li><strong>执行日</strong> = 信号日的下一个交易日。若同日成交，等于使用了收盘后才知道的信息。</li>
+  <li><strong>成交价</strong>：可交易版用次日开盘价；长周期版用收盘价，因为中证指数接口不提供开盘价。两个版本口径不同，报告中分别标注。</li>
+  <li><strong>手续费</strong>按成交金额双边收取：<code>费用 = 万2 × Σ|目标市值 − 当前市值|</code>。这个式子天然包含买入与卖出两侧，不需要再乘 2。</li>
+</ol>
+
+<p>内核上线前跑了一次自检：把权重固定为 100% 持有红利低波，跑出的净值必须与该标的买入持有完全一致。实测最大偏离 0.04%，且全部来自每一次调仓的重建仓成本。这条测试不通过，后面所有结论都不作数。</p>
+
+<h2 id="section-3-5">2.5　基准的选择</h2>
+
+<p>我们选了两个基准，而不是一个：</p>
+
+<ul>
+  <li><strong>主基准：沪深300 买入持有</strong>——代表"随便买个宽基躺着"的结果，是课程要求的横向对比对象。</li>
+  <li><strong>辅基准：红利低波买入持有</strong>——回答一个更尖锐的问题：绕了这么大一圈，是不是还不如直接买红利？</li>
+</ul>
+
+<p>两个都要看。配置型策略在牛市里一定跑输纯权益，单用沪深300 对比对它不公平；但只用红利做基准，又会掩盖"配置把收益拉低了多少"。并列呈现才说得清。</p>
+
+<h1 id="section-4">三、策略设计与迭代：六组实验</h1>
+
+<p>这一节是全文的重点。它的结构不是"我们设计了一个策略然后它很好"，而是"我们设计了一个策略，然后一步步证明它不行，最后换了一个方向"。</p>
+
+<h2 id="section-4-1">3.1　初版：一个直觉上合理的择时策略</h2>
+
+<p>初版规则（内部称 v2）如下，每月最后一个交易日判断一次，中途不动：</p>
+
+<ol>
+  <li><strong>基础权益仓位</strong>看沪深300 近 10 年 PE-TTM 分位：低于 30% → 80%，30%—70% → 60%，高于 70% → 30%；</li>
+  <li><strong>趋势修正</strong>（串联扣减，不是独立信号）：沪深300 跌破 120 日均线 → 权益减半；红利低波也跌破自己的均线 → 权益归零；</li>
+  <li><strong>剩余仓位</strong>进防御：国债 70%、货币 30%；</li>
+  <li><strong>权益内部</strong>按过去 60 日涨幅倾斜：第一名 60%、第二名 40%。</li>
+</ol>
+
+<p>权益上限 80%，永不满仓，这是主动取舍。初版跑出来的结果是"一半成功"：</p>
+
+<table>
+  <caption>表 2　初版策略（v2）的回测结果，长周期版 2015-01-30 至 2026-11-24</caption>
+  <thead>
+    <tr><th>对象</th><th>累计收益率</th><th>年化收益率</th><th>最大回撤</th><th>夏普比率</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">策略</td><td>76.9%</td><td>5.1%</td><td class="t-strong">−23.2%</td><td>0.40</td></tr>
+    <tr><td class="t-left">沪深300 买入持有</td><td>50.9%</td><td>3.7%</td><td>−46.1%</td><td>0.18</td></tr>
+    <tr><td class="t-left">红利低波 买入持有</td><td>188.5%</td><td>9.7%</td><td>−42.5%</td><td>0.47</td></tr>
+  </tbody>
+</table>
+
+<p>回撤控制确实做到了（−23% 对基准的 −42%），但收益跑输红利买入持有。更严重的是样本内外表现相反：2015—2020 年策略累计 65%，跑赢两个基准；2021 年以后只有 7.2%，同期红利低波涨了 91%。</p>
+
+<p>这个"内好外崩"的模式是策略研究中最需要警惕的信号。它通常意味着两件事之一：要么参数是拟合出来的，要么策略依赖的市场环境已经改变。无论是哪一种，都必须查清，而不能靠"再调调参数"解决。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/05_净值对比_长周期.png" alt="择时版净值" width="560"></p>
+  <figcaption><p>图 2　择时版（v2）的净值曲线：2016—2020 年跟得上，2021 年后完全掉队</p></figcaption>
+</figure>
+
+<h2 id="section-4-2">3.2　实验一：换估值锚，能不能救回来</h2>
+
+<p>第一个怀疑对象是估值锚。初版用沪深300 的 PE 分位判断整个组合贵贱，但底仓是红利低波。这个批评听起来很有力：用别人的温度计给自己量体温。2023 年以后沪深300 的估值分位常年偏高，把仓位压在 30%，而同期红利低波仍在低位、一路新高。</p>
+
+<p>于是我们换了四个锚，其余规则完全不动：</p>
+
+<table>
+  <caption>表 3　四种估值锚下的策略表现（长周期版，样本外）</caption>
+  <thead>
+    <tr><th>估值锚</th><th>样本外年化</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">沪深300 PE-TTM 分位（原版）</td><td>7.2%</td><td class="t-left">基线</td></tr>
+    <tr><td class="t-left">上证红利 PE-TTM 分位</td><td class="t-strong">−7.0%</td><td class="t-left">换对了标的，反而更差</td></tr>
+    <tr><td class="t-left">红利低波自身价格分位</td><td>5.2%</td><td class="t-left">略差</td></tr>
+    <tr><td class="t-left">无估值层（基础仓位恒 60%）</td><td>−0.8%</td><td class="t-left">拿掉估值层也更差</td></tr>
+  </tbody>
+</table>
+
+<p>结果与预期相反：换成一个"更正确的"锚，样本外从 +7.2% 变成 −7.0%。这说明估值锚不是病因，这个诊断本身是错的。</p>
+
+<p>这个结果很有价值。它提醒我们：一个听起来合理的解释，如果没有被单独检验过，就只是猜测。如果当时接受了"锚错配"这个诊断并据此修改策略，我们会得到一个更差的版本，而且会以为自己已经修好了问题。</p>
+
+<h2 id="section-4-3">3.3　实验二：把择时整个拆掉，对照一次</h2>
+
+<p>估值锚不是病因，那就往下追一层：这套择时本身有没有价值？</p>
+
+<p>要回答这个问题，对照组必须与实验组暴露相同。我们的做法是：用策略自己过去使用过的平均权重构造一个固定配置组合，每月机械再平衡，其余完全相同。两者的权益暴露一模一样，唯一差别就是"判断"这一下。可交易版（2019—2026）样本外的结果如下：</p>
+
+<table>
+  <caption>表 4　择时 vs 暴露匹配的固定配置（可交易版，样本外）</caption>
+  <thead>
+    <tr><th>方案</th><th>权益暴露</th><th>样本外年化</th><th>最大回撤</th><th>夏普比率</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">v2 择时策略</td><td>34%</td><td>1.5%</td><td>−11.9%</td><td>−0.05</td></tr>
+    <tr><td class="t-left">固定配置（同暴露，不判断）</td><td>34%</td><td>5.0%</td><td>−3.8%</td><td>0.66</td></tr>
+    <tr><td class="t-left">固定 35% 红利 + 65% 国债</td><td>35%</td><td class="t-strong">6.5%</td><td>−5.9%</td><td class="t-strong">0.77</td></tr>
+  </tbody>
+</table>
+
+<p class="callout">&nbsp;&nbsp;同样的权益暴露，择时版年化 1.5%，不判断版 5.0%，而且回撤还更小。这个差额与选股、选债无关，全部来自"什么时候持有"——而这一步做反了。</p>
+
+<p>进一步的分层拆解更清楚：只用趋势（关掉估值层）的样本外年化是 −11.9%，只用估值的 2.1%，两者合并 1.2%。也就是说，趋势层不但自己没贡献，还把估值层拖累了。</p>
+
+<p>我们还发现一个值得记录的现象：初版的平均权益只有 35%，但 2015 年高位时配到 80%、2018 年整段归零、2023—2024 低位时反而只有 30%。用一句话概括就是高位重仓、低位轻仓，正好反了。这与我们"低估加仓"的设计意图完全相反，原因是估值分位与价格趋势在当时给出的信号，与直觉判断并不一致。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/09_结构对照_净值_trade.png" alt="暴露匹配对照" width="560"></p>
+  <figcaption><p>图 3　暴露匹配对照：红色为固定配置，绿色为择时策略，同权益暴露下固定配置全程领先</p></figcaption>
+</figure>
+
+<h2 id="section-4-4">3.4　实验三：参数网格，24 组全输</h2>
+
+<p>到这里还有一个可能的辩解：也许只是参数没调好。于是我们做了参数网格，三组变量：</p>
+
+<ul>
+  <li>均线周期：120 / 200 / 250 日（越慢越少穿越，但也越迟钝）；</li>
+  <li>仓位档位：80-60-30 / 100-80-60（后者承认"不满仓本身就是收益损失"）；</li>
+  <li>缓冲带：0 / 10%（权重变动不足 10% 就不调仓，专治反复穿越）。</li>
+</ul>
+
+<p>共 24 组。这里有一条比结果更重要的纪律：参数只能按样本内表现挑选，样本外只用来检验，不能用来挑。否则样本外就失去了意义。所以下表按样本内夏普排序：</p>
+
+<table>
+  <caption>表 5　参数网格（长周期版，按样本内夏普排序，取前二与参照）</caption>
+  <thead>
+    <tr><th>组合</th><th>权益均值</th><th>样本内夏普</th><th>样本外年化</th><th>样本外夏普</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">250-80-60-30-缓冲0%</td><td>38%</td><td>0.53</td><td>3.0%</td><td>0.18</td></tr>
+    <tr><td class="t-left">200-80-60-30-缓冲0%</td><td>37%</td><td>0.50</td><td>2.4%</td><td>0.09</td></tr>
+    <tr><td class="t-left">固定 35 红利 65 国债（参照）</td><td>35%</td><td>0.43</td><td class="t-strong">6.6%</td><td class="t-strong">0.81</td></tr>
+  </tbody>
+</table>
+
+<p>24 组里没有任何一组在样本外打过"什么都不做"。慢均线（250 日）确实优于 120 日，方向是对的，但幅度远远不够。</p>
+
+<p>顺带记录一个实验设计上的失误：缓冲带设 10% 完全没有效果，0% 与 10% 的结果完全相同。原因是仓位档位只有 0/30/60/80 四档，相邻档位的最小变动是 30%，10% 的阈值永远不可能触发。这是一个典型的"参数设了但没生效"的错误，如果不检查就会误以为"缓冲带没用"。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/10_参数网格_样本内vs样本外.png" alt="参数网格" width="560"></p>
+  <figcaption><p>图 4　参数网格：横轴样本内夏普，纵轴样本外夏普，红虚线是不择时的参照，所有点都在虚线下方</p></figcaption>
+</figure>
+
+<h2 id="section-4-5">3.5　实验四：如果只做配置，比例该定多少</h2>
+
+<p>既然择时无效，问题就变成：不做判断，只决定比例，能做到什么水平？我们扫描了红利占比 20%—80%（其余为国债），每月再平衡：</p>
+
+<table>
+  <caption>表 6　固定比例扫描（可交易版，月度再平衡，防御资产为国债）</caption>
+  <thead>
+    <tr><th>红利占比</th><th>样本内年化</th><th>样本内回撤</th><th>样本外年化</th><th>样本外回撤</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>20%</td><td>4.8%</td><td>−3.4%</td><td>5.2%</td><td>−2.0%</td></tr>
+    <tr><td>40%</td><td>6.6%</td><td>−6.8%</td><td>7.1%</td><td>−5.0%</td></tr>
+    <tr><td>60%</td><td>8.3%</td><td>−10.2%</td><td>8.9%</td><td>−8.1%</td></tr>
+    <tr><td>80%</td><td>9.9%</td><td>−13.4%</td><td>10.5%</td><td>−11.2%</td></tr>
+  </tbody>
+</table>
+
+<p>这张表支持一个清晰的设计逻辑：<strong>先定风险预算，再反推比例</strong>。我们设定的约束是"可交易口径最大回撤不超过 7%"，按上表，40% 是满足这条约束的最高档，50% 就到 −8.5% 了。因此 40% 不是拍出来的，是从约束里解出来的。</p>
+
+<p>这里还有一个必须指出的方法论问题：夏普比率对这类混合了无风险资产的组合有偏差。国债本身接近无风险利率，占比越高夏普越高——扫描结果里 20% 红利那一档夏普最高，但它的年化只有 4.7%。如果只看夏普选比例，会被系统性地推向"几乎全买国债"。所以我们改用 Calmar（年化 ÷ 最大回撤）作为主要比较指标，并同时看绝对收益。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/11_配置比例_扫描.png" alt="比例扫描" width="560"></p>
+  <figcaption><p>图 5　固定比例扫描：红利占比与样本内、样本外夏普的关系</p></figcaption>
+</figure>
+
+<h2 id="section-4-6">3.6　实验五与六：窄幅择时与安慰剂检验</h2>
+
+<p>实验二之后还剩最后一个希望：也许问题只是"幅度太大"。如果把择时幅度压到 30%/40%/50% 这么窄，是不是就能保留一点超额？</p>
+
+<p>窄幅版的表现确实更好：样本外夏普 0.99，高于固定 40% 的 0.86。但这个比较是错的。窄幅版因为估值分位大部分时间偏高，平均红利暴露只有 32%，而固定版是 40%。波动水平不同，夏普不可比。</p>
+
+<p>于是我们做了真正的对照：把比例序列随机打乱 100 次。打乱后，比例分布完全相同（同样多的 30%、40%、50% 月份），平均暴露完全相同，手续费量级相同，唯一被破坏的是"低估多配、高估少配"这个时间对应关系。</p>
+
+<pre>真实信号：样本外夏普 0.99
+随机重排 100 次：均值 0.91，95% 分位 1.04
+真实信号在随机分布中的位置：14%</pre>
+
+<p class="callout">&nbsp;&nbsp;随便乱配，86% 的情况都比它好或一样好。这说明那个 0.99 的夏普不是信号带来的，而是"窄幅 + 40% 左右暴露"这个结构带来的。</p>
+
+<p>这一步是整个研究中最关键的转折。在此之前，我们还可以说"择时幅度没调好"；在此之后，只能承认：估值方向在这组数据上没有信息量。</p>
+
+<p>需要记录一个方法论上的自我修正：我们最初用的安慰剂是"反向微调"（低估时减配、高估时增配），但两组的红利暴露分别是 32% 和 49%，暴露不同，夏普不可比，这个检验是无效的。安慰剂组如果和实验组的暴露不一样，检验就失去了意义——这句话值得写进任何一份策略研究报告。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/12_安慰剂检验.png" alt="安慰剂检验" width="560"></p>
+  <figcaption><p>图 6　安慰剂检验：灰柱为 100 次随机重排的夏普分布，红线为真实信号，绿虚线为 95% 分位</p></figcaption>
+</figure>
+
+<h2 id="section-4-7">3.7　收敛：配置型策略 v3</h2>
+
+<p>六组实验的结论汇总成一句：这套策略的收益，全部来自"持有了什么"，没有一分钱来自"什么时候持有"。而初版把"持有什么"这一层也做坏了。</p>
+
+<p>据此我们重构了策略。最终规则只有三条：</p>
+
+<ol>
+  <li>长期持有 <strong>40% 红利低波 + 60% 国债</strong>，每月末把比例拉回目标（再平衡）；</li>
+  <li>当组合近 60 日已实现波动超过<strong>年化 8%</strong> 时，按 <code>8% / 实际波动</code> 的比例收缩红利仓位，下限 20%；</li>
+  <li>波动回落后恢复至 40%；<strong>不做任何方向判断，不预测涨跌</strong>。</li>
+</ol>
+
+<p>第 2 条是唯一保留的动态成分，称为"波动率目标化"。它之所以被保留，是因为它响应的是风险而非收益预期——它不问"明天会涨还是会跌"，只问"当前的风险是否超出了预算"。这与前面被证伪的所有信号有本质区别。</p>
+
+<p>它解决了一个具体问题：固定 40/60 在 2015 年股灾中的最大回撤是 −17.4%。四档目标波动率的实测结果：</p>
+
+<table>
+  <caption>表 7　固定比例 vs 波动率目标化（长周期版）</caption>
+  <thead>
+    <tr><th>模式</th><th>最大回撤</th><th>年化</th><th>夏普</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">固定 40/60</td><td>−17.4%</td><td>6.2%</td><td>0.56</td></tr>
+    <tr><td class="t-left">目标波动 12%</td><td>−15.0%</td><td>6.4%</td><td>0.61</td></tr>
+    <tr><td class="t-left">目标波动 10%</td><td>−13.7%</td><td>6.4%</td><td>0.62</td></tr>
+    <tr><td class="t-left">目标波动 8%（采用）</td><td class="t-strong">−12.1%</td><td>6.3%</td><td class="t-strong">0.63</td></tr>
+  </tbody>
+</table>
+
+<p>回撤压掉 5.3 个百分点，年化反而略升。原因是收缩的月份正好是坏月份，"因为降仓而错过上涨"的担忧没有发生。</p>
+
+<p>需要说明这一设计的保守取向：目标波动化只降不升，上限锁死在基准 40%，不做"波动低时加杠杆"。因此它长期会略微拉低平均仓位（实测 38% 而非 40%）。这是有意的，因为放大仓位会突破我们设定的风险预算。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/13_波动率目标化.png" alt="波动率目标化" width="560"></p>
+  <figcaption><p>图 7　波动率目标化：四条净值曲线对比，阴影为 2015 年 6—9 月</p></figcaption>
+</figure>
+
+<h1 id="section-5">四、回测结果</h1>
+
+<h2 id="section-5-1">4.1　指标表</h2>
+
+<p>长周期版（2015-01-30 至 2026-11-24，指数口径）：</p>
+
+<table>
+  <caption>表 8　长周期版指标（三个区间 × 三个对象）</caption>
+  <thead>
+    <tr><th>区间</th><th>对象</th><th>累计</th><th>年化</th><th>最大回撤</th><th>夏普</th><th>Calmar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>全区间</td><td class="t-left t-strong">策略</td><td>101.0%</td><td>6.3%</td><td class="t-strong">−12.1%</td><td>0.63</td><td class="t-strong">0.52</td></tr>
+    <tr><td>全区间</td><td class="t-left">沪深300 买入持有</td><td>50.9%</td><td>3.7%</td><td>−46.1%</td><td>0.18</td><td>0.08</td></tr>
+    <tr><td>全区间</td><td class="t-left">红利低波 买入持有</td><td>188.5%</td><td>9.7%</td><td>−42.5%</td><td>0.47</td><td>0.23</td></tr>
+    <tr><td>样本内</td><td class="t-left">策略</td><td>37.0%</td><td>5.6%</td><td>−12.1%</td><td>0.50</td><td>0.47</td></tr>
+    <tr><td>样本内</td><td class="t-left">沪深300 买入持有</td><td>71.7%</td><td>9.9%</td><td>−46.1%</td><td>0.43</td><td>0.21</td></tr>
+    <tr><td>样本内</td><td class="t-left">红利低波 买入持有</td><td>52.0%</td><td>7.6%</td><td>−42.5%</td><td>0.35</td><td>0.18</td></tr>
+    <tr><td>样本外</td><td class="t-left">策略</td><td>47.4%</td><td>7.1%</td><td>−6.7%</td><td>0.80</td><td>1.06</td></tr>
+    <tr><td>样本外</td><td class="t-left">沪深300 买入持有</td><td>−13.0%</td><td>−2.4%</td><td>−41.6%</td><td>−0.16</td><td>−0.06</td></tr>
+    <tr><td>样本外</td><td class="t-left">红利低波 买入持有</td><td>91.3%</td><td>12.1%</td><td>−16.9%</td><td>0.67</td><td>0.72</td></tr>
+  </tbody>
+</table>
+
+<p>可交易版（2019-01-31 至 2026-11-23，ETF 实际价格）：</p>
+
+<table>
+  <caption>表 9　可交易版指标（三个区间 × 三个对象）</caption>
+  <thead>
+    <tr><th>区间</th><th>对象</th><th>累计</th><th>年化</th><th>最大回撤</th><th>夏普</th><th>Calmar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>全区间</td><td class="t-left t-strong">策略</td><td>69.0%</td><td>7.2%</td><td class="t-strong">−6.3%</td><td class="t-strong">0.80</td><td class="t-strong">1.14</td></tr>
+    <tr><td>全区间</td><td class="t-left">沪深300 买入持有</td><td>42.6%</td><td>4.8%</td><td>−42.2%</td><td>0.24</td><td>0.11</td></tr>
+    <tr><td>全区间</td><td class="t-left">红利低波 买入持有</td><td>147.0%</td><td>12.8%</td><td>−16.5%</td><td>0.68</td><td>0.77</td></tr>
+    <tr><td>样本内</td><td class="t-left">策略</td><td>30.6%</td><td>7.3%</td><td>−6.3%</td><td>0.75</td><td>1.16</td></tr>
+    <tr><td>样本内</td><td class="t-left">沪深300 买入持有</td><td>28.5%</td><td>6.9%</td><td>−37.7%</td><td>0.33</td><td>0.18</td></tr>
+    <tr><td>样本内</td><td class="t-left">红利低波 买入持有</td><td>60.9%</td><td>13.4%</td><td>−16.5%</td><td>0.66</td><td>0.81</td></tr>
+    <tr><td>样本外</td><td class="t-left">策略</td><td>29.1%</td><td>7.1%</td><td>−5.0%</td><td>0.87</td><td>1.43</td></tr>
+    <tr><td>样本外</td><td class="t-left">沪深300 买入持有</td><td>10.7%</td><td>2.8%</td><td>−22.6%</td><td>0.13</td><td>0.12</td></tr>
+    <tr><td>样本外</td><td class="t-left">红利低波 买入持有</td><td>52.8%</td><td>12.0%</td><td>−14.2%</td><td>0.71</td><td>0.85</td></tr>
+  </tbody>
+</table>
+
+<p>表 8 中红利低波买入持有的 −42.5% 需要单独说明，因为它容易和行情软件上看到的数字对不上。中证指数公司对同一只指数发布两个版本：价格指数（H30269）只反映股价变动，全收益指数（H20269）把每一次分红都按除息日再投资回指数。本文所有"红利低波"口径均指后者。</p>
+
+<table>
+  <caption>表 8 附　中证红利低波动指数两个口径的差异（2015 年那一轮）</caption>
+  <thead>
+    <tr><th>口径</th><th>2015 年峰值</th><th>峰值日期</th><th>最大回撤</th><th>2015 年至今年化</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">价格指数 H30269（行情软件显示值）</td><td>11103.55（盘中最高 11188.01）</td><td>2015-06-12（盘中 06-15）</td><td>−43.6%</td><td>4.05%</td></tr>
+    <tr><td class="t-left">全收益指数 H20269（本文采用）</td><td>14395.48</td><td>2015-06-12</td><td>−42.5%</td><td>9.06%</td></tr>
+    <tr><td class="t-left">两者之比</td><td>1.2965</td><td>累计分红再投资 29.6%</td><td>+1.1pp</td><td>+5.01pp</td></tr>
+  </tbody>
+</table>
+
+<p>也就是说，同一个指数在 2015 年的峰值，行情软件显示 11188.01，本文使用 14395.48，相差 29.6%——这 29.6% 是 2005 年基期到 2015 年之间累积的分红再投资，不是数据错误。回撤也一样：价格口径 −43.6%，全收益口径 −42.5%，相差 1.1 个百分点，方向一致。</p>
+
+<p>这里必须用全收益口径，原因不只是"更准确"，而是用错了结论会完全反过来：如果误用价格指数，红利低波 2015 年以来的年化只有 4.05%，而策略是 6.3%，看上去策略跑赢了红利 2.3 个百分点；换成正确的全收益口径，红利是 9.06%，策略实际落后 2.8 个百分点。同一个策略，因为一个口径选择，从"跑赢"变成"跑输"。</p>
+
+<p>回到回撤本身：−42.5% 发生在 2015-06-12 至 2016-01-28 这 230 天里，峰值 14395.5、谷底 8278.2；同期沪深300 全收益指数跌 −45.9%，两者只差 3.4 个百分点。也就是说，在这轮由杠杆盘强制平仓引发的流动性危机中，红利低波的"低波"特性基本没有起作用。两版数据在 2015 年 6—7 月都是连续下跌，单日涨跌幅没有超过 9%，不存在数据跳变。</p>
+
+<p>这个事实是后面配置 60% 国债的直接理由：如果权益资产自己能抗跌，就不需要这么多防御资产。反过来说，任何以"红利低波很稳"为前提、把权益暴露放得很高的方案，在 2015 年那种环境下都会失效。</p>
+
+<p>累计手续费 0.11%（可交易版）、0.20%（长周期版）；平均红利仓位 39%；波动率闸门触发收缩 14 个月（可交易版）、31 个月（长周期版）。</p>
+
+<h2 id="section-5-2">4.2　净值与回撤</h2>
+
+<figure>
+  <p><img src="D:/量化交易/charts/14_最终策略_trade.png" alt="最终策略可交易版" width="560"></p>
+  <figcaption><p>图 8　最终策略（可交易版）：上为净值，中为回撤，下为已实现波动与红利仓位</p></figcaption>
+</figure>
+
+<figure>
+  <p><img src="D:/量化交易/charts/14_最终策略_long.png" alt="最终策略长周期版" width="560"></p>
+  <figcaption><p>图 9　最终策略（长周期版）：2015 股灾期间的净值曲线与回撤表现</p></figcaption>
+</figure>
+
+<p>图 8 下方的面板直接展示了策略的工作方式：蓝色线是组合近 60 日已实现波动，红色虚线是 8% 的风险预算，红色填充区域是超出预算的时段。可以看到，每次红色区域出现时，绿色阶梯线（红利仓位）都会向下走，波动回落后再回到 40%。这正是规则第 2、3 条的直观呈现。</p>
+
+<p>图 9 是长周期版，其中 2015 年下半年那段尤其值得看：两个基准在股灾中回撤接近腰斩，而策略的净值曲线基本走平。</p>
+
+<h2 id="section-5-3">4.3　结果解读</h2>
+
+<p><strong>第一，Calmar 是最该看的一列。</strong>策略 1.14、红利 0.77、沪深300 0.11。它的含义是"每承受 1% 的回撤换回 1.14% 的年化"，红利是 0.77，沪深300 只有 0.11。对稳健型投资者，这个指标比夏普更贴近实际决策。</p>
+
+<p><strong>第二，绝对收益低于红利买入持有（7.2% 对 12.8%）。</strong>这是必然的，因为策略只用了 40% 的风险预算。它本质上是一次交换：用一部分收益换取回撤的大幅压缩。但"用多少回撤换多少收益"这句话不能笼统地说，因为两个版本的幅度并不相同，所以下面按版本分开列。</p>
+
+<table>
+  <caption>表 9 附　收益与回撤的交换比（两版分别计算，均为全区间）</caption>
+  <thead>
+    <tr><th>版本</th><th>年化（策略 / 红利）</th><th>收益保留比例</th><th>最大回撤（策略 / 红利）</th><th>回撤压缩比例</th><th>Calmar（策略 / 红利）</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">可交易版 2019–2026</td><td>7.2% / 12.8%</td><td>56.5%</td><td>−6.3% / −16.5%</td><td>38.3%</td><td>1.14 / 0.77</td></tr>
+    <tr><td class="t-left">长周期版 2015–2026</td><td>6.3% / 9.7%</td><td>64.9%</td><td>−12.1% / −42.5%</td><td>28.4%</td><td>0.52 / 0.23</td></tr>
+  </tbody>
+</table>
+
+<p>两个版本的共同点是方向一致：<strong>回撤压缩的幅度都大于收益牺牲的幅度</strong>（38% 对 57%、28% 对 65%），所以 Calmar 分别提升 1.5 倍和 2.3 倍。差别只在程度上：可交易版接近"用四成回撤换五成半收益"，长周期版则是"用不到三成回撤换六成半收益"。</p>
+
+<p>这里需要说明一句：本节初稿写的是"用三分之一的回撤换一半的收益"，那个说法只对可交易版近似成立（38% 与 57%），套到长周期版上反而低估了策略（28% 与 65%）。现在按两个版本的实际数字分开表述，不做四舍五入式的概括。<strong>这是配置型策略的定义，不是缺陷</strong>——但定义必须写准，否则承认取舍就变成了模糊表态。</p>
+
+<p><strong>第三，样本内外一致。</strong>可交易版样本内夏普 0.75、样本外 0.87；长周期版样本内 0.50、样本外 0.80。没有出现初版那种"内好外崩"，这是配置型结构相对择时结构的优势——它不依赖对未来的判断，因此不会因为市场环境变化而失效。</p>
+
+<p><strong>第四，样本外表现好于样本内，有一个具体原因。</strong>2021 年以后 A 股整体下行，沪深300 三年多为负收益，而红利低波与国债都录得正收益，配置型组合因此受益。这不能理解为策略"在样本外发现了新规律"，只能说这段时间的资产轮动恰好对配置型有利。诚实记录这一点，比把它包装成"策略稳健"更有价值。</p>
+
+<h1 id="section-6">五、讨论</h1>
+
+<h2 id="section-6-1">5.1　为什么趋势信号在这里失效</h2>
+
+<p>六组实验里最反直觉的一条是：趋势跟踪在红利低波上不但没用，还是负贡献。事后我们找到了一个还算自洽的解释。</p>
+
+<p>最初我们以为原因是"红利低波波动太低、均线信号淹没在噪声里"。查了数据之后，这个解释站不住：它的年化波动在可交易口径是 16.9%，含 2015 股灾的长周期口径是 19.5%，相对沪深300 的 21.3% 只低不到 2 个百分点。"低波"是相对的，不是绝对的，它并不缺波动。</p>
+
+<p>更可能的原因不是波动幅度，而是穿越频率。2025 年底红利低波的价格就贴着 120 日均线反复穿越（2.352 对 2.387），被反复剔除再买回，既付了手续费又错过了上涨。参数网格的结果也支持这个判断：250 日均线的样本外夏普（0.18）明显高于 120 日均线的（0.09），说明问题确实出在触发过于频繁——把窗口拉长、减少触发次数，表现会好一些。</p>
+
+<p>但拉长窗口只是缓解，没有解决。24 组参数里最好的组合，样本外仍然跑不过"什么都不做"（3.0% 对 6.6%）。也就是说，我们没有找到任何一个让趋势信号在红利低波上转正的参数。诚实的说法是：这个信号的失效原因我们只有一个部分成立的解释，而不是一个可以写进教科书的定论。</p>
+
+<p>这个教训仍然可以推广成一个判断标准：在设计策略之前，先问这个信号需要什么前提，再问我的标的是否满足这个前提。如果前提不成立，调参数最多只能缓解，不能扭转。</p>
+
+<h2 id="section-6-2">5.2　本研究的局限</h2>
+
+<p>我们主动列出六条，这些都是答辩时可能被问到的：</p>
+
+<p><strong>第一，40% 这个比例是用全样本扫描得出的，存在后视偏差风险。</strong>缓解的理由是：相邻档位（30%—50%）的回撤与收益差异平缓（样本内回撤从 −5.1% 到 −8.5%，年化从 6.0% 到 7.8%），说明结果对比例不敏感，不是"只有 40% 才行"。但必须承认，样本内挑出的最优参数，本来就应该打个折扣看。</p>
+
+<p><strong>第二，只有两个资产，没有真正的分散。</strong>黄金、创业板、海外市场都曾纳入候选。第六、七节的实测结果是：黄金和创业板都能改善某一段样本，但一个靠金价、一个靠在两个样本里结论相反，都不满足"稳健"的要求；海外市场未做，是数据与解释成本所限。所以"两个资产"是检验后的选择，不是偷懒——但它确实意味着组合缺少第三条独立的收益来源。</p>
+
+<p><strong>第三，波动率目标化只降不升</strong>，长期拉低平均仓位（38% 对 40%）。这是一个保守的选择，代价是长期收益略低。</p>
+
+<p><strong>第四，长周期版的股票腿使用指数</strong>，不含管理费与跟踪误差。真实的到手收益以可交易版为准。</p>
+
+<p><strong>第五，样本外不足 4 年。</strong>可交易版样本外为 2023—2026，不足以覆盖完整的牛熊周期。这是所有 A 股策略回测的共同问题，无法通过技术手段解决。</p>
+
+<p><strong>第六，Calmar 对本组合有偏，凡比较都必须先做暴露匹配。</strong>国债占比越高，波动与回撤越小，Calmar 天然越高。一个只做减仓、不含任何信息的机制，也能让 Calmar 变好。我们在第六节用固定比例曲线插值的方法做了修正，但这条偏向无法完全消除：所有"Calmar 改善"的结论，都应同时看年化与平均仓位，否则容易把减仓记成功劳。</p>
+
+<h2 id="section-6-3">5.3　可扩展的方向</h2>
+
+<p>第六、七节已经把原先列在这里的三项做了两项，结论需要相应更新。</p>
+
+<p><strong>已经做过、并已排除的：</strong></p>
+
+<ol>
+  <li><strong>加黄金</strong>：能把长周期最大回撤从 −17.4% 压到 −8.7%，但 2015 年少赚 8 个百分点，收益端完全依赖 2019 年后的金价；扣减 4 个百分点后即输给基准。定位为可选保险，比例不超过 10%，不进主线。</li>
+  <li><strong>加创业板</strong>：长周期单调变差（Calmar 0.36→0.28），可交易版略好，但差异来自 2019—2021 成长牛。同一标的两个样本结论相反，判定为不稳健，不采用。</li>
+  <li><strong>全押十年国债</strong>：单调改善但没有平台，且 2024 年一年贡献了四成差异，本质是押注利率继续下行。只作为支线（5:5 混合），不作为主线。</li>
+</ol>
+
+<p><strong>仍然值得做、但本研究没有做的：</strong></p>
+
+<ol>
+  <li><strong>行业轮动层</strong>：把周期行业的暴露作为卫星仓位。它需要另一套数据与另一组对照实验，数据量翻倍，且以本文的标准（暴露匹配 + 安慰剂检验）衡量，通过的门槛很高。</li>
+  <li><strong>海外资产</strong>：纳指等 QDII 与 A 股相关性低，理论上是比黄金更"干净"的分散工具；但涉及汇率、额度与溢价，回测口径复杂，本研究未纳入。</li>
+  <li><strong>信用债</strong>：城投债收益率更高，但引入信用风险，与本文"只承担市场风险"的定位冲突，暂不考虑。</li>
+</ol>
+
+<h1 id="section-7">六、边界检验：策略还能不能更灵活</h1>
+
+<p>主线收敛之后，最常被问到的一个问题是：这套配置是不是太死板了？有没有可能通过止盈线、回撤线、或者允许临时加仓来提高收益？这一节不靠争论回答，而是先诊断"死板"来自哪里，再逐一检验四类常见机制，最后回答一个此前没人问过的问题——再平衡本身值多少钱。</p>
+
+<h2 id="section-7-1">6.1　"死板"的技术来源</h2>
+
+<p>代码里有两行决定了这套策略的性格：<code>MAX_EQUITY = BASE_EQUITY = 0.40</code>，以及 <code>scale = min(1.0, ...)</code>。前者把仓位上限锁死在基准仓位，后者只允许向下调整。合起来的意思是：<strong>仓位只能减，不能加。</strong></p>
+
+<p>实测结果：长周期版 143 个月里有 112 个月（78%）仓位停在 40%，可交易版 95 个月里有 82 个月（86%）停在 40%。因此它实质上不是"动态策略"，而是"固定 40/60 加偶发减仓"。用户的直觉是对的，但直觉指向的解决方案（加盈亏线）需要先过一道检验。</p>
+
+<h2 id="section-7-2">6.2　先换一把尺子：Calmar 对本组合有偏</h2>
+
+<p>要判断一个机制有没有用，不能直接看 Calmar。原因很直接：国债占比越高，波动越小，回撤也越小，Calmar 天然越高。一个"减仓型"机制只要把平均仓位压下去，Calmar 就会变好，哪怕它不含任何信息。<strong>把减仓记成机制的功劳，是这类实验最常见的错误。</strong></p>
+
+<p>我们的做法是"暴露匹配"：先画出固定比例 30%—60% 的 Calmar 曲线，再用候选机制的实际平均仓位在该曲线上插值，得到"同仓位但不做任何动态调整"的基准，两者相减才是机制的真实超额。四组机制的检验结果如下。</p>
+
+<table>
+  <caption>表 10　四组灵活化机制的真实超额（暴露匹配后）</caption>
+  <thead>
+    <tr><th>机制</th><th>规则</th><th>长周期超额</th><th>可交易超额</th><th>判定</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">止盈 TP10</td><td class="t-left">组合上涨 10% 后减到 30%</td><td>+0.04</td><td>+0.09</td><td class="t-left">无效。平均仓位只有 32%，高 Calmar 全部来自减仓</td></tr>
+    <tr><td class="t-left">回撤线 DD5</td><td class="t-left">回撤达 5% 时压到 20%</td><td>+0.22</td><td>−0.03</td><td class="t-left">只在含 2015、2018 的长样本有效，样本外 −0.10</td></tr>
+    <tr><td class="t-left">分档 BANDMID</td><td class="t-left">按波动分五档设定仓位</td><td>+0.24</td><td>+0.23</td><td class="t-left">全区间最强，但可交易版样本外 −0.22</td></tr>
+    <tr><td class="t-left">打开上限 UP50</td><td class="t-left">允许在低波动时加到 50%</td><td class="t-left t-strong">+0.24</td><td class="t-left t-strong">+0.27</td><td class="t-left">长周期样本外仍有 +0.18，但被换手否决（见 6.3）</td></tr>
+  </tbody>
+</table>
+
+<p>把这张表读成一句话：<strong>盈亏线是保险，不是收益来源。</strong>买保险在灾难年份能理赔，但在平静年份要付保费；而 2019 年以后没有发生过需要理赔的灾难，所以保费显得很贵。</p>
+
+<h2 id="section-7-3">6.3　换手：一票否决</h2>
+
+<p>UP50 是全区间唯一看起来"双赢"的机制：Calmar 在长周期版和可交易版分别达到 0.58 与 1.28。但把它的调仓行为打印出来，问题立刻暴露：月均调整 6.5 个百分点权益仓位，方向切换 103 次，最大单月跳 23 个百分点。这样的信号在实盘里做不出来——它不是"灵活"，而是"高频猜波动"。</p>
+
+<p>我们加上平滑约束（目标仓位向上一期衰减一半），再看它还剩下多少。</p>
+
+<table>
+  <caption>表 11　UP50 在可执行性约束前后的表现</caption>
+  <thead>
+    <tr><th>方案</th><th>月均调整</th><th>方向切换</th><th>Calmar（长周期）</th><th>Calmar（可交易）</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">UP50 原始</td><td>6.5 pct</td><td>103 次</td><td>0.58</td><td>1.28</td></tr>
+    <tr><td class="t-left">UP50 平滑后</td><td>2.1 pct</td><td>48 次</td><td class="t-strong">0.53</td><td class="t-strong">1.11</td></tr>
+    <tr><td class="t-left">V3 主线</td><td>1.7 pct</td><td>—</td><td>0.52</td><td>1.14</td></tr>
+  </tbody>
+</table>
+
+<p>平滑之后，Calmar 掉回 0.53 与 1.11，回撤反而恶化 0.9 与 0.8 个百分点——<strong>基本回到现状，甚至更差。</strong>那点超额是靠高频调仓换来的，而调仓成本在回测里被低估了（只算了万 2 手续费，没算冲击成本与滑点）。</p>
+
+<p>为排除"UP50 的优势只是因为红利这十年涨得好"这一解释，我们把红利日收益整体扣减 1、2、3 个百分点/年重跑。UP50 相对 V3 的年化优势（长周期 +0.5~0.8、可交易 +0.7~1.2 个百分点）不随扣减消失，说明机制确实含有信息。但"有信息"与"可执行"是两件事，后者一票否决。</p>
+
+<h2 id="section-7-4">6.4　再平衡本身值多少</h2>
+
+<p>前面所有讨论都在研究"怎么调"，却没有回答"调这件事本身值不值"。我们补了一组实验：把月度再平衡换成季度、半年、±5% 带宽，以及买入后完全不管（任其漂移）。为了把"再平衡"与"风控"分开，季度与半年版另做了一档"只在季末/半年末拉回比例，但闸门仍然月度响应"。</p>
+
+<table>
+  <caption>表 12　再平衡频率、带宽与完全不再平衡（可交易口径，2019-01 起）</caption>
+  <thead>
+    <tr><th>方案</th><th>年化</th><th>最大回撤</th><th>Calmar</th><th>累计换手</th><th>平均权益</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">月度 + 闸门（主线）</td><td>7.24%</td><td>−6.33%</td><td class="t-strong">1.14</td><td>5.53×</td><td>39.4%</td></tr>
+    <tr><td class="t-left">月度、不加闸门</td><td>7.25%</td><td>−6.81%</td><td>1.07</td><td>3.36×</td><td>40.1%</td></tr>
+    <tr><td class="t-left">季度重置（闸门月度）</td><td>6.98%</td><td>−6.33%</td><td>1.10</td><td>4.45×</td><td>39.4%</td></tr>
+    <tr><td class="t-left">半年重置（闸门月度）</td><td>6.98%</td><td>−6.36%</td><td>1.10</td><td>4.15×</td><td>39.4%</td></tr>
+    <tr><td class="t-left">±5% 带宽</td><td>7.10%</td><td>−6.40%</td><td>1.11</td><td>3.55×</td><td>40.3%</td></tr>
+    <tr><td class="t-left">完全不再平衡</td><td>7.61%</td><td>−8.46%</td><td>0.90</td><td>1.00×</td><td>49.9%</td></tr>
+    <tr><td class="t-left">同暴露固定比例（对照）</td><td class="t-strong">8.24%</td><td>−8.49%</td><td>0.97</td><td>3.56×</td><td>50.1%</td></tr>
+  </tbody>
+</table>
+
+<p>最后两行是这张表的关键。完全不再平衡的组合，权益仓位会随红利上涨漂移到 50%，看起来收益更高（7.61% 对 7.24%），但那是加仓换来的。把对照组设成同样 50% 平均仓位的固定比例后，<strong>"任其漂移"反而比"每月拉回"低 0.63 个百分点/年</strong>（长周期版为 0.51 个百分点）。这就是再平衡溢价：它真实存在，量级约半个百分点。</p>
+
+<p>频率本身几乎不重要：季度与半年重置比月度只差 0.26 个百分点。但把风控频率一起降下来，年化会掉 0.8 个百分点（6.19% 对 7.24%）——<strong>其中只有 0.26 是再平衡的代价，其余是闸门被延迟。</strong>这提醒我们，"降低调仓频率"和"降低风险响应频率"必须分开讨论，否则会把风控失效记在再平衡头上。</p>
+
+<p>±5% 带宽把换手从 5.53 倍压到 3.55 倍（−36%），代价是年化少 0.14 个百分点、Calmar 低 0.03。在万 2 的成本假设下这不划算：省下的手续费约每年 0.008 个百分点，远小于损失的收益。只有当单边交易成本超过约千 1.5（含冲击与滑点）时，带宽才开始回本。因此我们<strong>不修改主线参数</strong>，但把这条写进执行建议：大资金实盘应重新评估带宽。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/16_再平衡_频率与带宽.png" alt="再平衡频率与带宽" width="560"></p>
+  <figcaption><p>图 10　相对主线的净值比与累计换手：频率降低几乎不影响收益，带宽能省换手但在万 2 下不划算</p></figcaption>
+</figure>
+
+<h1 id="section-8">七、支线与资产端扩展</h1>
+
+<p>前面所有实验都在调整那 40% 的权益仓位，60% 的国债一次也没动过。这一节把三件此前没有做完的事做完：债端久期、黄金、创业板；最后补一个"任意时点进场"的稳健性检验。</p>
+
+<h2 id="section-8-1">7.1　债端久期：十年比五年好吗</h2>
+
+<p>方法上只改一个变量：权重表完全冻结，只把 60% 仓位里的国债从五年期（511010）换成十年期（511260），并在同一起点比较。十年国债 2017 年 8 月才有数据，所以长周期版从 2017-08-31 起算。</p>
+
+<table>
+  <caption>表 13　债端久期：同一张权重表，只换债券（十年占比 0%–100%）</caption>
+  <thead>
+    <tr><th>十年占比</th><th>长周期年化</th><th>长周期回撤</th><th>长周期 Calmar</th><th>可交易年化</th><th>可交易回撤</th><th>可交易 Calmar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">0%（主线）</td><td>5.53%</td><td>−9.68%</td><td>0.57</td><td>7.24%</td><td>−6.33%</td><td>1.14</td></tr>
+    <tr><td class="t-left">30%</td><td>5.67%</td><td>−9.55%</td><td>0.59</td><td>7.41%</td><td>−6.31%</td><td>1.17</td></tr>
+    <tr><td class="t-left">50%（支线）</td><td class="t-strong">5.77%</td><td class="t-strong">−9.46%</td><td class="t-strong">0.61</td><td class="t-strong">7.52%</td><td>−6.31%</td><td class="t-strong">1.19</td></tr>
+    <tr><td class="t-left">70%</td><td>5.87%</td><td>−9.37%</td><td>0.63</td><td>7.63%</td><td>−6.30%</td><td>1.21</td></tr>
+    <tr><td class="t-left">100%</td><td>6.02%</td><td>−9.27%</td><td>0.65</td><td>7.80%</td><td>−6.28%</td><td>1.24</td></tr>
+  </tbody>
+</table>
+
+<p>先说一个反直觉的结果：久期越长，组合回撤反而越小。原因是股灾时十年债涨得更多（避险需求叠加降息预期），对冲更强。但这把双刃剑的另一面同样真实：债熊时十年债跌得更多。2020 年疫后，五年 −1.71%、十年 −2.54%；2025 年开年，五年 −0.87%、十年 −1.29%——<strong>约为 1.5 倍</strong>。而在红利单日跌超 1% 的 206 个交易日里，十年债的平均涨幅只是五年的 1.18 倍（胜率 58%）。两者与红利的相关性几乎一样（−0.195 对 −0.224），差别全在尾部。净效果为正，是因为这段样本里股灾的幅度压过了债熊。</p>
+
+<p>更重要的是<strong>单调、没有平台</strong>：占比从 0% 一路加到 100%，指标一路改善，没有拐点。这意味着数据只支持"加久期"这个方向，没有给出"加到多少"的答案。50% 不是算出来的最优点，而是一个风险预算选择——把利率反转的风险控制在可接受范围内，同时拿到大部分票息提升。因此我们把它做成支线，默认不进主线。</p>
+
+<p>优势的时间分布也不均匀：分年度看，2024 年一年十年债就比五年多赚 2.70 个百分点，占全期累计差异的四成；2025 年反而 −0.73。利率已从 3.3% 降到 1.8% 附近，票息提升（约 30–50bp）可持续，资本利得不可持续。这是"不主张全押十年"的第二个理由。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/15_支线_久期_trade.png" alt="债端久期支线" width="560"></p>
+  <figcaption><p>图 11　债端久期支线：上为相对主线的净值比，下为分年度差异（2024 年一年占四成）</p></figcaption>
+</figure>
+
+<h2 id="section-8-2">7.2　黄金：是保险，不是收益来源</h2>
+
+<p>黄金与红利、国债的收益来源不同：它不产生现金流，全部收益来自价差。这与本文"赚企业的钱"的出发点存在张力，所以必须用数据裁决。两个口径分开跑：黄金从债里出（风险资产增加），与黄金从股里出（风险资产不变）。</p>
+
+<table>
+  <caption>表 14　加黄金：两个口径（固定比例、不加闸门）</caption>
+  <thead>
+    <tr><th>版本</th><th>方案</th><th>年化</th><th>最大回撤</th><th>Calmar</th><th>最差 20 日</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>长周期</td><td class="t-left">基准 40/60</td><td>6.21%</td><td>−17.35%</td><td>0.36</td><td>−11.94%</td></tr>
+    <tr><td>长周期</td><td class="t-left">替股 10（红30/金10/债60）</td><td>6.22%</td><td>−13.01%</td><td>0.48</td><td>−9.46%</td></tr>
+    <tr><td>长周期</td><td class="t-left">替股 20（红20/金20/债60）</td><td class="t-strong">6.17%</td><td class="t-strong">−8.66%</td><td class="t-strong">0.71</td><td class="t-strong">−6.93%</td></tr>
+    <tr><td>长周期</td><td class="t-left">替债 20（红40/金20/债40）</td><td>7.76%</td><td>−17.78%</td><td>0.44</td><td>−13.14%</td></tr>
+    <tr><td>可交易</td><td class="t-left">基准 40/60</td><td>7.24%</td><td>−6.81%</td><td>1.06</td><td>−5.35%</td></tr>
+    <tr><td>可交易</td><td class="t-left">替股 10</td><td class="t-strong">7.40%</td><td class="t-strong">−5.43%</td><td class="t-strong">1.36</td><td class="t-strong">−4.01%</td></tr>
+    <tr><td>可交易</td><td class="t-left">替股 20</td><td>7.48%</td><td>−7.85%</td><td>0.95</td><td>−4.18%</td></tr>
+  </tbody>
+</table>
+
+<p>长周期版"替股 20"把最大回撤从 −17.4% 压到 −8.7%，年化几乎不变（6.17% 对 6.21%），Calmar 从 0.36 升到 0.71。单看这三个数，它像是本轮最好的发现。但拆到年度就露馅了：<strong>2015 年基准赚 13.3%，替股 20 只赚 5.3%</strong>——股灾那一年的回撤确实被压住了，代价是全年少赚 8 个百分点；2019 年以后金价大涨，才把这笔账补回来。</p>
+
+<p>压测进一步确认：把黄金年化收益扣减 4 个百分点后，"替股 20"的年化降到 5.32%，低于基准的 6.21%；扣减 2 个百分点就已经低于基准。2026 年黄金 −22.2%，替股 20 的组合收益 −1.5%，而基准是 +4.4%。<strong>也就是说，它的收益端完全依赖金价，回撤端有效但只经历过一次股灾样本。</strong></p>
+
+<p>结论：黄金是尾部保险，不是收益来源。若配置，比例不应超过 10%（替股口径），并且要在报告里明确"这部分钱是买保险的，长期可能倒贴收益"。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/17_黄金_两个口径与年度.png" alt="黄金的两个口径" width="560"></p>
+  <figcaption><p>图 12　加黄金的两个口径，以及黄金自身的分年度收益（2025 年 +56%，2026 年 −22%）</p></figcaption>
+</figure>
+
+<h2 id="section-8-3">7.3　创业板：同一标的，两个样本给出相反答案</h2>
+
+<p>创业板常被视为"牛市弹性最好的宽基"。要检验的不是"牛市里谁涨得多"，而是"把一部分红利换成创业板，全周期的风险调整后收益是否变好"。</p>
+
+<table>
+  <caption>表 15　加创业板：长周期与可交易两个样本的结论相反</caption>
+  <thead>
+    <tr><th>版本</th><th>方案</th><th>年化</th><th>最大回撤</th><th>Calmar</th><th>最差 20 日</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>长周期</td><td class="t-left">基准 40/60</td><td class="t-strong">6.21%</td><td class="t-strong">−17.35%</td><td class="t-strong">0.36</td><td class="t-strong">−11.94%</td></tr>
+    <tr><td>长周期</td><td class="t-left">替股 10</td><td>6.07%</td><td>−18.85%</td><td>0.32</td><td>−13.87%</td></tr>
+    <tr><td>长周期</td><td class="t-left">替股 20</td><td>5.79%</td><td>−20.75%</td><td>0.28</td><td>−15.79%</td></tr>
+    <tr><td>可交易</td><td class="t-left">基准 40/60</td><td>7.24%</td><td>−6.81%</td><td>1.06</td><td>−5.35%</td></tr>
+    <tr><td>可交易</td><td class="t-left">替股 10</td><td class="t-strong">7.49%</td><td class="t-strong">−6.11%</td><td class="t-strong">1.23</td><td class="t-strong">−4.97%</td></tr>
+    <tr><td>可交易</td><td class="t-left">替股 20</td><td>7.58%</td><td>−8.36%</td><td>0.91</td><td>−5.75%</td></tr>
+  </tbody>
+</table>
+
+<p>长周期版是单调变差：年化从 6.21% 降到 5.79%，回撤从 −17.4% 扩大到 −20.8%，Calmar 从 0.36 掉到 0.28。可交易版却相反，替股 10 的年化、回撤、Calmar 三项都略好。差异的来源很清楚：可交易样本始于 2019 年，完整吃到了 2019—2021 年的成长股牛市；而长周期样本还包含 2016、2017、2018 三年，创业板分别 −18.4%、−12.6%、−28.3%。</p>
+
+<p>放大器在涨跌两边都放大，但倍数不对称：2015 上半年创业板 +160.1%、红利 +54.2%（3.0 倍），下半年创业板 −51.2%、红利 −42.5%（1.2 倍）。看起来"涨 3 倍、跌 1.2 倍"很划算，可是 2016—2018 连续三年下跌把超额全部吐了回去。<strong>同一标的在两个样本里给出相反答案，本身就是"不稳健"的证据</strong>，因此我们否掉它，而不是挑好看的那一段写进结论。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/19_创业板_弹性与代价.png" alt="加创业板" width="560"></p>
+  <figcaption><p>图 13　加创业板：牛市放大、熊市也放大，长周期版相对净值全程落后</p></figcaption>
+</figure>
+
+<h2 id="section-8-4">7.4　任意时点进场，持有三年会怎样</h2>
+
+<p>全区间年化回答不了"我 2021 年高点进场怎么办"。我们把每个交易日都当作起点，取其后整三年的净值，计算年化收益与窗口内最大回撤，再看整个分布。</p>
+
+<table>
+  <caption>表 16　滚动三年窗口：最差、分位与亏损概率</caption>
+  <thead>
+    <tr><th>版本</th><th>对象</th><th>最差三年</th><th>5 分位</th><th>中位</th><th>三年亏损占比</th><th>最差窗口</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>长周期</td><td class="t-left t-strong">本策略</td><td class="t-strong">+1.17%</td><td>+2.15%</td><td>+5.89%</td><td class="t-strong">0%</td><td>2018-01 → 2021-01</td></tr>
+    <tr><td>长周期</td><td class="t-left">红利买入持有</td><td>−4.51%</td><td>+0.02%</td><td>+9.73%</td><td>5%</td><td>2015-06 → 2018-06</td></tr>
+    <tr><td>长周期</td><td class="t-left">沪深300</td><td>−14.87%</td><td>−10.00%</td><td>+6.00%</td><td>29%</td><td>2021-01 → 2024-01</td></tr>
+    <tr><td>可交易</td><td class="t-left t-strong">本策略</td><td class="t-strong">+3.33%</td><td>+5.12%</td><td>+7.11%</td><td class="t-strong">0%</td><td>2021-09 → 2024-09</td></tr>
+    <tr><td>可交易</td><td class="t-left">红利买入持有</td><td>+2.19%</td><td>+7.20%</td><td>+12.11%</td><td>0%</td><td>2021-09 → 2024-09</td></tr>
+    <tr><td>可交易</td><td class="t-left">沪深300</td><td>−15.36%</td><td>−11.14%</td><td>+1.25%</td><td>42%</td><td>2021-01 → 2024-01</td></tr>
+  </tbody>
+</table>
+
+<p>结论有两层。第一，<strong>本策略在任何时点买入并持有三年，都没有出现过亏损</strong>：长周期最差 +1.17%，可交易最差 +3.33%。第二，代价是上行也被削掉：红利买入持有在中位窗口是 +9.73%/+12.11%，本策略只有 +5.89%/+7.11%。这与全文的定位一致——它卖的不是收益，是"不会让你在第三年还亏钱"。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/18_滚动三年_分布.png" alt="滚动三年" width="560"></p>
+  <figcaption><p>图 14　任意时点买入并持有三年的年化收益：策略全程在零线以上，沪深300 有 29%–42% 的窗口为负</p>
+</figcaption>
+</figure>
+
+<h1 id="section-9">八、结论</h1>
+
+<p>本研究从一个直觉上合理的择时策略出发，用六组对照实验逐步证明它无效，最终收敛为一个不做方向判断的配置型策略；随后又用两组边界检验和三项资产端实验，确认了这个结论的边界。主要结论有六条：</p>
+
+<ol>
+  <li><strong>换估值锚不能挽救择时策略。</strong>把沪深300 的 PE 分位换成一个"更正确"的红利类估值锚，样本外表现反而从 +7.2% 降到 −7.0%。原诊断错误。</li>
+  <li><strong>在暴露匹配的前提下，不判断优于判断。</strong>同样的 34% 权益暴露，固定配置样本外年化 5.0%，择时策略 1.5%，且回撤更小。</li>
+  <li><strong>窄幅择时的表面有效经不起安慰剂检验。</strong>100 次随机重排显示，真实信号的夏普落在随机分布的 14% 位置，估值方向没有信息量。</li>
+  <li><strong>配置结构本身是有价值的。</strong>40% 红利 + 60% 国债，加上只降不升的波动率闸门，在可交易口径实现年化 7.2%、最大回撤 −6.3%、Calmar 1.14，样本内外一致。</li>
+  <li><strong>仓位层面的"灵活化"没有免费午餐。</strong>四组机制在暴露匹配后，超额都在 0.04–0.27 之间；唯一双赢的 UP50 在被压到可执行换手后，Calmar 从 0.58 掉回 0.53。真正确定的收益是再平衡溢价：同平均仓位下，月度再平衡比任其漂移每年高 0.5–0.6 个百分点。</li>
+  <li><strong>资产端的扩展都成立在"有边界"的前提下。</strong>债端久期单调改善但完全依赖利率下行（2024 年一年占四成），只能做支线；黄金能把回撤腰斩，但收益端靠金价，扣减 4 个百分点后就输给基准，是保险而非收益来源；创业板在同一标的的两个样本里给出相反答案，不稳健，否。</li>
+</ol>
+
+<p>如果只能留一句话，我们希望是这句：一个策略"讲得通"不等于它"有效"，而区分这两者的唯一办法，是给对照组同样的暴露，然后看差异还在不在。</p>
+
+<h1 id="section-10">附录 A　复现步骤</h1>
+
+<p>环境：Python 3.13，依赖见 <code>requirements.txt</code>（pandas、numpy、matplotlib、akshare）。国内安装请加清华镜像：<code>pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</code>。</p>
+
+<pre># 1. 数据（data/ 已随仓库提交，可跳过；跳过则全程离线）
+python src/fetch_etf.py
+python src/fetch_index.py
+
+# 2. 主流程：生成比例表 → 回测 → 指标 → 图
+python src/run_strategy.py</pre>
+
+<p>主流程产出：<code>output/final_nav_{long,trade}.csv</code>、<code>output/final_metrics_{long,trade}.csv</code>、<code>charts/14_最终策略_{long,trade}.png</code>。</p>
+
+<pre># 3. 复现本文第三节的六组实验
+python src/experiment_anchor.py      # 实验一：换估值锚
+python src/experiment_structure.py   # 实验二：择时 vs 不择时
+python src/experiment_grid.py        # 实验三：参数网格（约 3 分钟）
+python src/experiment_ratio.py       # 实验四：比例扫描
+python src/experiment_core.py        # 实验五：窄幅择时
+python src/experiment_placebo.py     # 实验六：安慰剂（约 3 分钟）
+python src/experiment_vol.py         # 实验七：波动率目标化</pre>
+
+<p>实验脚本曾在全新目录（不含 <code>output/</code>、<code>charts/</code>）中完整重跑验证，产出的指标表与净值序列与原始结果逐字节一致。</p>
+
+</section>
+
+</body>
+</html>

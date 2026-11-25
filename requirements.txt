@@ -1,0 +1,10 @@
+# 依赖清单
+# 本项目在 Python 3.13.14 下验证通过，实测版本：
+#   pandas 3.1.1 / numpy 2.5.5 / matplotlib 3.11.2 / akshare 1.20.65
+# 安装（国内务必加镜像，直连 pypi 单页要 20 秒以上）：
+#   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+pandas>=2.2,<4
+numpy>=1.26
+matplotlib>=3.8
+akshare>=1.20

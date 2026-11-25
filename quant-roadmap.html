@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量化交易课程 · 推进地图</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f6f6f3;
+    --card: #ffffff;
+    --line: #e7e5df;
+    --line-2: #d8d5cc;
+    --text: #23221e;
+    --text-2: #5d5c57;
+    --text-3: #8b897f;
+    --blue: #378ADD;
+    --blue-deep: #185FA5;
+    --blue-bg: #E6F1FB;
+    --green: #1D9E75;
+    --green-bg: #E1F5EE;
+    --amber: #BA7517;
+    --amber-bg: #FAEEDA;
+    --red: #C0392B;
+    --red-bg: #FCEBEB;
+    --purple: #534AB7;
+    --purple-bg: #EEEDFE;
+  }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 90px; }
+
+  .hdr { position: sticky; top: 0; z-index: 30; background: var(--bg);
+    padding: 18px 0 12px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+  .hdr-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  h1 { font-size: 17px; font-weight: 500; letter-spacing: -.2px; }
+  .hdr-sub { font-size: 12px; color: var(--text-3); }
+  .hdr-actions { margin-left: auto; display: flex; gap: 6px; }
+  button { font-family: inherit; font-size: 12px; color: var(--text-2); background: var(--card);
+    border: 1px solid var(--line-2); border-radius: 6px; padding: 4px 10px; cursor: pointer;
+    transition: background .15s, color .15s; }
+  button:hover { background: #f0efea; color: var(--text); }
+  .bar { height: 5px; background: #e8e6e0; border-radius: 99px; margin-top: 13px; overflow: hidden; }
+  .bar-fill { height: 100%; width: 0; background: var(--green); border-radius: 99px;
+    transition: width .3s cubic-bezier(.4,0,.2,1); }
+  .bar-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px;
+    font-size: 12px; color: var(--text-3); }
+  #nextTip { color: var(--blue-deep); }
+
+  .block { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; margin-bottom: 26px; }
+  .block-h { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 0; }
+  .block-h h2 { font-size: 14.5px; font-weight: 500; }
+  .lock { font-size: 11px; padding: 1px 7px; border-radius: 5px; background: var(--green-bg); color: #0F6E56; }
+  .block-sub { font-size: 12.5px; color: var(--text-3); margin: 3px 0 12px; }
+
+  .pool { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .pool-item { border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
+  .pool-name { font-size: 12.5px; font-weight: 500; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pool-pos { font-size: 10.5px; padding: 0 6px; border-radius: 4px; font-weight: 400;
+    background: var(--amber-bg); color: #854F0B; white-space: nowrap; }
+  .pool-pos.wide { background: var(--blue-bg); color: var(--blue-deep); }
+  .pool-pos.def { background: var(--green-bg); color: #0F6E56; }
+  .pool-pos.def2 { background: #F1EFE8; color: #5F5E5A; }
+  .pool-why { font-size: 11.5px; color: var(--text-2); margin-top: 3px; }
+
+  .rule-box { background: #fbfbf9; border: 1px solid var(--line); border-radius: 8px; padding: 11px 13px; }
+  .rule-h { font-size: 11.5px; color: var(--text-3); margin-bottom: 7px; letter-spacing: .03em; }
+  .rule-box ol { padding-left: 17px; }
+  .rule-box li { font-size: 12.5px; color: var(--text-2); margin-bottom: 3px; }
+  .rule-note { font-size: 11.5px; color: var(--text-3); margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed var(--line); }
+
+  .phase { margin-bottom: 4px; }
+  .phase-h { display: flex; align-items: center; gap: 9px; padding: 16px 0 9px; }
+  .phase-idx { font-size: 11px; color: var(--text-3); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+  .phase-name { font-size: 13.5px; font-weight: 500; }
+  .phase-who { font-size: 11px; padding: 1px 7px; border-radius: 5px; background: var(--purple-bg); color: var(--purple); }
+  .phase-who.a { background: var(--blue-bg); color: var(--blue-deep); }
+  .phase-who.both { background: #f1efea; color: var(--text-2); }
+  .phase-prog { margin-left: auto; font-size: 11.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+  .steps { border-left: 2px solid var(--line-2); margin-left: 5px; padding-left: 15px; }
+  .st { border: 1px solid var(--line); border-radius: 9px; background: var(--card);
+    margin-bottom: 7px; overflow: hidden; transition: border-color .15s, background .15s; }
+  .st:hover { border-color: var(--line-2); }
+  .st.done { background: #fbfdfc; border-color: #d3e8df; }
+  .st.now { border-color: #b9d6f5; }
+  .st-row { display: flex; align-items: flex-start; gap: 9px; padding: 9px 12px; cursor: pointer; }
+  .cbx { flex: 0 0 auto; margin-top: 2px; width: 15px; height: 15px; border-radius: 4px;
+    border: 1.5px solid var(--line-2); background: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .cbx:hover { border-color: var(--green); }
+  .st.done .cbx, .li.done .cbx { background: var(--green); border-color: var(--green); }
+  .cbx svg { opacity: 0; }
+  .st.done .cbx svg, .li.done .cbx svg { opacity: 1; }
+
+  .st-main { flex: 1 1 auto; min-width: 0; }
+  .st-title { font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .st.done .st-title { color: var(--text-2); }
+  .st-no { font-size: 11px; color: var(--text-3); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .st-done-line { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+  .st-done-line::before { content: "✓ "; color: var(--green); }
+  .chev { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 3px; color: var(--text-3);
+    transition: transform .18s; display: flex; align-items: center; justify-content: center; }
+  .st.open .chev { transform: rotate(180deg); }
+
+  .st-help { display: none; padding: 0 12px 11px 36px; }
+  .st.open .st-help { display: block; }
+  .how { margin: 0 0 7px; }
+  .how li { list-style: none; position: relative; padding-left: 14px; font-size: 12.5px;
+    color: var(--text-2); margin-bottom: 3px; }
+  .how li::before { content: ""; position: absolute; left: 3px; top: 8px; width: 4px; height: 4px;
+    border-radius: 50%; background: var(--line-2); }
+  .stuck { font-size: 12.5px; color: #6d2b22; background: var(--red-bg); border-radius: 6px;
+    padding: 7px 10px; }
+  .stuck::before { content: "卡点 "; font-weight: 500; }
+  .pbox { position: relative; margin-top: 7px; background: #fbfbf9; border: 1px solid var(--line);
+    border-radius: 6px; padding: 8px 10px; }
+  .ptxt { font-size: 12px; color: var(--text-2); font-family: ui-monospace, Consolas, monospace;
+    line-height: 1.65; padding-right: 46px; }
+  .copy { position: absolute; top: 6px; right: 6px; font-size: 10.5px; padding: 1px 7px; }
+
+  .sec { margin-top: 34px; }
+  .sec-h { font-size: 14.5px; font-weight: 500; margin-bottom: 3px; }
+  .sec-sub { font-size: 12.5px; color: var(--text-3); margin-bottom: 11px; }
+  .list { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .li { display: flex; align-items: flex-start; gap: 9px; padding: 9px 13px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .li:last-child { border-bottom: none; }
+  .li:hover { background: #fbfbf9; }
+  .li.done { background: #fbfdfc; }
+  .li.done .li-name { color: var(--text-3); text-decoration: line-through; }
+  .li-name { font-size: 13px; font-weight: 500; }
+  .li-desc { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+  .cost { font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: var(--amber-bg);
+    color: #854F0B; white-space: nowrap; }
+
+  .risks { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .risk { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; }
+  .risk-h { font-size: 12.5px; font-weight: 500; margin-bottom: 2px; display: flex; gap: 6px; align-items: center; }
+  .risk-h .lv { font-size: 10px; padding: 0 5px; border-radius: 4px; background: var(--red-bg); color: #9b2c1f; font-weight: 400; }
+  .risk-h .lv.mid { background: var(--amber-bg); color: #854F0B; }
+  .risk p { font-size: 12px; color: var(--text-2); }
+
+  .foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-size: 11.5px; color: var(--text-3); text-align: center; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 0 13px 60px; }
+    .pool { grid-template-columns: 1fr; }
+    .risks { grid-template-columns: 1fr; }
+    .hdr-actions { width: 100%; margin-left: 0; margin-top: 7px; }
+    .steps { padding-left: 11px; }
+    .st-help { padding-left: 12px; }
+  }
+  @media print {
+    .hdr { position: static; }
+    .st-help { display: block !important; }
+    .hdr-actions, .copy { display: none; }
+    .st { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hdr">
+    <div class="hdr-top">
+      <h1>量化交易课程 · 推进地图</h1>
+      <span class="hdr-sub">32 个小任务 · 一步一件事</span>
+      <div class="hdr-actions">
+        <button id="expandAll">全部展开</button>
+        <button id="reset">重置</button>
+      </div>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    <div class="bar-meta">
+      <span id="count">主线 0 / 32</span>
+      <span id="nextTip">下一步：建 GitHub 仓库并推第一次</span>
+    </div>
+  </header>
+
+  <div class="block">
+    <div class="block-h">
+      <h2>方向已定 · 配置型策略</h2>
+      <span class="lock">2026-11-24 重构</span>
+    </div>
+    <div class="block-sub">不做方向择时，只决定持有比例。原来的择时版（v2）已被 6 组对照实验证伪，证据在 <code>output/exp/</code> 与 <code>charts/07–13</code>。</div>
+
+    <div class="pool">
+      <div class="pool-item">
+        <div class="pool-name">红利低波 ETF <span class="pool-pos">风险资产 40%</span></div>
+        <div class="pool-why">股息是不依赖他人接盘的收益来源；低波因子把波动压在 15% 上下</div>
+      </div>
+      <div class="pool-item">
+        <div class="pool-name">国债 ETF <span class="pool-pos def">减震器 60%</span></div>
+        <div class="pool-why">与权益长期负相关，年化波动约 2%，把组合波动压到 6.5%</div>
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <div class="rule-h">规则 v3　·　每月最后一个交易日调整一次</div>
+      <ol>
+        <li>目标比例：红利低波 <b>40%</b> + 国债 <b>60%</b>，每月末拉回目标（再平衡）</li>
+        <li>风险闸门：组合近 60 日已实现波动 &gt; 年化 8% 时，按比例收缩红利仓位，下限 20%</li>
+        <li>波动回落后恢复至 40%；不做任何方向判断，不预测涨跌</li>
+      </ol>
+      <div class="rule-note">主基准 沪深300 买入持有　·　辅基准 红利低波买入持有　·　风险预算：最大回撤 ≤ 7%（可交易口径）</div>
+    </div>
+    <div class="block-sub" style="margin-top:10px;margin-bottom:0">被证伪后淘汰的做法：估值分位定仓位、120 日均线扣减、60 日动量排名、沪深300 作为持仓。这些不是「没想到」，是「试过、输了」。</div>
+  </div>
+
+  <main id="phases"></main>
+
+  <section class="sec">
+    <h2 class="sec-h">支线 · 主线走通后再挑，超过半天没进展就砍</h2>
+    <p class="sec-sub">支线的价值永远低于主线的完整度。前两条是答辩时最缺的「对比实验」。</p>
+    <div class="list" id="branches"></div>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-h">卡住时的退路 · 提前写死，不要临场决策</h2>
+    <p class="sec-sub">这四条覆盖了零基础做量化项目绝大多数失败方式。</p>
+    <div class="risks">
+      <div class="risk">
+        <div class="risk-h">数据接口挂了 <span class="lv">最高频</span></div>
+        <p>第 2 关当天必须落成本地 csv，此后全程离线跑，最脆的一环就被摘掉了。</p>
+      </div>
+      <div class="risk">
+        <div class="risk-h">代码跑不通 <span class="lv mid">按序降级</span></div>
+        <p>去掉波动率闸门（退成纯 40/60 固定比例）→ 月频改季频 → 只跑可交易版不做长周期版。每降一档都还是合格品。</p>
+      </div>
+      <div class="risk">
+        <div class="risk-h">结果不如预期 <span class="lv mid">不是问题</span></div>
+        <p>评分看逻辑不看收益。这个项目已经亲身证明了：六组实验的负面结论，比一个好看的数字更能说明方法。</p>
+      </div>
+      <div class="risk">
+        <div class="risk-h">讲不清 <span class="lv">唯一没退路</span></div>
+        <p>七成分数压在能不能讲明白上。唯一解是每天互相讲一遍。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-h">答辩五问 · 全部答上再提交</h2>
+    <p class="sec-sub">点一下代表"已能不看稿答出来"。</p>
+    <div class="list" id="qs"></div>
+  </section>
+
+  <div class="foot">单文件网页 · 勾选状态存在本机浏览器 · 想留档用浏览器打印成 PDF</div>
+</div>
+
+<script>
+const KEY = "quant-roadmap-v3";
+
+// 预置已完成的任务（对应 D:/量化交易 里已经跑通的部分）
+// 首次打开时自动勾上；之后以浏览器里的勾选为准，取消不会被覆盖回来。
+const PRESET = [
+  "a1", "a2", "a3",            // 第 0 关：配置结构、风险预算、一句话定义
+  "b1", "b2",                  // 第 1 关：目录与依赖（GitHub 仓库 b3 尚未建）
+  "c1", "c2", "c3", "c4", "c5", // 第 2 关：数据全部落地并通过体检
+  "d1", "d2", "d3", "d4",       // 第 3 关：比例表与波动率闸门，已手算抽查
+  "e1", "e2", "e3", "e4",       // 第 4 关：回测内核、两条基准、未来函数检查
+  "f1", "f2", "f3", "f4", "f5", // 第 5 关：五项指标、净值图、样本内外、对照实验、安慰剂
+  "g1", "g2", "g3", "g4", "g5", // 第 6 关：README、清理仓库、换目录重跑、报告五章、嵌图表
+  "x3", "x6", "x8",           // 支线：波动率目标化（已进主策略）、比例扫描图、债端久期混合
+  "i1", "i2", "i4", "i6"      // 第 8 关：再平衡、黄金、滚动三年、创业板已跑完
+];
+
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+const PRESET_VERSION = 6;   // 更新预置内容时改这个数字，会让新版预置重新生效一次
+if (saved.__preset !== PRESET_VERSION) {
+  PRESET.forEach(id => { if (!(id in saved)) saved[id] = true; });
+  saved.__preset = PRESET_VERSION;
+  localStorage.setItem(KEY, JSON.stringify(saved));
+}
+const state = saved;
+const save = () => localStorage.setItem(KEY, JSON.stringify(state));
+
+const CHECK = '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M1.5 5.2L4 7.6L8.6 2.6" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHEV = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const PHASES = [
+  { id: "p0", no: "第 0 关", name: "确认方向", who: "两人一起", whoCls: "both", steps: [
+    { id: "a1", title: "确认标的与比例：40% 红利 + 60% 国债",
+      ok: "能说出 40% 是怎么来的：先定回撤 ≤7% 的预算，再反推比例",
+      how: ["顺序不能反：先定风险预算，再算比例。先拍比例再看回撤，答辩时说不清",
+            "40% 是「回撤不突破 7%」这条约束下的上限，50% 就到 −8.5% 了"],
+      stuck: "有人提出换个比例，就问他一句：那你想承受多大的回撤？把问题从「觉得」换成「约束」。" },
+    { id: "a2", title: "确认风险预算：回撤 7%、波动 8%",
+      ok: "两个数字写下来，且说得清它们的关系",
+      how: ["回撤预算是「底线」，波动闸门是「手段」，不要混成一个",
+            "波动闸门只在超预算时收缩，回落后恢复，不是永久降仓"],
+      stuck: "两个数字经常被搞混：回撤是结果，波动是过程；闸门管过程，底线管结果。" },
+    { id: "a3", title: "写成一句话策略定义",
+      ok: "一句话含标的、比例、再平衡频率、风险闸门、基准五个要素",
+      how: ["模板：长期持有 ___% A + ___% B，每 ___ 把比例拉回目标；当 ___ 超过 ___ 时收缩 A，回落即恢复；对照 ___ 基准"],
+      stuck: "写不完整说明还有词没想清，回到前两步。" }
+  ]},
+
+  { id: "p1", no: "第 1 关", name: "搭骨架", who: "A 主导", whoCls: "a", steps: [
+    { id: "b1", title: "建项目文件夹与子目录",
+      ok: "目录里有 data/、src/、output/、charts/、README.md",
+      how: ["一次建好，之后所有文件各归各位", "charts/ 专门放图，报告和 PPT 直接从这拿"],
+      stuck: "路径不要带中文和空格，后面一半的报错来自这里。" },
+    { id: "b2", title: "装好三个库并导入成功",
+      ok: "三行 import 全部无报错，截图存下来",
+      how: ["数据表处理、数据源、绘图各装一个库", "装完立刻 import 验证一次，别等到写代码时才发现"],
+      stuck: "把报错原文整段贴给 AI，不要只说「装不上」。",
+      prompt: "我在 Windows 上用 Python 装这三个库报错了，完整报错如下：<粘贴全文>。请告诉我原因和最省事的解决步骤。" },
+    { id: "b3", title: "建 GitHub 仓库并推第一次",
+      ok: "GitHub 上能看到这个仓库，至少 1 次提交记录",
+      how: ["空仓库也行，先建起来，之后每过一关推一次", "如果账号授权暂时连不上，先在本地 git init + commit，等能连上了再推"],
+      stuck: "推不上去多半是没配令牌或 SSH，让 AI 按你的报错给具体命令。这一步是目前唯一卡住的，其余 13 项都已完成。" }
+  ]},
+
+  { id: "p2", no: "第 2 关", name: "数据落地", who: "A 主导 · B 复核", whoCls: "a", steps: [
+    { id: "c1", title: "验证每个标的的可用起点",
+      ok: "已确认：512890 从 2019-01-18 起，四只的共同起点由它决定",
+      how: ["红利低波 ETF 上市最晚，它会直接限制样本长度", "策略不再需要指标预热，所以回测起点就是 2019-01-31"],
+      stuck: "起点太晚 → 走甲方案：指数跑长周期、ETF 跑可交易性。",
+      prompt: "帮我查这几个 ETF 的上市日期和第一个交易日：512890、510300、511010、511880。输出一张表，说明它们共同的可用起始日期。" },
+    { id: "c2", title: "拉 4 只 ETF 的日线并存本地",
+      ok: "data/ 下 4 个 csv，列名统一为 date/open/high/low/close/volume",
+      how: ["东财 push2 会封 IP，改走新浪接口拿价格与分红记录，自己算后复权因子",
+            "512890 在 2021-10-25 有过 1:2 份额折算（1.639→0.801），不补回去会出现 −51% 的假暴跌"],
+      stuck: "接口报错就换一个免费数据源，不要在一个源上死磕。",
+      prompt: "用 akshare 拉 512890、510300、511010、511880 四只 ETF 的日线后复权数据，存成 data/ 下 4 个 csv，列名统一为 date,open,high,low,close,volume，并打印每个文件的行数和起止日期。" },
+    { id: "c3", title: "拉指数数据做长周期版",
+      ok: "data/index/ 下有红利低波、沪深300 两条全收益序列",
+      how: ["必须用全收益指数（含分红再投资），不能只拉价格指数", "往前多拉两年，是为了让 60 日波动窗口在 2015 年初就有数据"],
+      stuck: "只有价格指数 → 红利的分红全被漏掉，长周期版的结论会直接失真。宁可换接口也要拿到全收益。",
+      prompt: "帮我拉中证红利低波动指数的全收益版本、沪深300 全收益指数、以及一个国债指数的历史数据，从 2015 年开始，存成 csv 并说明每个序列的起始日期。" },
+    { id: "c4", title: "画曲线验真伪",
+      ok: "图上能看到 2015 股灾、2018 熊市、2022 下跌三段凹陷",
+      how: ["只为验数据真伪，不求好看", "几条线放同一张图，一眼看出谁涨谁跌"],
+      stuck: "线是直的、断的或只有几个月，说明数据没拉全。" },
+    { id: "c5", title: "核对行数、日期与空值",
+      ok: "每个文件行数与起止日期记在纸上，没有重复日期和 0 价格",
+      how: ["三件事：行数够不够、日期连不连续、有没有价格 0 或空行"],
+      stuck: "缺几天不影响月度策略，缺几个月才需要补。" }
+  ]},
+
+  { id: "p3", no: "第 3 关", name: "比例表", who: "B 定规则 · A 实现", whoCls: "both", steps: [
+    { id: "d1", title: "写「目标比例」规则",
+      ok: "一段话能让别人算出某个调仓日该持多少红利：40%，或波动收缩后的值",
+      how: ["基准比例恒定 40%，没有档位、没有插值，一句话讲完",
+            "简单不是偷懒：越简单越能证明结果不是参数拟合出来的"],
+      stuck: "想加档位就问自己：这档位在样本外验证过吗？没验证过就是拍脑袋。",
+      prompt: "我想写一个配置策略：红利低波 ETF 占 40%、国债 ETF 占 60%，每月最后一个交易日把权重拉回目标。请写一个函数生成月度目标权重表，输出 csv，每行权重合计为 1。" },
+    { id: "d2", title: "写「波动率闸门」规则",
+      ok: "一段话说清：用什么窗口算波动、超多少才收缩、收缩到几分之几、下限多少",
+      how: ["用**上一期持有的比例**算组合历史波动，不能用当期还没发生的价格",
+            "只降不升：上限锁 40%，避免变成「低波动时加杠杆」"],
+      stuck: "写成「波动低就加仓」会突破风险预算，那就不是稳健策略了。",
+      prompt: "给上面的配置策略加一个波动率闸门：用过去 60 个交易日、按当前权重算组合已实现波动（年化），若超过 8% 则把红利权重乘以 8%/实际波动，下限 20%，上限 40%。注意用上一期权重算，避免未来函数。" },
+    { id: "d3", title: "生成月度比例表",
+      ok: "表里每月一行，含红利权重、当期已实现波动、缩放系数，权重合计等于 1",
+      how: ["先不管回测，只要这张表", "缩放系数那一列要能看出哪些月份被闸门动过"],
+      stuck: "权重加起来不是 100%，八成是收缩后忘记把差额补回国债。",
+      prompt: "根据我的规则生成月度目标权重表：每月最后一个交易日输出红利低波与国债的目标权重、当期组合已实现波动、缩放系数，要求每行权重合计为 1，输出 csv。" },
+    { id: "d4", title: "手算三个月核对",
+      ok: "挑一个月闸门未触发、一个月触发，手算权重与程序输出一致（允许 1% 取整误差）",
+      how: ["用 Excel 或计算器算，不要用程序验程序",
+            "触发月要确认：波动算的是调仓日之前 60 天，不是之后"],
+      stuck: "不一致时先怀疑用到了调仓日之后的波动数据。" }
+  ]},
+
+  { id: "p4", no: "第 4 关", name: "回测内核", who: "A 主导 · B 对抗检查", whoCls: "a", steps: [
+    { id: "e1", title: "先只算一次调仓",
+      ok: "手工能对上的一次调仓后持仓变化",
+      how: ["别急着写循环，先算「上月持仓 → 本月目标权重 → 换手」这一小段", "这段对了，循环才有意义"],
+      stuck: "连单次都对不上，后面一定全错，别往下走。" },
+    { id: "e2", title: "扩成循环跑全区间",
+      ok: "一条每日净值序列，从 1.0 起算；ETF 版和指数版各跑一遍",
+      how: ["按目标权重调仓，次日成交，双边万 2 手续费", "每天记录一次总资产"],
+      stuck: "净值乱跳先查日期有没有对齐、有没有重复行。" },
+    { id: "e3", title: "算出两条基准净值",
+      ok: "沪深300 买入持有、红利低波买入持有，两条都从 1.0 起，日期与策略完全一致",
+      how: ["两条基准不是重复工作，是为了回答两个不同问题", "日期不一致就没法比，先对齐交易日历"],
+      stuck: "日期对不齐就把三条都按同一份交易日历重采样。",
+      prompt: "策略净值已经有了，请再生成两条基准净值：沪深300 买入持有、红利低波买入持有，起止日期与策略完全一致，三条拼成一张 csv。" },
+    { id: "e4", title: "对抗式检查未来函数",
+      ok: "能指着代码说出「每个月的权重只用到上月末及之前的数据」",
+      how: ["让对方随机挑一个调仓日，你倒推那天收盘时到底知道什么",
+            "波动率闸门最容易作弊：算波动只能用到调仓日之前的价格，不能包含调仓日之后"],
+      stuck: "年化收益超过 100% 基本就是未来函数，回去查数据截点。" }
+  ]},
+
+  { id: "p5", no: "第 5 关", name: "评估", who: "A 算 · B 解读", whoCls: "both", steps: [
+    { id: "f1", title: "算五项指标",
+      ok: "一张表，策略与两条基准各有五个数",
+      how: ["累计、年化、最大回撤、夏普，再加一个 Calmar（年化 ÷ 最大回撤）",
+            "Calmar 是这类组合最该看的一列：国债占比高会把夏普抬高，Calmar 不受这个影响"],
+      stuck: "夏普算出几百是年化系数错（日频乘 √252、月频乘 √12）。",
+      prompt: "根据三条每日净值序列（策略 + 两条基准），计算累计收益率、年化收益率、最大回撤、夏普比率和 Calmar 比率，输出一张对比表。" },
+    { id: "f2", title: "画净值与回撤对比图",
+      ok: "净值三条线都从 1.0 起；回撤图上策略明显更浅",
+      how: ["这是评委第一眼看的东西，优先做", "把「闸门触发」的月份标出来，能直接看出它在股灾里做了什么"],
+      stuck: "一条线到底说明净值没累乘，回去查回测。" },
+    { id: "f3", title: "拆成样本内与样本外",
+      ok: "同一张表里有 2015–2020 和 2021–2026 两段（ETF 版对应 2019–2022 / 2023–），各五项指标",
+      how: ["切分点提前定死，绝不能跑完再挑——事后挑切分点是这套作业最容易被质疑的地方"],
+      stuck: "切完样本外很差，如实写进报告，这反而是加分项。" },
+    { id: "f4", title: "跑「择时 vs 不择时」对照",
+      ok: "用策略自己的平均权重做一个不判断的组合，两者暴露相同、结果差多少写在纸上",
+      how: ["这是评价择时策略的标准做法，也是最容易被评委问到的点：凭什么说你的信号有用",
+            "如果固定配置不输给策略，就必须承认信号无效，别硬解释"],
+      stuck: "两组暴露不一样就没法比，先把平均权重对齐再跑。",
+      prompt: "帮我做一个对照实验：用策略自己的平均持仓权重构造一个每月机械再平衡的固定配置组合，与策略对比年化、最大回撤、夏普，确保两者平均权益暴露相同。" },
+    { id: "f5", title: "跑安慰剂检验",
+      ok: "把信号序列随机打乱 100 次，真实信号的位置能说清（落在分布中间 = 无效）",
+      how: ["安慰剂组必须和实验组暴露完全相同，否则检验无效",
+            "落在 95% 分位以上才可以说信号有信息量；落在中间就老实承认无效"],
+      stuck: "随机组和真实组暴露不同，说明安慰剂构造错了，改用打乱重排。",
+      prompt: "帮我对一个择时信号做安慰剂检验：把它的仓位序列随机打乱 100 次，保持每期权重的分布不变，统计随机组合的夏普分布，看真实信号的夏普落在什么分位。" }
+  ]},
+
+  { id: "p6", no: "第 6 关", name: "交付", who: "B 主导 · A 配合", whoCls: "b", steps: [
+    { id: "g1", title: "写 README 的三步运行",
+      ok: "外人只看 README 就能把结果跑出来",
+      how: ["拉数据 → 算权重 → 跑回测，每条一行命令"],
+      stuck: "命令里不要出现你本机的绝对路径。" },
+    { id: "g2", title: "导依赖清单并清理仓库",
+      ok: "requirements.txt 能装出一样的环境，仓库里没有临时文件",
+      how: ["删掉「测试1」「副本」「未命名」这类文件", "大文件写进 .gitignore，并在 README 说明怎么拉"],
+      stuck: "清理前先确认主线能跑通，别把要用的删了。" },
+    { id: "g3", title: "换个文件夹重新克隆跑一遍",
+      ok: "已实测：复制 src/ 与 data/ 到全新目录（不带 output、charts），跑出的三个 csv 与原始结果逐字节一致",
+      how: ["这是防「只有我电脑能跑」的唯一办法，务必真做一次",
+            "实测中找出一个真 bug：charts/ 目录不存在时出图会崩，已在所有脚本补上自动建目录"],
+      stuck: "跑不通九成是路径写死或数据文件没提交。" },
+    { id: "g4", title: "写报告五章",
+      ok: "已成稿：report/技术报告_红利低波与国债配置策略.docx，约 7400 字，含摘要、六章、附录",
+      how: ["先写「结果」那节，最好写；其余按图补文字",
+            "分析那节必须写清：哪些结论有数据支撑、哪些还是假设",
+            "第三节按「假设→方法→结论」写六组实验，这是全文最该有分量的部分"],
+      stuck: "写不动就把已完成的图先贴进去，文字随后补。" },
+    { id: "g5", title: "把指标表与净值图嵌进报告",
+      ok: "正文里能直接看到图和表，图不糊；两套数据（指数版 / ETF 版）都放进去了",
+      how: ["图导出高清 png 或矢量，不要截屏"],
+      stuck: "图糊就重新导出，别用聊天软件里那张。" }
+  ]},
+
+  { id: "p7", no: "第 7 关", name: "演练与提交", who: "两人各自", whoCls: "both", steps: [
+    { id: "h1", title: "五问自测过关",
+      ok: "页面最下方五个问题都能不看稿答出来",
+      how: ["回到页面底部逐条打勾"],
+      stuck: "答不上就回到对应那一步的「完成标志」，那就是答案骨架。" },
+    { id: "h2", title: "90 秒讲清全篇",
+      ok: "两分钟内讲完「做了什么、为什么这样做、结果说明什么」",
+      how: ["录音一遍自己听，超时说明没抓住主线"],
+      stuck: "讲不完就砍细节，只留因果链。" },
+    { id: "h3", title: "核对命名并提交",
+      ok: "邮件名与附件名和课程要求逐字一致",
+      how: ["照着课程文档抄，不要凭记忆拼"],
+      stuck: "命名拼错等于白交，交前读一遍给对方听。" }
+  ]},
+
+  { id: "p8", no: "第 8 关", name: "深化：把结论往外推一格", who: "可并行", whoCls: "both", steps: [
+    { id: "i1", title: "再平衡的价值：频率、带宽、完全不再平衡",
+      ok: "已跑完：同平均仓位下，月度再平衡比「任其漂移」年化高 0.5–0.6pct；频率降到季度/半年只差 0.14–0.26pct；±5% 带宽省 36–46% 换手但年化反而少 0.06–0.14pct，万2 下不划算。图 charts/16",
+      how: ["对照组先跑「买入后任其漂移」，这是判断再平衡溢价正负的锚",
+            "带宽与频率会改变平均仓位，必须再做一次暴露匹配，否则又会把减仓记成功劳",
+            "若 ±5% 带宽能省一半换手而年化只掉 0.1pct，主线参数就该改——这是唯一可能免费的改进"],
+      stuck: "带宽实现看 mechanism.py 的 band 参数，不要另写一套。" },
+
+    { id: "i2", title: "加黄金的对比实验（x1 落地）",
+      ok: "已跑完：替股 x=20（红20/金20/债60）把长周期回撤从 −17.4% 压到 −8.7%，年化 6.17% 对 6.21% 基本持平；但 2015 当年少赚 8pct，收益端全靠 2019 后金价，黄金年化扣 4pct 后反而输基准（5.32% 对 6.21%）。结论：尾部保险，不是收益来源。图 charts/17",
+      how: ["518880 从 2013-07 起，覆盖 2015 股灾，这是它最大的价值",
+            "口径一：红利 40 / 黄金 x / 债 60−x；口径二：红利 40−x / 黄金 x / 债 60。不分开跑就说不清黄金替代的是谁",
+            "必做压测：金价 2019 后大涨，把黄金收益扣减 2/4pct 看结论是否翻转"],
+      stuck: "先看分年度：2013–2015 黄金是熊市，全程年化会被这一段拖低，别只看全区间。" },
+
+    { id: "i3", title: "报告补第七、八轮（含局限第 6 条）",
+      ok: "docx 里有「边界检验」与「支线：债端久期」两节，局限里写明 Calmar 对本组合有偏",
+      how: ["先补局限第 6 条：仓位越低 Calmar 越高，所以任何比较都要先暴露匹配",
+            "再补第七轮：止盈/回撤线/分档/打开上限四组机制的超额，以及换手一票否决",
+            "最后补第八轮：十年 vs 五年、单调无平台、优势四成来自 2024"],
+      stuck: "报告已有表号连续，新表从表 10 开始编，别打乱前面的引用。" },
+
+    { id: "i4", title: "滚动 3 年稳健性（答辩防守）",
+      ok: "已跑完：本策略任意时点买入持有 3 年，最差年化仍有 +1.17%（长周期）/ +3.33%（可交易），三年亏损窗口 0%；同期红利买入持有最差 −4.51%、沪深300 −14.87%（29% 的窗口亏钱）。图 charts/18",
+      how: ["对最终净值做 3 年滚动窗口，统计年化收益分布与最差 3 年",
+            "同一张图放「红利买入持有」作对照，说明策略把最差情形抬高了没有"],
+      stuck: "注意窗口起点要落在有净值的日期上，别用自然日对齐。" },
+
+    { id: "i5", title: "建仓库 + Actions 每日跑（b3 / x4）",
+      ok: "github 上有仓库，Actions 能手动触发并跑通 backtest.py --test",
+      how: ["先 git init、写 .gitignore（data/ 与 output/ 是否提交要明确）",
+            "Actions 只跑自检与未来函数检查，不跑全量回测（免费额度有限）",
+            "README 加徽章，汇报时可直接展示"],
+      stuck: "推送失败先看凭证是否过期，不要反复重试。" },
+
+    { id: "i6", title: "加创业板的反例实验（x2 落地）",
+      ok: "已跑完：长周期版单调变差（年化 6.21%→5.79%、回撤 −17.4%→−20.8%、Calmar 0.36→0.28）；可交易版 x=10 反而略好（7.49% 对 7.24%），但那一段含 2019–2021 成长牛。同一标的两个样本结论相反 → 不稳健，否。图 charts/19",
+      how: ["159915 从 2011-12 起，覆盖 2015 上半年与下半年两个极端",
+            "对照组：红利 30 / 创业板 10 / 债 60，与 40/60 同区间比",
+            "重点看 Calmar 与最差 20 日，不要只看牛市那半年"],
+      stuck: "这一条大概率是证伪材料，写进报告时要说明「我们试过并且否了」，不是失败。" }
+  ]}
+];
+
+const BRANCHES = [
+  { id: "x1", name: "加黄金的对比实验", cost: "半天", desc: "把黄金加进「红利+国债」，看最大回撤改善多少、年化损失多少。黄金不产生现金流，但和 A 股相关性接近零" },
+  { id: "x2", name: "加创业板的对比实验", cost: "半天", desc: "用创业板替掉一部分红利做进攻位，看多出来的弹性值不值多承担的回撤。注意它是放大器，不是减震器" },
+  { id: "x3", name: "波动率目标化", cost: "半天", desc: "已完成并进入主策略：目标波动 8% 把 2015 股灾回撤从 −17.4% 压到 −12.1%，年化还略升" },
+  { id: "x4", name: "GitHub Actions 每日自动跑一次", cost: "半天", desc: "直接证明有真实内核而非静态页面，工程质量分几乎免费拿到" },
+  { id: "x5", name: "Streamlit 单页展示", cost: "半天", desc: "净值曲线 + 指标表 + 最新一期目标比例，汇报现场最直观" },
+  { id: "x6", name: "配置比例扫描图", cost: "2 小时", desc: "已完成：红利 20%–80% 的比例扫描，用来说明 40% 不是拍出来的（charts/11）" },
+  { id: "x7", name: "行业轮动层（周期暴露）", cost: "1 天", desc: "行业 ETF 动量选 1–2 个行业做卫星，数据量翻倍，主线没稳不要碰" },
+  { id: "x8", name: "债端久期混合（五年 + 十年）", cost: "半天", desc: "已完成并做成可复现支线（src/run_side.py，charts/15）：60% 国债里拿一半换十年，年化 +0.2~0.3 个百分点、回撤反而略降；代价是债熊时跌幅放大 1.5 倍，且优势四成来自 2024 一年。默认不进主线，因为它押的是利率环境" }
+];
+
+const QS = [
+  "为什么最后只剩两只标的？沪深300 去哪了？",
+  "为什么是 40% 而不是 60%？这个数字怎么定出来的？",
+  "为什么放弃择时？凭什么说你的信号没用？",
+  "这个策略在什么情况下会失效？你怎么发现的？",
+  "哪些代码是 AI 写的？你做了哪些验证才敢用？"
+];
+
+const ALL_STEPS = PHASES.flatMap(p => p.steps);
+const isDone = id => !!state[id];
+
+function nextText() {
+  const s = ALL_STEPS.find(x => !isDone(x.id));
+  return s ? "下一步：" + s.title : "全部走完，去练答辩";
+}
+
+function renderPhases() {
+  document.getElementById("phases").innerHTML = PHASES.map(p => {
+    const steps = p.steps.map(s => `
+      <div class="st" data-step="${s.id}">
+        <div class="st-row" data-open="${s.id}">
+          <div class="cbx" data-toggle="${s.id}">${CHECK}</div>
+          <div class="st-main">
+            <div class="st-title"><span class="st-no">${s.id.toUpperCase()}</span>${s.title}</div>
+            <div class="st-done-line">${s.ok}</div>
+          </div>
+          <div class="chev">${CHEV}</div>
+        </div>
+        <div class="st-help">
+          <ul class="how">${s.how.map(h => `<li>${h}</li>`).join("")}</ul>
+          <div class="stuck">${s.stuck}</div>
+          ${s.prompt ? `<div class="pbox"><div class="ptxt" id="pt-${s.id}">${s.prompt}</div><button class="copy" data-copy="${s.id}">复制</button></div>` : ""}
+        </div>
+      </div>`).join("");
+    return `
+      <div class="phase" data-phase="${p.id}">
+        <div class="phase-h">
+          <span class="phase-idx">${p.no}</span>
+          <span class="phase-name">${p.name}</span>
+          <span class="phase-who ${p.whoCls}">${p.who}</span>
+          <span class="phase-prog" data-prog="${p.id}">0/${p.steps.length}</span>
+        </div>
+        <div class="steps">${steps}</div>
+      </div>`;
+  }).join("");
+}
+
+function renderLists() {
+  document.getElementById("branches").innerHTML = BRANCHES.map(b => `
+    <div class="li ${isDone(b.id) ? "done" : ""}" data-toggle="${b.id}">
+      <div class="cbx" data-toggle="${b.id}">${CHECK}</div>
+      <div style="flex:1 1 auto">
+        <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">
+          <span class="li-name">${b.name}</span><span class="cost">${b.cost}</span>
+        </div>
+        <div class="li-desc">${b.desc}</div>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("qs").innerHTML = QS.map((q, i) => `
+    <div class="li ${isDone("q" + (i + 1)) ? "done" : ""}" data-toggle="q${i + 1}">
+      <div class="cbx" data-toggle="q${i + 1}">${CHECK}</div>
+      <span style="font-size:11px;color:var(--text-3);padding-top:2px">0${i + 1}</span>
+      <span class="li-name" style="font-weight:400">${q}</span>
+    </div>`).join("");
+}
+
+function applyState() {
+  ALL_STEPS.forEach(s => {
+    const el = document.querySelector('.st[data-step="' + s.id + '"]');
+    if (el) { el.classList.toggle("done", isDone(s.id)); el.classList.remove("now"); }
+  });
+  const first = ALL_STEPS.find(s => !isDone(s.id));
+  if (first) {
+    const el = document.querySelector('.st[data-step="' + first.id + '"]');
+    if (el) el.classList.add("now");
+  }
+  PHASES.forEach(p => {
+    const el = document.querySelector('[data-prog="' + p.id + '"]');
+    if (el) el.textContent = p.steps.filter(s => isDone(s.id)).length + "/" + p.steps.length;
+  });
+  const n = ALL_STEPS.filter(s => isDone(s.id)).length;
+  document.getElementById("count").textContent = "主线 " + n + " / " + ALL_STEPS.length;
+  document.getElementById("barFill").style.width = (n / ALL_STEPS.length * 100) + "%";
+  document.getElementById("nextTip").textContent = nextText();
+  renderLists();
+}
+
+function toggle(id) {
+  if (state[id]) delete state[id]; else state[id] = true;
+  save();
+  applyState();
+}
+
+document.getElementById("phases").addEventListener("click", e => {
+  if (e.target.closest(".copy")) return;
+  const t = e.target.closest("[data-toggle]");
+  if (t) { e.stopPropagation(); toggle(t.getAttribute("data-toggle")); return; }
+  const o = e.target.closest("[data-open]");
+  if (o) document.querySelector('.st[data-step="' + o.getAttribute("data-open") + '"]').classList.toggle("open");
+});
+
+["branches", "qs"].forEach(id => {
+  document.getElementById(id).addEventListener("click", e => {
+    const t = e.target.closest("[data-toggle]");
+    if (t) toggle(t.getAttribute("data-toggle"));
+  });
+});
+
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".copy");
+  if (!btn) return;
+  const txt = document.getElementById("pt-" + btn.getAttribute("data-copy")).textContent;
+  const done = () => { btn.textContent = "已复制"; setTimeout(() => btn.textContent = "复制", 1300); };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(txt).then(done).catch(() => fb(txt, done));
+  } else fb(txt, done);
+});
+
+function fb(txt, cb) {
+  const ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); cb(); } catch (err) {}
+  document.body.removeChild(ta);
+}
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (!confirm("清空全部勾选？不可撤销。")) return;
+  Object.keys(state).forEach(k => delete state[k]);
+  save();
+  applyState();
+});
+
+let allOpen = false;
+document.getElementById("expandAll").addEventListener("click", () => {
+  allOpen = !allOpen;
+  document.querySelectorAll(".st").forEach(el => el.classList.toggle("open", allOpen));
+  document.getElementById("expandAll").textContent = allOpen ? "全部收起" : "全部展开";
+});
+
+renderPhases();
+applyState();
+</script>
+</body>
+</html>
