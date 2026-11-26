@@ -1,0 +1,57 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`40% 不是拍出来的，是从 7% 的回撤预算解出来的。把红利占比从 20% 扫到 80%，回撤依次变大；7% 这条约束下，40% 是能通过的最高一档，45% 对应 −7.7%，已经越界。\n但下一句更重要：这其实是一次同义反复。回撤和权益比例几乎是精确线性的，可交易口径回撤约等于 0.168 乘比例，R² 是 1.000。也就是说，用预算解出 40%，和直接定 40%，在数学上是同一件事。\n这一点我们写在报告里，不藏。真正能替 40% 辩护的只有一条：只用 2022 年底以前的数据重做这套反推，规则照样选出 40%。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+  <Text style={{ position: 'absolute', top: 22, right: 60, fontSize: 18, color: '#8B97A8' }}>02 策略设计</Text>
+
+  <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    40% 是从 7% 预算解出来的，但这是一次同义反复
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 16 }} />
+
+  <Box style={{ flexDirection: 'row', gap: 44, marginTop: 32, height: 440 }}>
+    <Box style={{ width: 600, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 20, color: '#4A5568', marginBottom: 16, lineHeight: 1.5 }}>
+        可交易口径，红利占比从 20% 扫到 80%，其余为国债、月度再平衡
+      </Text>
+      <Table
+        style={{ width: 600, height: 208 }}
+        defaultTextStyle={{ fontSize: 19, textAlign: 'center', color: '#1A2230' }}
+        defaultCellStyle={{ border: { left: { width: 1, color: '#D6DCE5' }, right: { width: 1, color: '#D6DCE5' }, top: { width: 1, color: '#D6DCE5' }, bottom: { width: 1, color: '#D6DCE5' } } }}
+        cells={[
+          [
+            { text: '红利占比', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+            { text: '20%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+            { text: '40%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+            { text: '45%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+            { text: '60%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+            { text: '80%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+          ],
+          ['最大回撤', '−3.4%', { text: '−6.8%', textStyle: { bold: true, color: '#1A3D6D' } }, '−7.7%', '−10.2%', '−13.4%'],
+          ['判定', '宽松', { text: '采用', textStyle: { bold: true, color: '#1A3D6D' } }, { text: '越界', textStyle: { bold: true, color: '#8B2E2E' } }, '越界', '越界'],
+        ]}
+      />
+      <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 12, lineHeight: 1.5 }}>
+        约束：最大回撤不超过 7%。40% 是满足约束的最高一档。
+      </Text>
+    </Box>
+
+    <Box style={{ width: 516, flexDirection: 'column', gap: 18 }}>
+      <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.65 }}>
+        如果结论停在这里，听起来很漂亮：先写预算，再解出比例。但它经不起追问——
+      </Text>
+      <Box style={{ background: '#FBF4F4', border: '1px solid #8B2E2E', padding: 22 }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#8B2E2E', marginBottom: 8 }}>同义反复</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.6 }}>
+          回撤 ≈ 0.168 × 权益比例，R² = 1.000。<br />
+          预算与比例是同一个事实的两种写法，不是两次独立的验证。
+        </Text>
+      </Box>
+      <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.65 }}>
+        真正能替 40% 辩护的只有一条：只用 2022 年底以前的数据重做反推，规则照样选出 40%。
+        这条能救参数，救不了「独立验证」这个说法。
+      </Text>
+    </Box>
+  </Box>
+</Slide>

@@ -1,0 +1,27 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`各位老师、同学好，我们是第 X 组。今天讲的这个策略，我们前后推翻过很多次，最后留下来的东西比一开始简单得多：40% 红利低波加 60% 国债。\n先用一句话说结论：这不是一个能预测涨跌的策略，它是一份配置方案，外加一个只对慢跌有效的保险。后面会用数据说明，为什么只能做到这个程度。\n汇报按课程要求分三段：系统怎么搭的、策略怎么想的、结果怎么样、在哪儿不管用。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1A3D6D' }} />
+
+  <Box style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', height: 600 }}>
+    <Text style={{ fontSize: 20, color: '#8B97A8', letterSpacing: 3, marginBottom: 28 }}>
+      量化交易 · 课程项目汇报
+    </Text>
+    <Text style={{ fontSize: 66, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1.2, letterSpacing: 2 }}>
+      红利低波与国债的配置型策略
+    </Text>
+    <Text style={{ fontSize: 26, color: '#4A5568', marginTop: 22, lineHeight: 1.5 }}>
+      一个稳健型组合的设计、实现与证伪
+    </Text>
+
+    <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 64, marginBottom: 28 }} />
+
+    <Box style={{ flexDirection: 'row', gap: 56 }}>
+      <Text style={{ fontSize: 19, color: '#4A5568' }}>组号：第 ＿ 组</Text>
+      <Text style={{ fontSize: 19, color: '#4A5568' }}>组长：＿＿＿＿</Text>
+      <Text style={{ fontSize: 19, color: '#4A5568' }}>成员：＿＿＿＿　＿＿＿＿　＿＿＿＿</Text>
+      <Text style={{ fontSize: 19, color: '#8B97A8' }}>2026 年 11 月</Text>
+    </Box>
+  </Box>
+</Slide>

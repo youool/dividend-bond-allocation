@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="docx-page-size" content="A4">
+<title>红利低波与国债的配置型策略</title>
+<style>
+:root {
+  --ff-heading: "SimHei", "Microsoft YaHei", sans-serif;
+  --ff-body: "SimSun", "宋体", serif;
+  --ff-mono: "Consolas", "Courier New", monospace;
+
+  --fs-cover-title: 26pt;
+  --fs-cover-sub: 14pt;
+  --fs-cover-meta: 12pt;
+  --fs-h1: 17pt;
+  --fs-h2: 13.5pt;
+  --fs-body: 12pt;
+  --fs-table: 10.5pt;
+  --fs-caption: 10pt;
+  --fs-mono: 9.5pt;
+  --fs-toc: 11pt;
+  --fs-toc-sub: 10.5pt;
+
+  --lh-body: 1.75;
+  --lh-heading: 1.45;
+  --lh-table: 1.45;
+
+  --color-primary: #1A3D6D;
+  --color-accent: #8B2E2E;
+  --color-text: #1A1A1A;
+  --color-muted: #5F5F5F;
+  --color-border: #C9CDD4;
+  --color-thead: #EDF1F6;
+  --color-callout: #F2F5F9;
+
+  --spacing-paragraph: 0.6em;
+  --spacing-section: 1.9em;
+  --spacing-block: 1.0em;
+
+  --page-content-width: 15.6cm;
+}
+
+@page {
+  margin: 2.4cm 2.2cm 2.2cm 2.6cm;
+  @bottom-center { content: counter(page); }
+}
+@page cover {
+  @bottom-center { content: none; }
+}
+section[role="cover"] { page: cover; }
+
+body {
+  max-width: var(--page-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+}
+
+.cover-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-cover-title);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+  text-indent: 0;
+  line-height: var(--lh-heading);
+  margin-top: 5.6cm;
+  margin-bottom: 0.5em;
+}
+.cover-sub {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-cover-sub);
+  color: var(--color-muted);
+  text-align: center;
+  text-indent: 0;
+  margin-bottom: 2.6em;
+}
+.cover-meta {
+  font-family: var(--ff-body);
+  font-size: var(--fs-cover-meta);
+  color: var(--color-text);
+  text-align: center;
+  text-indent: 0;
+  line-height: 2.1;
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: var(--lh-heading);
+  text-indent: 0;
+  margin-top: var(--spacing-section);
+  margin-bottom: 0.55em;
+}
+h2 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: var(--lh-heading);
+  text-indent: 0;
+  margin-top: 1.5em;
+  margin-bottom: 0.45em;
+}
+
+p {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-indent: 2em;
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: var(--spacing-paragraph);
+}
+
+ul, ol {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin-top: 0.35em;
+  margin-bottom: var(--spacing-paragraph);
+  padding-left: 2.4em;
+}
+li {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-align: justify;
+  margin-bottom: 0.25em;
+}
+
+.callout {
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-callout);
+  padding: 0.55em 0.8em;
+  text-indent: 0;
+  margin-bottom: var(--spacing-block);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ff-body);
+  font-size: var(--fs-table);
+  line-height: var(--lh-table);
+  margin-top: 0.5em;
+  margin-bottom: var(--spacing-block);
+}
+caption {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-align: left;
+  text-indent: 0;
+  padding-bottom: 0.35em;
+}
+th {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-table);
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--color-thead);
+  border: 1px solid var(--color-border);
+  padding: 0.38em 0.5em;
+  text-align: center;
+  line-height: var(--lh-table);
+}
+td {
+  font-family: var(--ff-body);
+  font-size: var(--fs-table);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: 0.34em 0.5em;
+  text-align: center;
+  line-height: var(--lh-table);
+}
+td.t-left { text-align: left; }
+td.t-strong { font-weight: 700; }
+
+.abstract-card td {
+  background: var(--color-callout);
+  border: 1px solid var(--color-border);
+  text-align: justify;
+  padding: 0.9em 1.1em;
+}
+.abstract-card p {
+  text-indent: 2em;
+  margin-bottom: 0.5em;
+}
+.abstract-card p.card-h {
+  font-family: var(--ff-heading);
+  font-weight: 700;
+  text-indent: 0;
+  margin-bottom: 0.55em;
+  color: var(--color-primary);
+}
+
+figure {
+  margin-top: 0.9em;
+  margin-bottom: var(--spacing-block);
+}
+figure p {
+  text-align: center;
+  text-indent: 0;
+  margin-bottom: 0.3em;
+}
+figure img {
+  max-width: 100%;
+}
+figcaption p {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-align: center;
+  text-indent: 0;
+  line-height: 1.5;
+}
+
+pre {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.55;
+  background: var(--color-callout);
+  border-left: 3px solid var(--color-border);
+  padding: 0.6em 0.9em;
+  margin-top: 0.5em;
+  margin-bottom: var(--spacing-block);
+  white-space: pre-wrap;
+}
+
+.toc-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+  text-indent: 0;
+  margin-top: 0.4em;
+  margin-bottom: 1.1em;
+}
+.toc-list, .toc-list ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-toc);
+  line-height: 1.85;
+}
+.toc-list > li {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-toc);
+  font-weight: 700;
+  margin-top: 0.45em;
+}
+.toc-list ol li {
+  font-family: var(--ff-body);
+  font-size: var(--fs-toc-sub);
+  font-weight: 400;
+  margin-top: 0.1em;
+}
+.toc-list a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<section role="cover">
+  <p class="cover-title">红利低波与国债的配置型策略</p>
+  <p class="cover-sub">——从择时证伪到配置重构</p>
+  <p class="cover-meta">课程：量化交易</p>
+  <p class="cover-meta">组号：第 ＿＿ 组</p>
+  <p class="cover-meta">组长：＿＿＿＿</p>
+  <p class="cover-meta">成员：＿＿＿＿　＿＿＿＿</p>
+  <p class="cover-meta">2026 年 11 月</p>
+</section>
+
+<section role="cover">
+<nav class="doc-toc" aria-label="文档目录">
+  <p class="toc-title">目　录</p>
+  <ol class="toc-list">
+    <li><a href="#section-1">摘要</a></li>
+    <li><a href="#section-2">一、研究对象与设计约束</a>
+      <ol>
+        <li><a href="#section-2-1">1.1　要解决的问题</a></li>
+        <li><a href="#section-2-2">1.2　为什么是红利低波与国债</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-3">二、策略设计</a>
+      <ol>
+        <li><a href="#section-3-1">2.1　四层结构</a></li>
+        <li><a href="#section-3-2">2.2　比例：从风险预算反推</a></li>
+        <li><a href="#section-3-3">2.3　风险闸门：波动率目标化</a></li>
+        <li><a href="#section-3-4">2.4　执行细则与可执行性</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-4">三、回测方法</a>
+      <ol>
+        <li><a href="#section-4-1">3.1　两个口径</a></li>
+        <li><a href="#section-4-2">3.2　数据：三个会静默失真的坑</a></li>
+        <li><a href="#section-4-3">3.3　回测内核</a></li>
+        <li><a href="#section-4-4">3.4　基准：一个不够</a></li>
+        <li><a href="#section-4-5">3.5　四条方法论纪律</a></li>
+        <li><a href="#section-4-6">3.6　六组证伪实验</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-5">四、回测结果与优势检验</a>
+      <ol>
+        <li><a href="#section-5-1">4.1　核心指标</a></li>
+        <li><a href="#section-5-2">4.2　三项优势</a></li>
+        <li><a href="#section-5-3">4.3　三项被撤回的说法</a></li>
+        <li><a href="#section-5-4">4.4　本报告结论的可证伪性</a></li>
+        <li><a href="#section-5-5">4.5　代价要讲清楚</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-6">五、边界与局限</a>
+      <ol>
+        <li><a href="#section-6-1">5.1　边界一览</a></li>
+        <li><a href="#section-6-2">5.2　唯一通过的资产：纳指 10%</a></li>
+        <li><a href="#section-6-3">5.3　任意时点进场，持有三年</a></li>
+        <li><a href="#section-6-4">5.4　局限</a></li>
+      </ol>
+    </li>
+    <li><a href="#section-7">六、结论</a></li>
+    <li><a href="#section-8">附录 A　复现步骤</a></li>
+  </ol>
+</nav>
+</section>
+
+<section role="body" data-page-restart="1">
+
+<h1 id="section-1">摘要</h1>
+
+<table class="abstract-card executive-summary">
+  <tbody>
+  <tr><td>
+    <p class="card-h">核心内容</p>
+    <p>本文的对象是一个面向稳健型投资者的长期配置策略。核心主张：这类投资者需要的是"回撤可承受"，不是"收益最大化"。回撤预算能决定的只有权益比例（二者近似成正比，见 4.3），策略真正要回答的问题因此只剩两件：持有什么，以及按纪律再平衡。</p>
+    <p>策略只有三条规则：40% 红利低波 ETF（512890）与 60% 五年国债 ETF（511010），每月末把比例拉回目标；组合近 60 日已实现波动超过年化 8% 时，按 8%／实际波动 收缩权益（下限 20%），回落即恢复。可交易口径（2019—2026，真实 ETF 价格、次日开盘成交、双边万 2）年化 7.2%、最大回撤 −6.3%、夏普 0.80、Calmar 1.14；同期红利低波买入持有为 12.8%／−16.5%／0.68／0.77，沪深300 为 4.8%／−42.2%／0.24／0.11。长周期口径（2015 年起，含 2015 股灾与 2018 熊市）为 6.3%／−12.1%／0.63／0.52。</p>
+    <p>报告的重点不是"跑出多少收益"，而是策略为什么可信、在哪儿不管用；全文对照遵循同一条纪律：对照组必须与实验组暴露相同。据此我们否决了择时、止盈线、动态加仓、黄金与创业板，唯一通过全部检验的纳指 QDII 受制于 14.65% 的溢价，只作条件性建议。<strong>最后一节把同一把刀对准主线</strong>：五项审计中三项把它的优势判死——Calmar 的约七成来自资产选择而非规则，回撤预算与权益比例是同一个事实，"样本外"只是时间切分。</p>
+  </td></tr>
+  </tbody>
+</table>
+
+<p><strong>关键词</strong>：资产配置；波动率目标化；暴露匹配；安慰剂检验；样本外检验</p>
+
+<h1 id="section-2">一、研究对象与设计约束</h1>
+
+<h2 id="section-2-1">1.1　要解决的问题</h2>
+
+<p>我们是一组稳健型投资者。这个身份先于策略存在：不能承受 40% 级别的回撤（2015 年红利低波 −42.5% 的跌幅会直接导致中途放弃）；要跑赢理财，不必追平满仓权益；只能接受每月一次的决策频率。写成约束就是验收标准：<strong>可交易口径最大回撤不超过 7%，在此约束下最大化年化</strong>。后文所有设计都从这条推出来——设计的第一步不是找信号，而是问这个信号需要什么前提，再看标的是否满足。</p>
+
+<h2 id="section-2-2">1.2　为什么是红利低波与国债</h2>
+
+<p><strong>红利低波</strong>的入选理由不是涨得好，而是收益来源不同。股票收益可拆成股息、盈利增长、估值变化三块，前两块由企业创造，第三块取决于别人愿意出多少钱；红利低波筛持续分红、波动小的公司，收益重心落在第一块——<strong>股息是不需要有人接盘就能拿到的现金流</strong>，低波因子本身也是被长期验证的异象。2015 年以来中证红利低波动全收益指数年化 9.1%，但 2015 年回撤 −42.5%、同期沪深300 −45.9%，只差 3.4 个百分点：<strong>"低波"是相对的</strong>，在强制平仓引发的流动性危机里基本失效。</p>
+
+<p><strong>国债</strong>与权益负相关：经济下行时避险需求上升、货币转向宽松，债价上涨，两类资产对同一个宏观变量做了相反暴露。红利单日跌超 1% 的 206 个交易日里，十年国债平均上涨 0.067%、胜率 58%，这是组合能把股灾回撤压到 −12% 的根本原因。两者波动不同步还带来第三个收益来源：<strong>再平衡</strong>——涨得多时卖一点、跌得多时买回一点，机械的低买高卖，不需要判断，后文实测 0.5–0.6 个百分点／年。</p>
+
+<h1 id="section-3">二、策略设计</h1>
+
+<h2 id="section-3-1">2.1　四层结构</h2>
+
+<p>策略可拆成四层，每层只回答一个问题（表 1）。三层静态、一层动态：动态成分越多，需要预测的东西越多，而方向不可预测已在 3.6 节确认。</p>
+
+<table>
+  <caption>表 1　策略的四层结构与设定依据</caption>
+  <thead>
+    <tr><th>层</th><th>规则</th><th>回答的问题</th><th>设定依据</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>收益层</td><td class="t-left">40% 红利低波 ETF（512890）</td><td class="t-left">钱从哪来</td><td class="t-left">股息现金流，2015 年以来全收益年化 9.1%</td></tr>
+    <tr><td>防御层</td><td class="t-left">60% 五年国债 ETF（511010）</td><td class="t-left">波动从哪压</td><td class="t-left">与权益负相关，股灾中是可靠上涨的资产</td></tr>
+    <tr><td>风控层</td><td class="t-left">近 60 日组合波动超过年化 8% → 权益 ×(8%／实际)，下限 20%</td><td class="t-left">超出预算怎么办</td><td class="t-left">风险预算，不预测方向</td></tr>
+    <tr><td>执行层</td><td class="t-left">每月末判断、次日开盘成交、双边万 2</td><td class="t-left">能不能做出来</td><td class="t-left">月均调整 1.7 个百分点权益仓位</td></tr>
+  </tbody>
+</table>
+
+<h2 id="section-3-2">2.2　比例：从风险预算反推</h2>
+
+<p>40% 由回撤预算解出：红利占比从 20% 扫到 80%（其余国债、月度再平衡），可交易口径最大回撤依次为 −3.4%、−6.8%、−10.2%、−13.4%，约束是"不超过 7%"，故 <strong>40% 是满足约束的最高档</strong>（45% 对应 −7.7%，已越界）。但要注意预算与比例并不独立——回撤对比例几乎是精确线性，这个"解出"只是同一个约束的另一种写法，详见 4.3 第二条。它是上限而非最优点：若未来波动整体抬升，正确反应是往下调。</p>
+
+<p>这里有个指标上的坑：<strong>夏普比率对混合了无风险资产的组合有系统性偏差</strong>——国债接近无风险利率，占比越高分母（波动）越小、夏普越高，扫描里 20% 红利那档夏普最高，年化却只有 4.8%。因此本文主要用 <strong>Calmar（年化 ÷ 最大回撤）</strong>，并同时看绝对收益与平均仓位。</p>
+
+<h2 id="section-3-3">2.3　风险闸门：波动率目标化</h2>
+
+<p>固定 40/60 的问题出在 2015 年：回撤 −17.4%，超出预算。永久降权益能降回撤，但也会永久损失收益；替代方案是<strong>波动率目标化</strong>——把目标波动率当作风险预算，实际波动超出时按比例收缩、回落即恢复。关键性质是<strong>输入为已实现波动而非预期收益</strong>：不问涨跌，只问风险是否超支。这正是它与被证伪的择时信号的本质区别。</p>
+
+<table>
+  <caption>表 2　固定比例与四档波动率目标化（长周期版，2015 年起）</caption>
+  <thead>
+    <tr><th>模式</th><th>最大回撤</th><th>年化</th><th>夏普</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">固定 40/60</td><td>−17.4%</td><td>6.2%</td><td>0.56</td></tr>
+    <tr><td class="t-left">目标波动 12%</td><td>−15.0%</td><td>6.4%</td><td>0.61</td></tr>
+    <tr><td class="t-left">目标波动 10%</td><td>−13.7%</td><td>6.4%</td><td>0.62</td></tr>
+    <tr><td class="t-left">目标波动 8%（采用）</td><td>−12.1%</td><td>6.3%</td><td>0.63</td></tr>
+  </tbody>
+</table>
+
+<p>回撤压掉 5.3 个百分点，年化反而略升——收缩的月份恰好是坏月份：2015 年 6 月起连续下跌，闸门在跌到一半时已把仓位降下来，"因降仓而错过上涨"没有发生（图 1，阴影区）。设计刻意保守：只降不升、上限锁死 40%、不加杠杆，代价是平均仓位 38% 而非 40%。<strong>但这一节的结论只在长周期成立</strong>：同样的闸门放到可交易样本上，与随机收缩无法区分；它在快跌中也追不上——边界与证据见 4.4。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/13_波动率目标化.png" alt="波动率目标化" width="560"></p>
+  <figcaption><p>图 1　波动率目标化：四档目标的净值曲线对比，阴影为 2015 年 6—9 月</p></figcaption>
+</figure>
+
+<h2 id="section-3-4">2.4　执行细则与可执行性</h2>
+
+<p>规则只用月末数据、次日开盘成交，不存在"用当天收盘价知道自己该做什么"的前视问题。按双边万 2 计，八年累计换手 5.5 倍、手续费 0.11%，月均只调整 1.7 个百分点权益仓位。对比被否决的 UP50：月均调整 6.5 个百分点、方向切换 103 次——回测能做、实盘做不出来。<strong>换手率因此被当作独立的一票否决项，而非可折算成手续费的软成本。</strong></p>
+
+<h1 id="section-4">三、回测方法</h1>
+
+<p>这一节回答四个问题：用什么数据、怎么成交、跟谁比、怎么排除自欺。</p>
+
+<h2 id="section-4-1">3.1　两个口径</h2>
+
+<p>只报一个回测是不负责任的：样本太短过不了牛熊，太长又只能用指数、体现不出费用与跟踪误差，因此并行两版（表 3）。可交易版的起点由 512890 上市日决定，这一只标的直接限制了样本长度。</p>
+
+<table>
+  <caption>表 3　两个回测口径</caption>
+  <thead>
+    <tr><th>版本</th><th>数据</th><th>起点</th><th>回答什么问题</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>长周期版</td><td class="t-left">两条全收益指数 + 国债 ETF</td><td>2015-01-30</td><td class="t-left">扛不扛得住 2015 股灾、2018 熊市</td></tr>
+    <tr><td>可交易版</td><td class="t-left">四只 ETF 真实价格</td><td>2019-01-31</td><td class="t-left">扣掉费用与跟踪误差后还剩多少</td></tr>
+  </tbody>
+</table>
+
+<h2 id="section-4-2">3.2　数据：三个会静默失真的坑</h2>
+
+<p><strong>第一，红利资产必须用全收益指数。</strong>其收益大头是分红：价格指数（H30269）只反映股价，全收益指数（H20269）把每次分红按除息日再投资。同一指数 2015 年峰值前者 11188 点、后者 14395 点，差 29.6%，是基期以来累积的分红再投资。口径用错结论会反过来：价格口径下红利 2015 年以来年化 4.05%、策略 6.3%，看似跑赢 2.3 个百分点；全收益口径下红利 9.06%，策略实际落后 2.8 个百分点。</p>
+
+<p><strong>第二，份额折算会被接口误记为分红。</strong>512890 在 2021-10-25 做过 1:2 折算（1.639 → 0.801），接口记为一条金额为 0 的分红，常规处理会让回测看到一次 −51% 的假暴跌；我们在数据层单独识别并按倍数补回。<strong>第三，复权自己做</strong>——原始价不含分红再投资，等于把红利收益整段删除。处理完再体检三项：行数、日期连续性、空值与零价格。</p>
+
+<h2 id="section-4-3">3.3　回测内核</h2>
+
+<p>回测用<strong>份额法</strong>，不是"每天按目标权重算收益"——后者等价于假设每天免费再平衡，凭空产生收益也凭空产生成本。份额法是调仓日换一次份额，之后价值随价格漂移、权重缓慢偏离，到下个调仓日拉回。三个细节必须对齐：<strong>执行日</strong> = 信号日的次日（同日成交等于用了收盘后才知道的信息）；<strong>成交价</strong>，可交易版用次日开盘价、长周期版用收盘价，分别标注；<strong>手续费</strong>按 <code>费用 = 万2 × Σ|目标市值 − 当前市值|</code> 双边计收，该式已含买卖两侧。</p>
+
+<p>两项自检。其一，把权重固定为 100% 持有单一资产，净值必须与该资产买入持有一致，实测最大偏离 0.04%，且全部来自重建仓成本。其二，缺数据必须报错而非静默跳过——早期版本在价格为 NaN 时返回初始资金，我们用"权重表前移四年"的用例复现过：净值全程 1.0、年化 0.00%、零报警；现在持仓资产缺价会直接抛错并指出日期与标的。</p>
+
+<h2 id="section-4-4">3.4　基准：一个不够</h2>
+
+<p>主基准<strong>沪深300 买入持有</strong>代表"随便买个宽基躺着"，是课程要求的横向对象；辅基准<strong>红利低波买入持有</strong>回答一个更尖锐的问题：绕这么一圈，是不是还不如直接买红利。只比沪深300 对配置型不公平，只比红利又会掩盖"配置把收益拉低了多少"。</p>
+
+<h2 id="section-4-5">3.5　四条方法论纪律</h2>
+
+<p><strong>一、暴露匹配。</strong>两个策略暴露不同时，收益差不能归因于"判断"；很多研究只报策略收益、再与满仓宽基比，这在方法上回答不了"择时有没有用"。正确做法是用策略自己用过的平均权重做固定配置、每月机械再平衡，构造一个暴露完全相同但不做判断的对照组——唯一剩下的差别就是"判断"这一下。</p>
+
+<p><strong>二、安慰剂检验。</strong>信号看起来有效，也可能只是仓位分布恰好有利。把仓位序列随机打乱 100 次：分布、平均暴露、成本量级都不变，只破坏"低估多配、高估少配"的时间对应关系。</p>
+
+<p><strong>三、参数只用样本内挑。</strong>样本外只能检验、不能挑选，否则它退化成第二个样本内。</p>
+
+<p><strong>四、同一套刀要架在自己脖子上。</strong>前三条约定的规则，最初只用在被否决的方案上，主线只接受了无法失败的检验（相邻档位不敏感、样本内外一致）。补上这一条之后，主线自身也要过暴露匹配、安慰剂与随机化——结果见 4.3、4.4。方法一致性的真正含义不是"对别人严格"，而是"对自己的结论用同一把尺"。</p>
+
+<h2 id="section-4-6">3.6　六组证伪实验</h2>
+
+<p>初版是：红利低波为底仓，沪深300 PE 分位定基础仓位（30%–80%），120 日均线做趋势扣减，剩余进国债与货币。样本内好看（2015—2020 年化 9.1%，跑赢两个基准），2021 年后只剩 1.2%，同期红利低波买入持有 12.1%。"内好外崩"只有两种可能：参数拟合，或市场环境已变。按三条纪律逐层排查：</p>
+
+<table>
+  <caption>表 4　六组证伪实验及其结论</caption>
+  <thead>
+    <tr><th>实验</th><th>做法</th><th>关键结果</th><th>结论</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>一　换估值锚</td><td class="t-left">沪深300 PE → 上证红利 PE</td><td class="t-left">样本外 +7.2% → −7.0%</td><td class="t-left">"锚用错了"这个诊断本身是错的</td></tr>
+    <tr><td>二　拆掉择时</td><td class="t-left">同 34% 暴露的固定配置</td><td class="t-left">1.5% → 5.0%，回撤 −11.9% → −3.8%</td><td class="t-left">不判断优于判断</td></tr>
+    <tr><td>三　参数网格</td><td class="t-left">24 组：均线 120/200/250 × 档位 × 缓冲带</td><td class="t-left">最好的组合样本外 3.0%，"什么都不做" 6.6%</td><td class="t-left">全输</td></tr>
+    <tr><td>四　比例扫描</td><td class="t-left">红利 20%–80%</td><td class="t-left">40% 对应回撤 −6.8%</td><td class="t-left">比例可从预算反推</td></tr>
+    <tr><td>五　窄幅择时</td><td class="t-left">仓位压到 30/40/50%</td><td class="t-left">夏普 0.99，高于固定档 0.86</td><td class="t-left">暴露不同（32% vs 40%），不可比</td></tr>
+    <tr><td>六　安慰剂</td><td class="t-left">100 次随机重排</td><td class="t-left">真实值落在随机分布 14% 分位</td><td class="t-left">估值方向没有信息量</td></tr>
+  </tbody>
+</table>
+
+<p>结论压成一句：收益全部来自"持有了什么"，没有一分钱来自"什么时候持有"。图 2 是实验二，两条曲线暴露相同，固定配置全程在择时版之上；图 3 是实验六，真实信号在 100 次随机重排里只排 14% 位置——乱配也有 86% 的情况不比它差。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/09_结构对照_净值_trade.png" alt="暴露匹配对照" width="560"></p>
+  <figcaption><p>图 2　暴露匹配对照：同权益暴露下，固定配置（红）全程领先择时策略（绿）</p></figcaption>
+</figure>
+
+<figure>
+  <p><img src="D:/量化交易/charts/12_安慰剂检验.png" alt="安慰剂检验" width="560"></p>
+  <figcaption><p>图 3　安慰剂检验：100 次随机重排的夏普分布（灰）、真实信号（红）与 95% 分位（绿虚线）</p></figcaption>
+</figure>
+
+<p>一次自我修正：实验六最初用"反向微调"当安慰剂（低估减配、高增配），但两组平均暴露 32% 与 49% 不同、夏普不可比，检验无效。<strong>安慰剂组与实验组暴露不一样，检验就失去意义</strong>；换成随机重排后分布完全相同，结论才有分量。</p>
+
+<h1 id="section-5">四、回测结果与优势检验</h1>
+
+<h2 id="section-5-1">4.1　核心指标</h2>
+
+<p>先把数字摆出来。第四章与前面几章的不同在于：4.2 只保留能扛住审计的结论，4.3 主动撤回扛不住的部分，4.4 给出可重跑的审计本身。</p>
+
+<table>
+  <caption>表 5　核心指标（两个口径 × 三个对象，全区间）</caption>
+  <thead>
+    <tr><th>版本</th><th>对象</th><th>年化</th><th>最大回撤</th><th>夏普</th><th>Calmar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="3">长周期<br>2015–2026</td><td class="t-left t-strong">本策略</td><td>6.3%</td><td>−12.1%</td><td>0.63</td><td>0.52</td></tr>
+    <tr><td class="t-left">沪深300 买入持有</td><td>3.7%</td><td>−46.1%</td><td>0.18</td><td>0.08</td></tr>
+    <tr><td class="t-left">红利低波 买入持有</td><td>9.7%</td><td>−42.5%</td><td>0.47</td><td>0.23</td></tr>
+    <tr><td rowspan="3">可交易<br>2019–2026</td><td class="t-left t-strong">本策略</td><td>7.2%</td><td>−6.3%</td><td>0.80</td><td>1.14</td></tr>
+    <tr><td class="t-left">沪深300 买入持有</td><td>4.8%</td><td>−42.2%</td><td>0.24</td><td>0.11</td></tr>
+    <tr><td class="t-left">红利低波 买入持有</td><td>12.8%</td><td>−16.5%</td><td>0.68</td><td>0.77</td></tr>
+  </tbody>
+</table>
+
+<p>表 5 里本策略的 Calmar 同时高于两个基准，但要注意这个比较<strong>混了两件事</strong>：一是配置结构（债券占比高、回撤天然小），二是资产选择（红利低波本身的风险收益比优于沪深300）。4.3 第一条把结构固定住、只换资产，就是为了把两者分开。</p>
+
+<p>图 4 是完整运行图：上为净值，中为回撤，下为已实现波动（蓝）、8% 预算（红虚线）与红利仓位（绿阶梯）——红色区域出现时仓位下行、波动回落后回到 40%，即规则第 2、3 条的直观呈现。图 5 是长周期版：2015 年下半年两个基准回撤近半，策略净值走平。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/14_最终策略_trade.png" alt="最终策略可交易版" width="560"></p>
+  <figcaption><p>图 4　最终策略（可交易版）：净值、回撤、已实现波动与红利仓位</p></figcaption>
+</figure>
+
+<figure>
+  <p><img src="D:/量化交易/charts/14_最终策略_long.png" alt="最终策略长周期版" width="560"></p>
+  <figcaption><p>图 5　最终策略（长周期版）：2015 股灾期间两个基准回撤近半，策略净值走平</p></figcaption>
+</figure>
+
+<h2 id="section-5-2">4.2　三项优势</h2>
+
+<p>下面三条是审计之后仍然成立的。原本列了六条，另外三条在 4.3 撤回——不是因为它们不成立，而是因为它们能被一个与规则无关的原因解释。</p>
+
+<p><strong>一、执行成本可忽略。</strong>年换手 5.5 倍、累计手续费 0.11%、月均调整 1.7 个百分点。多数动态策略的超额只有 0.2–0.3 个百分点，扣掉冲击成本与滑点后为负；本策略不靠高换手换收益，这一点在实盘守得住。</p>
+
+<p><strong>二、任意时点进场，持有三年不亏。</strong>滚动 36 个月最差窗口 +1.17%（长周期）／+3.33%（可交易），亏损窗口 0%（表 9）；同期红利低波最差 −4.51%、沪深300 −14.87%，且有 29%–42% 的窗口是亏的。对个人投资者，"什么时候买"往往比"买什么"更焦虑，这一条直接对应那个焦虑。</p>
+
+<p><strong>三、可复现、可审计。</strong>每个数字都对应 output/ 下的 CSV；脚本在全新目录重跑逐字节一致；CI 每次提交自动跑内核自检与前视检查。本轮的五项审计也写成脚本（src/audit_overfit.py）一并提交，4.3 与 4.4 的每个数字都能重跑出来——包括那些对本报告不利的数字。</p>
+
+<h2 id="section-5-3">4.3　三项被撤回的说法</h2>
+
+<p>这一轮做的事，是给主线自己做证伪。前几轮的严格检验——暴露匹配、100 次随机重排、24 组参数网格——都打在<strong>被否决的方案</strong>上；主线只接受了不会失败的软检验：相邻档位不敏感、样本内外一致、滚动三年为正。这些检验的共同点是没有办法输。换成能输的检验之后，六条优势里有三条站不住。</p>
+
+<p><strong>一、Calmar 领先，主要是配置结果，不是规则功劳。</strong>结构完全不动（40/60、月度再平衡、8% 闸门），只把权益腿从红利低波换成沪深300 与创业板：可交易口径 Calmar 从 1.14 掉到 0.30 与 0.31，长周期从 0.52 掉到 0.29 与 0.23。也就是说，这套规则本身只值 0.3 左右的 Calmar，其余约 0.8 来自"2019 年选择红利低波"这一个只能做一次、且做的时候已经知道结果的决策。Calmar 1.14 仍是事实，但它描述的是配置，不是规则的有效性。</p>
+
+<p><strong>二、"回撤预算被兑现"是同义反复。</strong>最大回撤对权益比例几乎是精确线性：可交易口径回撤 ≈ 0.168 × 权益比例（R² = 1.000），长周期 ≈ 0.446 × 权益比例。用同一规则反解，"7% 预算"在可交易样本上恰好给出 41.2%，在长周期样本上给出 16.6%（20% 仓位仍有 −8.57%，任何比例都满足不了 7%）。预算与比例是同一个事实的两种写法，不是两次独立验证，因此"预算被兑现"不能算证据。</p>
+
+<p><strong>三、"没有样本外失效"里的样本外不干净。</strong>所谓样本外只是时间切分（可交易版切在 2022-12-31），不是信息隔离——资产选择、比例、闸门阈值都是看过全样本之后定的。真正干净、且真的为 40% 辩护的只有一条：<strong>只用 2022 年底以前的数据重做"7% 预算反推比例"，规则照样选出 40%</strong>（45% 档回撤 −7.66%，已越界）。这条能救参数，但救不了"样本内外一致"这个说法。</p>
+
+<h2 id="section-5-4">4.4　本报告结论的可证伪性</h2>
+
+<p>为了上面这些判断可核对，五项审计都写进了脚本，任何人都能重跑。五项设计成都能把主线判死，实际结果是三项判死、一项判活、一项给边界。</p>
+
+<table>
+  <caption>表 6　对主线策略本身的五项审计（src/audit_overfit.py）</caption>
+  <thead>
+    <tr><th>审计</th><th>做法</th><th>结果</th><th>判断</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="t-left">回撤与比例的关系</td><td class="t-left">20%–60% 扫比例，拟合回撤</td><td class="t-left">R² = 1.000，斜率 0.168／0.446</td><td class="t-left">预算与比例不独立</td></tr>
+    <tr><td class="t-left">同结构换资产</td><td class="t-left">规则不变，换沪深300／创业板</td><td class="t-left">Calmar 1.14 → 0.30／0.31</td><td class="t-left">约七成来自资产选择</td></tr>
+    <tr><td class="t-left">闸门安慰剂</td><td class="t-left">权重分布不变，随机重排时间对应 300 次</td><td class="t-left">长周期第 100 分位；可交易第 92 分位</td><td class="t-left">只在含 2015 的回填样本显著</td></tr>
+    <tr><td class="t-left">回撤的形状</td><td class="t-left">回撤 ÷ 年化波动</td><td class="t-left">可交易 0.97，红利买入持有 0.98</td><td class="t-left">未改善风险形状，只缩小规模</td></tr>
+    <tr><td class="t-left">多重比较</td><td class="t-left">统计全项目配置结果</td><td class="t-left">356 行配置、五个独立环境、无校正</td><td class="t-left">"选最好"本身带偏差</td></tr>
+  </tbody>
+</table>
+
+<p>最值得记的是第三行与第四行。<strong>闸门在能买的样本上不显著</strong>：可交易版的随机重排 95 分位是 1.18，真实值 1.14 落在里面，与"随机挑同样多的月份收缩"无法区分（p ≈ 0.08）；显著的那一段（2015 年起）有 6 年是 ETF 尚未成立的指数回填。机制上也能解释——闸门用 60 日已实现波动，只能追慢跌。2015 年崩盘走了 160 天，它来得及把仓位从 40% 压到 20%；2020 年 2 月疫情 8 个交易日跌完，2 月末波动 6.9% 没触发，3 月末才砍到 34%，而底部是 3 月 23 日，等于<strong>卖在底部</strong>。</p>
+
+<p><strong>回撤小和波动小是同一件事</strong>：可交易版回撤 ÷ 波动 = 0.97，红利低波买入持有 = 0.98。策略没有改变风险的形状，只是按比例缩小；−6.3% 就是一个 6.5% 波动的序列从未遇到逆境时的正常回撤。长周期版 1.73 对 2.17，长样本里确实改善了一点，但改善来自债券的分散，不来自规则。</p>
+
+<p>闸门唯一站得住的性质是<strong>尾部保险，不是方向预测</strong>：收缩后的下一个月，权益收益均值 −0.25%；不收缩时 +0.74%，差 1 个百分点。但两者为负的月份占比完全一样（45% 对 44%）——它不提高命中率，只在少数大跌月份减少暴露。这与"响应风险、不预测方向"的设计初衷一致，也划清了它能做到与不能做到的边界。</p>
+
+<h2 id="section-5-5">4.5　代价要讲清楚</h2>
+
+<p>绝对收益低于红利买入持有（7.2% 对 12.8%），这是配置的定义而非缺陷。可交易版保留 56.5% 的收益、压缩 38.3% 的回撤，Calmar 0.77→1.14；长周期版保留 64.9%、压缩 28.4%，0.23→0.52。两版方向一致：回撤压缩幅度都大于收益牺牲幅度。但要接上 4.3 的第一条：这个改善是"资产 + 结构"合起来的结果，两者无法分离；把权益腿换成沪深300、结构不动，Calmar 只有 0.30。所以更准确的说法是——本策略在"红利低波 + 国债"这个资产选择上，比直接买入持有更符合稳健目标。</p>
+
+<p>另需诚实记录：样本外好于样本内，是因为 2021 年后沪深300 三年多为负而红利与国债为正，属资产轮动恰好有利，不是"发现了新规律"。</p>
+
+<h1 id="section-6">五、边界与局限</h1>
+
+<h2 id="section-6-1">5.1　边界一览</h2>
+
+<p>主线确定后，大部分工作量花在回答"它在哪里失效"。表 7 汇总四类改法与三种资产；所有比较都做了暴露匹配——仓位越低 Calmar 天然越高，不匹配就会把"减仓"记成"机制的功劳"。</p>
+
+<table>
+  <caption>表 7　边界检验与资产端扩展（均经暴露匹配或同起点比较）</caption>
+  <thead>
+    <tr><th>方向</th><th>最好的结果</th><th>代价</th><th>判定</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>仓位灵活化<br>（止盈／回撤线／分档／开上限）</td><td class="t-left">暴露匹配后超额仅 +0.04–0.27；UP50 长短两周期双赢</td><td class="t-left">UP50 月均调整 6.5 个百分点，平滑后 Calmar 掉回 0.53／1.11</td><td class="t-left">不改主线</td></tr>
+    <tr><td>债端久期<br>（五年 → 十年）</td><td class="t-left">可交易 7.24% → 7.80%，Calmar 1.14 → 1.24，单调改善</td><td class="t-left">2024 一年占四成差异；债熊时跌幅是五年的 1.5 倍</td><td class="t-left">支线，50% 混合</td></tr>
+    <tr><td>黄金<br>（替股 20%）</td><td class="t-left">长周期回撤 −17.4% → −8.7%，Calmar 0.36 → 0.71</td><td class="t-left">2015 年少赚 8 个百分点；收益扣 4 个百分点即输给基准</td><td class="t-left">否决，≤10% 保险</td></tr>
+    <tr><td>创业板<br>（替股 10%）</td><td class="t-left">可交易年化 7.24% → 7.49%</td><td class="t-left">长周期 6.21% → 5.79%，Calmar 0.36 → 0.28</td><td class="t-left">不稳健，否</td></tr>
+  </tbody>
+</table>
+
+<p>最有价值的是第一行。四组机制暴露匹配后真实超额只有 0.04–0.27；唯一在长短两周期同时为正的 UP50，压到可执行换手（月均 2.1 个百分点、方向切换 48 次）后 Calmar 从 0.58 掉回 0.53、回撤反而恶化 0.9 个百分点——那点超额靠高频调仓换来，而回测只算了万 2 手续费。把"更灵活"当改进方向，前提是先证明它没有靠换手买单。</p>
+
+<p>反过来，真正确定的收益是再平衡本身。把"每月拉回"与"任其漂移"放在同一平均仓位下比：漂移组权益从 40% 涨到 50%，收益看着更高（7.61% 对 7.24%），但那是加仓换来的；对照同样 50% 暴露的固定比例（8.24%），漂移组反而低 0.63 个百分点／年。</p>
+
+<h2 id="section-6-2">5.2　唯一通过的资产：纳指 10%</h2>
+
+<p>三项资产实验里只有纳指 QDII 同时通过两组检验（表 8）。它与黄金的区别是背后有能产生现金流的企业，与创业板的区别是与 A 股相关性只有 0.21–0.22。</p>
+
+<table>
+  <caption>表 8　接入纳指 10%：风险资产仍是 40%，闸门按真实三资产组合重算</caption>
+  <thead>
+    <tr><th>版本</th><th>方案</th><th>年化</th><th>最大回撤</th><th>Calmar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="2">长周期</td><td class="t-left">主线 红利40／债60</td><td>6.32%</td><td>−12.06%</td><td>0.52</td></tr>
+    <tr><td class="t-left t-strong">红利30／纳指10／债60</td><td>7.31%</td><td>−10.42%</td><td class="t-strong">0.70</td></tr>
+    <tr><td rowspan="2">可交易</td><td class="t-left">主线 红利40／债60</td><td>7.23%</td><td>−6.33%</td><td>1.14</td></tr>
+    <tr><td class="t-left t-strong">红利30／纳指10／债60</td><td>8.18%</td><td>−5.57%</td><td class="t-strong">1.47</td></tr>
+  </tbody>
+</table>
+
+<p>但 513100 以人民币计价，涨幅混了纳指、汇率、QDII 溢价三样。142 个月里 ETF 年化 18.92%、纳指 16.86%，<strong>汇率只贡献 0.76%</strong>（人民币十一年贬值 9.4%，与直觉相反），残差 1.17% 集中在 2024 年 +5.96% 与 2026 年 +12.91%，来自溢价扩张。用"纳指 × 汇率"合成按净值成交的曲线重跑，10% 档为 8.00%／Calmar 1.42；纳指年化扣 4 个百分点仍有 7.84%，高于主线。<strong>优势对美股收益不敏感，风险在执行端。</strong></p>
+
+<p>截至 2026-11-23，513100 收盘 2.050 元、净值 1.788 元，溢价 14.65% 且暂停申购；按此价建仓 10% 仓位一次性付出约 1.47%。故结论有条件：<strong>溢价低于 3% 才建仓、优先场外联接按净值申购、高于 10% 不建仓、上限 10%</strong>，不直接改主线。</p>
+
+<figure>
+  <p><img src="D:/量化交易/charts/20_纳指_组合效果与收益分解.png" alt="纳指组合效果与收益分解" width="560"></p>
+  <figcaption><p>图 6　加纳指的组合效果（左）与 513100 的收益拆解（右）：2026 年 ETF 实际收益远高于纳指与汇率能解释的部分</p></figcaption>
+</figure>
+
+<h2 id="section-6-3">5.3　任意时点进场，持有三年</h2>
+
+<p>全区间年化回答不了"我 2021 年高点进场怎么办"。以每个交易日为起点取其后整三年（表 9）：策略两种口径下都无亏损窗口，最差 +1.17%；沪深300 有 29%–42% 的窗口为负。代价是中位窗口红利 +9.73%／+12.11%，策略只有 +5.89%／+7.11%——<strong>它卖的不是收益，是"第三年不至于还亏钱"。</strong>图 7 是这个分布的直观版本。</p>
+
+<table>
+  <caption>表 9　滚动三年窗口：最差、中位与亏损概率</caption>
+  <thead>
+    <tr><th>版本</th><th>对象</th><th>最差三年</th><th>中位</th><th>亏损窗口占比</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="3">长周期</td><td class="t-left t-strong">本策略</td><td>+1.17%</td><td>+5.89%</td><td>0%</td></tr>
+    <tr><td class="t-left">红利低波买入持有</td><td>−4.51%</td><td>+9.73%</td><td>5%</td></tr>
+    <tr><td class="t-left">沪深300</td><td>−14.87%</td><td>+6.00%</td><td>29%</td></tr>
+    <tr><td rowspan="2">可交易</td><td class="t-left t-strong">本策略</td><td>+3.33%</td><td>+7.11%</td><td>0%</td></tr>
+    <tr><td class="t-left">沪深300</td><td>−15.36%</td><td>+1.25%</td><td>42%</td></tr>
+  </tbody>
+</table>
+
+<figure>
+  <p><img src="D:/量化交易/charts/18_滚动三年_分布.png" alt="滚动三年" width="560"></p>
+  <figcaption><p>图 7　任意时点买入并持有三年的年化收益：策略全程在零线以上，沪深300 有 29%–42% 的窗口为负</p></figcaption>
+</figure>
+
+<h2 id="section-6-4">5.4　局限</h2>
+
+<p>七条：一，40% 与 7% 预算不独立（回撤近似线性于比例），能为参数辩护的只有一条——只用 2022 年底以前的数据，"7% 反推"照样选出 40%；二，结论押在"2019 年选红利低波"这一个决策上，且只持有两个资产、分散度有限，无法证明换一个标的还能复现；三，闸门只能追慢跌，2020 年 2 月崩盘 8 个交易日跌完、它在底部才减仓，且可交易样本上安慰剂检验不显著（第 92 分位）；四，可交易版三年滚动窗口全部为正，说明它从未经历权益与债券同时下跌，−6.3% 是这个环境的产物；五，多重比较未校正：全项目 356 行配置结果、五个独立环境，"选最好"本身带偏差；六，长周期股票腿用指数回填（2013–2018 无 ETF），那 6 年年化 16.1%、波动 23.1%，与实盘期 12.8%／16.8% 差异明显，不宜当作同一资产的两段；七，Calmar 与夏普都对含无风险资产的组合有偏，仓位越低指标越好，凡"改善"结论必须先做暴露匹配。</p>
+
+<h1 id="section-7">六、结论</h1>
+
+<p>第一，稳健型投资者的可用工具比想象中少。方向不可预测被六组实验反复确认之后，剩下的只有两件事：持有什么，以及按纪律再平衡。</p>
+
+<p>第二，风险预算应该先于收益目标。先写下"回撤不超过 7%"，40% 的比例与 8% 的闸门阈值都从约束里解出来。顺序反过来，就会得到一个先追求收益、再用杠杆式手段补风控的方案——这正是我们最初失败的原因。但预算只能定比例，不能证明机制有效：把"预算被兑现"当成验证，是本项目踩过的最隐蔽的一个坑。</p>
+
+<p>第三，优势主要来自"持有什么"，既不来自"什么时候持有"，也不来自规则的复杂度。本轮审计又把这句往回收了一格：Calmar 的约七成来自"选了红利低波"，规则本身只值 0.3 左右。所以最诚实的定位是——<strong>这是一份配置方案，附一个只对慢跌有效的尾部保险，不是一个有效的择时策略。</strong>承认这一点比再加一个机制难，但也更有用。</p>
+
+<p>如果只能留一句话：<strong>一个策略"讲得通"不等于它"有效"，区分两者的唯一办法，是给对照组同样的暴露，然后看差异还在不在——这把刀同样要架在自己脖子上，本轮五项审计就是那么做的。</strong></p>
+
+<h1 id="section-8">附录 A　复现步骤</h1>
+
+<p>环境：Python 3.13，依赖见 requirements.txt（pandas、numpy、matplotlib、akshare）。国内安装请加清华镜像：<code>pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</code>。</p>
+
+<pre># 1. 数据（data/ 已随仓库提交，可跳过；跳过则全程离线）
+python src/fetch_etf.py
+python src/fetch_index.py
+
+# 2. 主流程：生成比例表 → 回测 → 指标 → 图
+python src/run_strategy.py
+# 产出 output/final_nav_{long,trade}.csv、final_metrics_{long,trade}.csv
+#      charts/14_最终策略_{long,trade}.png
+
+# 3. 复现第三节的六组实验
+python src/experiment_anchor.py      # 实验一：换估值锚
+python src/experiment_structure.py   # 实验二：择时 vs 不择时
+python src/experiment_grid.py        # 实验三：参数网格（约 3 分钟）
+python src/experiment_ratio.py       # 实验四：比例扫描
+python src/experiment_core.py        # 实验五：窄幅择时
+python src/experiment_placebo.py     # 实验六：安慰剂（约 3 分钟）
+python src/experiment_vol.py         # 波动率目标化
+
+# 4. 审计主线自己（本报告 4.3、4.4 的数字）
+python src/audit_overfit.py A C E   # 回撤线性、换资产、样本内反推（约 1 分钟）
+python src/audit_overfit.py B       # 闸门安慰剂，300 次重排（约 10 分钟）
+
+# 5. 复现第五节边界检验与资产端实验
+python src/run_side.py               # 债端久期支线
+python src/experiment_rebalance.py   # 再平衡频率与带宽
+python src/experiment_gold.py        # 黄金
+python src/experiment_chinext.py     # 创业板
+python src/experiment_qdii.py        # 纳指 QDII
+python src/experiment_rolling.py     # 滚动三年</pre>
+
+<p>实验脚本曾在全新目录（不含 output/、charts/）中完整重跑验证，产出的指标表与净值序列与原始结果逐字节一致。</p>
+
+</section>
+</body>
+</html>

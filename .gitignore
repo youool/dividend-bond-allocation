@@ -14,3 +14,7 @@ output/*.txt
 *.tmp
 ~$*
 report/_backup*.docx
+
+# PPT 生成工具的缓存与日志
+.slidep/
+.cache/

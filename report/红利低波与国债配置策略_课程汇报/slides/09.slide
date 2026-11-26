@@ -1,0 +1,18 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#1A3D6D', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`第二段是评分重心：策略设计。\n这一段我想讲清楚三件事：三条规则分别是从哪来的；40% 这个比例怎么算出来的，以及为什么这个算法其实有点循环论证；最后是我们用六组实验把自己的初版否掉的过程——那六组实验比策略本身更能说明方法。`}
+>
+  <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 64, height: 600 }}>
+    <Text style={{ fontSize: 220, fontWeight: 'bold', color: '#3D7BD9', lineHeight: 1, width: 330 }}>02</Text>
+
+    <Box style={{ flexDirection: 'column', width: 700 }}>
+      <Text style={{ fontSize: 54, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.2 }}>策略设计</Text>
+      <Box style={{ width: 120, height: 3, background: '#3D7BD9', marginTop: 22, marginBottom: 34 }} />
+      <Box style={{ flexDirection: 'column', gap: 18 }}>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>三条规则：40% 红利 + 60% 国债 + 一道波动闸门</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>比例从回撤预算反推，但这是一次同义反复</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>六组实验：收益来自持有什么，不来自什么时候持有</Text>
+      </Box>
+    </Box>
+  </Box>
+</Slide>

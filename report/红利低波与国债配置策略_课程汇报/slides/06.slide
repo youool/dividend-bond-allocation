@@ -1,0 +1,57 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`数据层不产生收益，但能产生假收益。我们踩过三个坑，共同点是都不会报错，只会让净值悄悄变形。\n第一个是复权口径。红利资产收益的大头是分红，价格指数不含分红。同一段回测，用价格指数是跑赢 2.3 个点，换成全收益指数就变成跑输 2.8 个点——一个口径，结论反过来。\n第二个是 512890 在 2021 年做过 1 比 2 的份额折算，接口把它记成一条 0 元分红，回测里就出现一次 −51% 的假暴跌。\n第三个更隐蔽：估算波动率时只检查了样本数够不够，没检查有效值够不够，首期把 6% 的波动估成了 1.81%。\n三个坑修完之后，四个结果文件的 MD5 和修之前逐字节一致——说明改的是错误处理，没有偷偷改结论。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+  <Text style={{ position: 'absolute', top: 22, right: 60, fontSize: 18, color: '#8B97A8' }}>01 软件设计</Text>
+
+  <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    数据层不产生收益，但能产生假收益
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 16 }} />
+
+  <Box style={{ flexDirection: 'row', gap: 25, marginTop: 30, height: 402 }}>
+    <Box style={{ width: 370, background: '#F7F9FC', border: '1px solid #D6DCE5', padding: 22, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1.3 }}>复权口径</Text>
+      <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 4, marginBottom: 14 }}>价格指数 vs 全收益指数</Text>
+      <Box style={{ flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 16, color: '#8B2E2E', lineHeight: 1.5 }}>现象　同一段回测，从「跑赢 2.3pct」变成「跑输 2.8pct」</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>根因　价格指数不含分红，红利收益被整段删除</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>修法　改用全收益指数（H20269），分红按除息日再投资</Text>
+      </Box>
+      <Box style={{ flex: 1 }} />
+      <Text style={{ fontSize: 16, color: '#1A2230', fontWeight: 'bold', lineHeight: 1.5 }}>验证　复权净值 150.45% 对官方 150.64%</Text>
+    </Box>
+
+    <Box style={{ width: 370, background: '#F7F9FC', border: '1px solid #D6DCE5', padding: 22, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1.3 }}>份额折算</Text>
+      <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 4, marginBottom: 14 }}>512890 的 1:2 折算</Text>
+      <Box style={{ flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 16, color: '#8B2E2E', lineHeight: 1.5 }}>现象　回测里出现一次 −51% 的假暴跌</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>根因　2021-10-25 折算被接口记成 0 元分红</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>修法　数据层单独识别，按倍数补回份额</Text>
+      </Box>
+      <Box style={{ flex: 1 }} />
+      <Text style={{ fontSize: 16, color: '#1A2230', fontWeight: 'bold', lineHeight: 1.5 }}>验证　折算日前后净值连续，无跳空</Text>
+    </Box>
+
+    <Box style={{ width: 370, background: '#F7F9FC', border: '1px solid #D6DCE5', padding: 22, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1.3 }}>半截窗口</Text>
+      <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 4, marginBottom: 14 }}>用 9 个值估 60 日波动</Text>
+      <Box style={{ flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 16, color: '#8B2E2E', lineHeight: 1.5 }}>现象　首期组合波动估成 1.81%，真实约 6%</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>根因　只查样本数 ≥30，标准差却跳过空值</Text>
+        <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.5 }}>修法　要求有效值数等于窗口长度，否则退回固定比例</Text>
+      </Box>
+      <Box style={{ flex: 1 }} />
+      <Text style={{ fontSize: 16, color: '#1A2230', fontWeight: 'bold', lineHeight: 1.5 }}>验证　前 3 期波动为空，仓位与净值不变</Text>
+    </Box>
+  </Box>
+
+  <Box style={{ background: '#E8EFF8', padding: 16, marginTop: 24, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+    <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1A3D6D' }}>共同点</Text>
+    <Text style={{ fontSize: 18, color: '#1A2230', lineHeight: 1.5 }}>
+      三个坑都不报错。一个会静默出错的回测引擎，比没有回测更危险，因为它把错误包装成了结论。
+    </Text>
+  </Box>
+</Slide>

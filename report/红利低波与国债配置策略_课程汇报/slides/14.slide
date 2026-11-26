@@ -1,0 +1,18 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#1A3D6D', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`第三段讲结果。顺序是：先摆数字，再教怎么看图，最后讲超额从哪来、以及它在哪儿不管用。\n我提前说一句：这一段的数字里，有一行对我们不利——红利买入持有的收益比我们高得多。我不会跳过它，后面会解释为什么。`}
+>
+  <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 64, height: 600 }}>
+    <Text style={{ fontSize: 220, fontWeight: 'bold', color: '#3D7BD9', lineHeight: 1, width: 330 }}>03</Text>
+
+    <Box style={{ flexDirection: 'column', width: 700 }}>
+      <Text style={{ fontSize: 54, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.2 }}>回测结果</Text>
+      <Box style={{ width: 120, height: 3, background: '#3D7BD9', marginTop: 22, marginBottom: 34 }} />
+      <Box style={{ flexDirection: 'column', gap: 18 }}>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>两个口径、三个对象、六项指标</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>净值曲线怎么读：红线、绿阶梯分别代表什么</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>超额从哪来，以及在哪儿失效</Text>
+      </Box>
+    </Box>
+  </Box>
+</Slide>

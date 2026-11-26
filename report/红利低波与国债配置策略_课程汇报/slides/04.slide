@@ -1,0 +1,18 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#1A3D6D', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`第一段讲软件设计，回答一个问题：凭什么说这是一个真能跑的系统，不是几张画出来的图。\n我们按数据、策略、回测、输出四层拆开，每层只做一件事，层与层之间只通过 CSV 文件通信。这样做的好处很实际：换数据源不用改回测逻辑，改策略不用碰成交假设。`}
+>
+  <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 64, height: 600 }}>
+    <Text style={{ fontSize: 220, fontWeight: 'bold', color: '#3D7BD9', lineHeight: 1, width: 330 }}>01</Text>
+
+    <Box style={{ flexDirection: 'column', width: 700 }}>
+      <Text style={{ fontSize: 54, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.2 }}>软件设计</Text>
+      <Box style={{ width: 120, height: 3, background: '#3D7BD9', marginTop: 22, marginBottom: 34 }} />
+      <Box style={{ flexDirection: 'column', gap: 18 }}>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>四层架构：数据接入 / 策略信号 / 回测引擎 / 结果输出</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>数据层三个不会报错、只会让净值变形的坑</Text>
+        <Text style={{ fontSize: 22, color: '#D5E2F2', lineHeight: 1.6 }}>前视检查与可复现：怎么保证不是自己骗自己</Text>
+      </Box>
+    </Box>
+  </Box>
+</Slide>

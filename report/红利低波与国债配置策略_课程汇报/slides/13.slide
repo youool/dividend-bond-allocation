@@ -1,0 +1,46 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`这一页是整场的转折。我们的初版是一个择时策略：红利打底，沪深300 的估值分位决定仓位，再加一根 120 日均线做趋势。样本内年化 9.1%，样本外只剩 1.2%。\n我们做了六组实验想救它，结果六组全是否定的。\n换估值锚，样本外从正 7.2% 变成负 7.0%，更差。拆掉择时、用同样的 34% 暴露做固定配置，样本外从 1.5% 变成 5.0%。24 组参数网格，最好的也只有 3.0%，还不如什么都不做。\n最关键的是第六组：把信号的时间顺序随机打乱 100 次，真实信号只排到 14% 的位置——也就是说，随便乱配，86% 的情况都比它好。\n六组压成一句话：收益全部来自持有了什么，没有一分钱来自什么时候持有。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+  <Text style={{ position: 'absolute', top: 22, right: 60, fontSize: 18, color: '#8B97A8' }}>02 策略设计</Text>
+
+  <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    六组实验，把我们自己的初版否掉了
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 14 }} />
+
+  <Table
+    style={{ width: 1160, height: 330, marginTop: 20 }}
+    defaultTextStyle={{ fontSize: 17, textAlign: 'left', color: '#1A2230' }}
+    defaultCellStyle={{ border: { left: { width: 1, color: '#D6DCE5' }, right: { width: 1, color: '#D6DCE5' }, top: { width: 1, color: '#D6DCE5' }, bottom: { width: 1, color: '#D6DCE5' } } }}
+    cells={[
+      [
+        { text: '实验', textStyle: { bold: true, color: '#FFFFFF', textAlign: 'center' }, cellStyle: { background: { color: '#1A3D6D' } } },
+        { text: '做法', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+        { text: '关键结果', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+        { text: '结论', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
+      ],
+      [{ text: '一　换估值锚', textStyle: { textAlign: 'center' } }, '沪深300 PE → 上证红利 PE', '样本外 +7.2% → −7.0%', { text: '「锚用错了」这个诊断本身错', textStyle: { color: '#8B2E2E' } }],
+      [{ text: '二　拆掉择时', textStyle: { textAlign: 'center' } }, '同样 34% 暴露的固定配置', '1.5% → 5.0%，回撤 −11.9% → −3.8%', { text: '不判断优于判断', textStyle: { color: '#8B2E2E' } }],
+      [{ text: '三　参数网格', textStyle: { textAlign: 'center' } }, '24 组：均线 120/200/250 × 档位', '最好组合样本外 3.0%，「不做」6.6%', { text: '全输', textStyle: { color: '#8B2E2E' } }],
+      [{ text: '四　比例扫描', textStyle: { textAlign: 'center' } }, '红利 20%–80%', '40% 对应回撤 −6.8%', '比例可从预算反推'],
+      [{ text: '五　窄幅择时', textStyle: { textAlign: 'center' } }, '仓位压到 30/40/50%', '夏普 0.99，高于固定档 0.86', { text: '暴露 32% vs 40%，不可比', textStyle: { color: '#8B2E2E' } }],
+      [{ text: '六　安慰剂', textStyle: { textAlign: 'center' } }, '100 次随机重排信号时间', '真实值落在随机分布 14% 分位', { text: '估值方向没有信息量', textStyle: { color: '#8B2E2E' } }],
+    ]}
+  />
+
+  <Box style={{ flexDirection: 'row', gap: 24, marginTop: 20, alignItems: 'center' }}>
+    <Box style={{ flexDirection: 'column', width: 492 }}>
+      <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1.45 }}>
+        收益全部来自「持有了什么」<br />没有一分钱来自「什么时候持有」
+      </Text>
+    </Box>
+    <Box style={{ flexDirection: 'column', width: 320 }}>
+      <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.55 }}>
+        图：同样的 34% 权益暴露下，固定配置（红）全程领先择时策略（绿）——差别只剩「判断」这一下。
+      </Text>
+    </Box>
+    <Image src="assets/exposure.png" style={{ width: 300, height: 150, objectFit: 'contain' }} />
+  </Box>
+</Slide>

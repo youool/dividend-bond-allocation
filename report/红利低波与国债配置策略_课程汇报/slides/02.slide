@@ -1,0 +1,48 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`先说三个数字。7% 是最大回撤上限，也就是最坏情况下我们能忍住的亏损；一个月一次，是决策频率；0，是我们做方向预测的次数。\n这三个数字不是策略跑出来的结果，是策略的前提。我们先写下能忍多少亏损，再决定买什么。顺序如果反过来，就会得到一个先追收益、再想办法补风控的方案——我们最初就是这么失败的。\n把 7% 写下来之后，能调的其实只剩两件事：持有什么，以及按什么纪律再平衡。后面三章都在回答这两件事。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+
+  <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    稳健型投资者要的不是最高收益，是「拿得住」
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 18 }} />
+
+  <Box style={{ flexDirection: 'row', gap: 56, marginTop: 38, height: 452 }}>
+    <Box style={{ width: 430, flexDirection: 'column', gap: 26 }}>
+      <Box style={{ flexDirection: 'column' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1 }}>7%</Text>
+        <Text style={{ fontSize: 18, color: '#4A5568', marginTop: 10 }}>能接受的最大回撤　—— 不是目标，是上限</Text>
+      </Box>
+      <Box style={{ flexDirection: 'column' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1 }}>1 次/月</Text>
+        <Text style={{ fontSize: 18, color: '#4A5568', marginTop: 10 }}>决策频率　—— 不盯盘，不做日内</Text>
+      </Box>
+      <Box style={{ flexDirection: 'column' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#1A3D6D', lineHeight: 1 }}>0</Text>
+        <Text style={{ fontSize: 18, color: '#4A5568', marginTop: 10 }}>方向预测次数　—— 这是设计前提，不是结果</Text>
+      </Box>
+    </Box>
+
+    <Box style={{ width: 674, flexDirection: 'column', justifyContent: 'space-between' }}>
+      <Box style={{ flexDirection: 'column', gap: 20 }}>
+        <Text style={{ fontSize: 23, color: '#1A2230', lineHeight: 1.7 }}>
+          这三个数字先于策略存在。先写下能忍多少亏损，再决定买什么——顺序反了，
+          就会得到一个先追收益、再用杠杆式手段补风控的方案。
+        </Text>
+        <Text style={{ fontSize: 23, color: '#1A2230', lineHeight: 1.7 }}>
+          回撤预算能决定的只有权益比例。所以策略真正要回答的问题只剩两件：
+          <span style={{ fontWeight: 'bold', color: '#1A3D6D' }}>持有什么，以及按什么纪律再平衡。</span>
+        </Text>
+      </Box>
+
+      <Box style={{ background: '#1A3D6D', padding: 24, flexDirection: 'column', gap: 8 }}>
+        <Text style={{ fontSize: 17, color: '#A8BEDC' }}>我们踩过的第一个坑</Text>
+        <Text style={{ fontSize: 21, color: '#FFFFFF', lineHeight: 1.6 }}>
+          初版先找信号、再找标的，样本内年化 9.1%，样本外只剩 1.2%。
+        </Text>
+      </Box>
+    </Box>
+  </Box>
+</Slide>

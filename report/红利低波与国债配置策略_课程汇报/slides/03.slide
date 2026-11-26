@@ -1,0 +1,46 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`汇报按课程要求分三段，我也标了大致时长，方便老师掌握节奏。\n第一段讲软件设计，大约 5 分钟，重点是四层架构、数据层的三个静默错误，以及我们怎么防止自己骗自己。\n第二段讲策略设计，6 分钟，这是评分重心：三条规则从哪来，以及六组实验怎么把我们的初版否掉。\n第三段讲回测结果，7 分钟，包括指标、净值怎么读，还有边界——哪些做法被数据否掉了。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+
+  <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    三段，对应课程要求的三个问题
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 18 }} />
+
+  <Box style={{ flexDirection: 'row', gap: 44, marginTop: 46, height: 430 }}>
+    <Box style={{ width: 357, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 92, fontWeight: 'bold', color: '#D6DCE5', lineHeight: 1 }}>01</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#1A3D6D', marginTop: 14 }}>软件设计</Text>
+      <Text style={{ fontSize: 17, color: '#8B97A8', marginTop: 6 }}>约 5 分钟</Text>
+      <Box style={{ flexDirection: 'column', gap: 12, marginTop: 26 }}>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>四层架构与模块划分</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>数据层三个静默错误</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>怎么防止自己骗自己</Text>
+      </Box>
+    </Box>
+
+    <Box style={{ width: 357, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 92, fontWeight: 'bold', color: '#D6DCE5', lineHeight: 1 }}>02</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#1A3D6D', marginTop: 14 }}>策略设计</Text>
+      <Text style={{ fontSize: 17, color: '#8B97A8', marginTop: 6 }}>约 6 分钟</Text>
+      <Box style={{ flexDirection: 'column', gap: 12, marginTop: 26 }}>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>三条规则与设定依据</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>比例怎么从预算反推</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>六组实验否掉择时</Text>
+      </Box>
+    </Box>
+
+    <Box style={{ width: 357, flexDirection: 'column' }}>
+      <Text style={{ fontSize: 92, fontWeight: 'bold', color: '#D6DCE5', lineHeight: 1 }}>03</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#1A3D6D', marginTop: 14 }}>回测结果</Text>
+      <Text style={{ fontSize: 17, color: '#8B97A8', marginTop: 6 }}>约 7 分钟</Text>
+      <Box style={{ flexDirection: 'column', gap: 12, marginTop: 26 }}>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>核心指标与双基准</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>净值曲线怎么读</Text>
+        <Text style={{ fontSize: 21, color: '#1A2230', lineHeight: 1.6 }}>超额来源与适用边界</Text>
+      </Box>
+    </Box>
+  </Box>
+</Slide>
