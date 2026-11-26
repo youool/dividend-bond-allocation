@@ -19,7 +19,7 @@
       <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.55, marginTop: 8 }}>
         暴露匹配后真实超额仅 +0.04–0.27；UP50 月均调仓 6.5pct，平滑后 Calmar 掉回 0.53。
       </Text>
-      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#8B2E2E', marginTop: 8 }}>判定：不改主线</Text>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#8B2E2E', marginTop: 8 }}>判定：不改主线<br />唯一采纳的是放开上限</Text>
     </Box>
 
     <Box style={{ width: 568, background: '#F7F9FC', border: '1px solid #D6DCE5', padding: 20 }}>
@@ -61,7 +61,7 @@
   <Box style={{ background: '#1A3D6D', padding: 18, marginTop: 22, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
     <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#A8BEDC', width: 130 }}>对主线的审计</Text>
     <Text style={{ fontSize: 17, color: '#FFFFFF', lineHeight: 1.5 }}>
-      五项审计，三项把优势判死：Calmar 约七成来自资产选择 · 回撤预算与权益比例是同一事实 · 样本外只是时间切分
+      五项审计：两项判死（Calmar 归因、预算同义反复）、一项给「样本外」打折；闸门这次通过安慰剂，第 99 分位
     </Text>
   </Box>
 </Slide>

@@ -1,6 +1,6 @@
 <Slide
   style={{ width: 1280, height: 720, background: '#1A3D6D', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
-  notes={`最后收三句话。\n第一，稳健型投资者的工具比想象中少。方向不可预测被六组实验反复确认之后，剩下的只有两件事：持有什么，按什么纪律再平衡。这不是保守，是排除法留下的结果。\n第二，风险预算要先于收益目标。但预算只能定比例，不能证明机制有效——把「预算被兑现」当成验证，是我们踩过最隐蔽的坑。\n第三，优势主要来自持有什么。Calmar 的七成来自「选了红利低波」，规则本身只值 0.3。\n所以最诚实的定位是：这是一份配置方案，附一个只对慢跌有效的尾部保险，不是一个能预测方向的策略。\n谢谢，下面是提问时间。`}
+  notes={`最后收三句话。\n第一，稳健型投资者的工具比想象中少。方向不可预测被六组实验反复确认之后，剩下的只有两件事：持有什么，按什么纪律再平衡。这不是保守，是排除法留下的结果。\n第二，风险预算要先于收益目标。但预算只能定比例，不能证明机制有效——把「预算被兑现」当成验证，是我们踩过最隐蔽的坑。\n第三，优势主要来自持有什么。Calmar 的六到八成来自「选了红利低波」，规则本身只值 0.25。\n所以最诚实的定位是：这是一份配置方案，附一个只对慢跌有效的尾部保险，不是一个能预测方向的策略。\n谢谢，下面是提问时间。`}
 >
   <Box style={{ flexDirection: 'column', height: 600, justifyContent: 'center' }}>
     <Text style={{ fontSize: 20, color: '#8FB0DA', letterSpacing: 2, marginBottom: 30 }}>结论</Text>
@@ -21,7 +21,7 @@
       <Box style={{ flexDirection: 'row', gap: 22 }}>
         <Text style={{ fontSize: 26, fontWeight: 'bold', color: '#3D7BD9', width: 44 }}>03</Text>
         <Text style={{ fontSize: 24, color: '#FFFFFF', lineHeight: 1.55 }}>
-          优势主要来自「持有了什么」——Calmar 的七成来自选了红利低波，规则本身只值 0.3。
+          优势主要来自「持有了什么」——Calmar 的六到八成来自选了红利低波，规则本身只值 0.25。
         </Text>
       </Box>
     </Box>

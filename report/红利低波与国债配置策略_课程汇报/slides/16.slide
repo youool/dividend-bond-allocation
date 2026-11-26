@@ -22,19 +22,19 @@
       <Box style={{ flexDirection: 'row', gap: 12 }}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1A3D6D', width: 26 }}>1</Text>
         <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.55 }}>
-          三条线都归一化到 1.0，直接比期末值：策略 1.69，沪深300 1.43，红利 2.47。
+          三条线都归一化到 1.0，直接比期末值：策略 1.83，沪深300 1.43，红利 2.47。
         </Text>
       </Box>
       <Box style={{ flexDirection: 'row', gap: 12 }}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1A3D6D', width: 26 }}>2</Text>
         <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.55 }}>
-          红竖线 = 闸门触发月（仓位降幅 &gt;15pct）：可交易 5 次，长周期 16 次。这是本策略唯一的「买卖点」。
+          红竖线 = 闸门触发月（仓位降幅 &gt;15pct）：可交易 7 次，长周期 19 次。这是本策略唯一的「买卖点」。
         </Text>
       </Box>
       <Box style={{ flexDirection: 'row', gap: 12 }}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1A3D6D', width: 26 }}>3</Text>
         <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.55 }}>
-          下方绿阶梯 = 红利仓位；蓝线越过 8% 虚线（红）时，绿线下台阶，回落再上。
+          下方绿阶梯 = 红利仓位；蓝线越过 8% 时下台阶，回落到 8% 以下时升到 50%。
         </Text>
       </Box>
       <Box style={{ background: '#E8EFF8', padding: 18, marginTop: 4 }}>

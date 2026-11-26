@@ -70,8 +70,8 @@ def month_ends(index, start):
 
 
 def make_weights(equity_path, dates, base_equity, vol_target=None,
-                 vol_window=60, floor=0.20):
-    """与 allocation.build 同构，但资产可替换。用于 C 项。"""
+                 vol_window=60, floor=0.20, max_eq=0.50):
+    """与 allocation.build 同构（双向闸门、上限 50%），但资产可替换。用于 C 项。"""
     cl = pd.read_csv(equity_path, parse_dates=["date"]).drop_duplicates("date").set_index("date")["close"]
     bond = pd.read_csv(BOND, parse_dates=["date"]).drop_duplicates("date").set_index("date")["close"]
     df = pd.concat([cl.rename("eq"), bond.rename("bd")], axis=1).sort_index().ffill()
@@ -88,8 +88,8 @@ def make_weights(equity_path, dates, base_equity, vol_target=None,
         if vol_target is None or not np.isfinite(vol) or vol <= 0:
             eq, scale = base_equity, 1.0
         else:
-            scale = min(1.0, vol_target / vol)
-            eq = float(np.clip(base_equity * scale, floor, base_equity))
+            scale = vol_target / vol
+            eq = float(np.clip(base_equity * scale, floor, max_eq))
         rows.append({"date": d, "w_dividend": eq, "w_broad": 0.0,
                      "w_bond": 1.0 - eq, "w_cash": 0.0,
                      "realized_vol": vol, "scale": scale})

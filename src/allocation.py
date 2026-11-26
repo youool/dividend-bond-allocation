@@ -55,7 +55,10 @@ import backtest as bt  # noqa: E402
 # ---------- 参数 ----------
 BASE_EQUITY = 0.40      # 红利低波的基准比例
 MIN_EQUITY = 0.20       # 波动率目标化后的下限（不低于 20%，否则组合失去意义）
-MAX_EQUITY = 0.40       # 上限：不突破基准，不做「低波动时加杠杆」
+MAX_EQUITY = 0.50       # 上限：风险预算没用完时允许适度加仓，最多 50%
+# 为什么是 50% 而不是 40%：闸门改为双向之后，上限扫描 0.42–0.60 是一条平台，
+# 长周期最优 0.48（Calmar 0.583）、可交易最优 0.50（1.280）；0.55 以上开始变差。
+# 50% 比基准高 10 个百分点，是「风险预算没用完时的适度加仓」，不是激进加杠杆。
 VOL_WINDOW = 60         # 算已实现波动的窗口（交易日）
 VOL_TARGET = None       # None 表示不启用波动率目标化
 
@@ -123,9 +126,18 @@ def build(version_key, mode="fixed", base_equity=BASE_EQUITY,
             scale = 1.0
             note = "固定比例"
         else:
-            scale = min(1.0, vol_target / realized)
+            # 双向：实际波动低于目标时按缺口加仓（上限 MAX_EQUITY），
+            # 高于目标时按比例收缩（下限 MIN_EQUITY）。
+            # 单向版本（min(1,·)）会把风险预算永远用不满：低波动时仓位停在 40%，
+            # 而低波动恰恰是权益资产最便宜、最该多拿的时候。
+            scale = vol_target / realized
             eq = float(np.clip(base_equity * scale, MIN_EQUITY, MAX_EQUITY))
-            note = "波动超预算→收缩" if scale < 1 else "波动在预算内"
+            if scale < 1:
+                note = "波动超预算→收缩"
+            elif eq > base_equity + 1e-9:
+                note = "波动低于预算→加仓"
+            else:
+                note = "波动在预算内"
 
         rows.append({
             "date": d.strftime("%Y-%m-%d"),

@@ -29,7 +29,7 @@
             { text: '80%', textStyle: { bold: true, color: '#FFFFFF' }, cellStyle: { background: { color: '#1A3D6D' } } },
           ],
           ['最大回撤', '−3.4%', { text: '−6.8%', textStyle: { bold: true, color: '#1A3D6D' } }, '−7.7%', '−10.2%', '−13.4%'],
-          ['判定', '宽松', { text: '采用', textStyle: { bold: true, color: '#1A3D6D' } }, { text: '越界', textStyle: { bold: true, color: '#8B2E2E' } }, '越界', '越界'],
+          ['判定', '宽松', { text: '基准', textStyle: { bold: true, color: '#1A3D6D' } }, { text: '越界', textStyle: { bold: true, color: '#8B2E2E' } }, '越界', '越界'],
         ]}
       />
       <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 12, lineHeight: 1.5 }}>

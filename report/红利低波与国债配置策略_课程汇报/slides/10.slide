@@ -42,11 +42,11 @@
         <Text style={{ fontSize: 20, color: '#FFFFFF', fontWeight: 'bold' }}>风控层</Text>
       </Box>
       <Box style={{ flexDirection: 'column', paddingLeft: 24, width: 480 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1A2230' }}>波动 &gt; 8% 时收缩权益</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1A2230' }}>波动偏离 8% 就调整权益</Text>
         <Text style={{ fontSize: 16, color: '#4A5568', marginTop: 6 }}>超出预算怎么办</Text>
       </Box>
       <Text style={{ fontSize: 17, color: '#4A5568', width: 440, lineHeight: 1.5 }}>
-        近 60 日组合波动 &gt; 年化 8% → 权益 ×（8%／实际），下限 20%，回落即恢复
+        近 60 日波动 &gt; 8% 按比例收缩、&lt; 8% 按缺口加仓，区间 20%–50%
       </Text>
     </Box>
   </Box>
@@ -59,6 +59,6 @@
     <Text style={{ fontSize: 18, color: '#4A5568' }}>·</Text>
     <Text style={{ fontSize: 18, color: '#1A2230' }}>双边万 2</Text>
     <Text style={{ fontSize: 18, color: '#4A5568' }}>·</Text>
-    <Text style={{ fontSize: 18, color: '#1A2230' }}>月均只调整 1.7 个百分点仓位</Text>
+    <Text style={{ fontSize: 18, color: '#1A2230' }}>月均调整 6.3 个百分点</Text>
   </Box>
 </Slide>

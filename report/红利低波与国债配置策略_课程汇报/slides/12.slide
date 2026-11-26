@@ -1,6 +1,6 @@
 <Slide
   style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
-  notes={`固定 40/60 有一个过不去的坎：2015 年回撤 −17.4%，超出预算。永久降仓位能压回撤，但也会永久损失收益。\n替代方案是波动率目标化：把 8% 当作风险预算，实际波动超了就按比例收缩，回落就恢复。\n它和择时有本质区别：输入是已经实现的波动，不是对未来的判断。它不问会涨会跌，只问风险是不是超支了。\n效果：回撤从 −17.4% 压到 −12.1%，年化反而略升到 6.3%。原因是收缩的月份恰好就是坏月份，2015 年 6 月开始下跌，闸门在跌到一半时已经完成降仓，没有错过上涨。\n但这一页的结论只在长周期成立——到了可交易样本上，它和随机收缩分不开，这个后面会讲。`}
+  notes={`固定 40/60 有一个过不去的坎：2015 年回撤 −17.4%，超出预算。永久降仓位能压回撤，但也会永久损失收益。\n替代方案是波动率目标化：把 8% 当作风险预算。关键是它必须双向——只降不升，预算就永远用不完；低波动恰恰是该多拿的时候。\n它和择时有本质区别：输入是已经实现的波动，不是对未来的判断。它不问会涨会跌，只问风险是不是超支了。\n效果：回撤从 −17.4% 压到 −12.4%，年化从 6.2% 升到 7.1%。原因是收缩的月份恰好就是坏月份，2015 年 6 月开始下跌，闸门在跌到一半时已经完成降仓，没有错过上涨。\n但这一页的结论只在长周期成立——到了可交易样本上，它和随机收缩分不开，这个后面会讲。`}
 >
   <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
   <Text style={{ position: 'absolute', top: 22, right: 60, fontSize: 18, color: '#8B97A8' }}>02 策略设计</Text>
@@ -20,13 +20,13 @@
     <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <Box style={{ width: 6, height: 44, background: '#1A3D6D' }} />
       <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.45 }}>
-        只降不升、上限 40%<br />不加杠杆
+        双向：20%–50%<br />不加杠杆
       </Text>
     </Box>
     <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <Box style={{ width: 6, height: 44, background: '#8B2E2E' }} />
       <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.45 }}>
-        长周期回撤 −17.4% → −12.1%<br />年化 6.2% → 6.3%
+        长周期回撤 −17.4% → −12.4%<br />年化 6.2% → 7.1%
       </Text>
     </Box>
   </Box>

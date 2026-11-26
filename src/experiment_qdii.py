@@ -108,7 +108,7 @@ def build_theoretical():
     return path
 
 
-def build_gated(ver, qdii_share, base=0.40, floor=0.20, target=0.08, window=60):
+def build_gated(ver, qdii_share, base=0.40, floor=0.20, target=0.08, window=60, max_eq=0.50):
     """
     把纳指接进主线：风险资产仍是 40%，内部按 (1−share) : share 分给红利与纳指，
     波动率闸门按「真实的三资产组合」重算，而不是沿用原来的 40/0/60 权重表。
@@ -130,7 +130,7 @@ def build_gated(ver, qdii_share, base=0.40, floor=0.20, target=0.08, window=60):
         if np.isnan(realized) or realized <= 0:
             eq = base
         else:
-            eq = float(np.clip(base * min(1.0, target / realized), floor, base))
+            eq = float(np.clip(base * (target / realized), floor, max_eq))
         rows.append({"date": d, "w_dividend": eq * (1 - qdii_share),
                      "w_broad": eq * qdii_share, "w_bond": 1 - eq, "w_cash": 0.0})
         prev_eq = eq

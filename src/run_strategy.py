@@ -169,11 +169,11 @@ def plot(ver, out, alloc, mdf):
              alpha=0.9, label="红利仓位（右轴）")
     ax4.yaxis.set_major_formatter(PercentFormatter(1.0))
     ax4.set_ylabel("红利仓位")
-    ax4.set_ylim(0, 0.5)
+    ax4.set_ylim(0, 0.56)
 
     h1, l1 = ax3.get_legend_handles_labels()
     h2, l2 = ax4.get_legend_handles_labels()
-    ax3.legend(h1 + h2, l1 + l2, loc="upper center", fontsize=7.2, ncol=4, framealpha=0.92,
+    ax3.legend(h1 + h2, l1 + l2, loc="lower center", fontsize=7.2, ncol=2, framealpha=0.92,
                handlelength=1.6, columnspacing=1.2)
 
     ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
