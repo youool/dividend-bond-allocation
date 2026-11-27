@@ -18,3 +18,6 @@ report/_backup*.docx
 # PPT 生成工具的缓存与日志
 .slidep/
 .cache/
+
+# 本地交付物（代码包 zip 不重复进仓库）
+report/*.zip
