@@ -19,5 +19,7 @@ report/_backup*.docx
 .slidep/
 .cache/
 
-# 本地交付物（代码包 zip 不重复进仓库）
+# 本地交付物（旧版临时 zip 不进仓库）
 report/*.zip
+# 例外：课程提交用的 v6 代码包，需要随仓库提供下载
+!report/红利低波与国债配置策略_代码包_v6.zip
