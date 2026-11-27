@@ -91,13 +91,20 @@ def month_end_dates(series):
 
 
 def build(version_key, mode="fixed", base_equity=BASE_EQUITY,
-          vol_window=VOL_WINDOW, out_tag=None, bond_path=None, write=True):
+          vol_window=VOL_WINDOW, out_tag=None, bond_path=None, write=True,
+          vol_target=None, max_equity=None, min_equity=None):
     """
     返回一张调仓表：每行是「哪天、目标比例是多少、为什么」。
     波动率用**上一期持有的比例**算组合历史波动，避免用当期还没发生的价格。
 
     bond_path：把国债腿换成另一条价格曲线（支线做久期对比时用）。
     write：设为 False 则只算不落盘，用于诊断，不会覆盖主线产物。
+
+    可选覆盖（默认全部取模块常量，传 None 即维持主线口径）：
+      vol_target  覆盖 MODES[mode] 里的目标波动，单位是年化小数（0.08 = 8%）
+      max_equity  覆盖上限 MAX_EQUITY
+      min_equity  覆盖下限 MIN_EQUITY
+    这三个参数是给「现场改参数看结果」用的，不影响默认路径的任何数字。
     """
     cfg = VERSIONS[version_key]
     prices = dict(cfg["prices"])
@@ -109,7 +116,12 @@ def build(version_key, mode="fixed", base_equity=BASE_EQUITY,
     dates = pd.DatetimeIndex(month_end_dates(div))
     dates = dates[dates >= pd.Timestamp(cfg["start"])]
 
-    vol_target = MODES[mode]["vol_target"]
+    if vol_target is None:
+        vol_target = MODES[mode]["vol_target"]
+    max_eq = MAX_EQUITY if max_equity is None else float(max_equity)
+    min_eq = MIN_EQUITY if min_equity is None else float(min_equity)
+    if min_eq > max_eq:
+        raise ValueError(f"下限 {min_eq} 不能高于上限 {max_eq}")
 
     rets = cl[["dividend", "bond"]].pct_change()
     rows = []
@@ -136,7 +148,7 @@ def build(version_key, mode="fixed", base_equity=BASE_EQUITY,
             # 单向版本（min(1,·)）会把风险预算永远用不满：低波动时仓位停在 40%，
             # 而低波动恰恰是权益资产最便宜、最该多拿的时候。
             scale = vol_target / realized
-            eq = float(np.clip(base_equity * scale, MIN_EQUITY, MAX_EQUITY))
+            eq = float(np.clip(base_equity * scale, min_eq, max_eq))
             if scale < 1:
                 note = "波动超预算→收缩"
             elif eq > base_equity + 1e-9:

@@ -23,6 +23,7 @@
   基准选择理由                          → 见 README「基准」一节
 """
 
+import argparse
 import os
 import sys
 
@@ -41,7 +42,43 @@ def build_drawdown(nav):
     return nav / nav.cummax() - 1.0
 
 
-def main():
+def parse_args(argv=None):
+    ap = argparse.ArgumentParser(
+        description="主回测入口。默认参数等于主线口径，改参数用于现场演示「结果随输入变化」。",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    ap.add_argument("--vol-target", type=float, default=8.0, metavar="PCT",
+                    help="目标波动（年化百分数）。默认 8")
+    ap.add_argument("--max-equity", type=float, default=50.0, metavar="PCT",
+                    help="权益仓位上限（百分数）。默认 50")
+    ap.add_argument("--min-equity", type=float, default=20.0, metavar="PCT",
+                    help="权益仓位下限（百分数）。默认 20")
+    ap.add_argument("--base", type=float, default=40.0, metavar="PCT",
+                    help="基准权益比例（百分数）。默认 40")
+    ap.add_argument("--window", type=int, default=60, metavar="N",
+                    help="算已实现波动的窗口（交易日）。默认 60")
+    ap.add_argument("--tag", default="", metavar="NAME",
+                    help="给输出文件加后缀，不覆盖主线产物。默认空")
+    return ap.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    vol_target = args.vol_target / 100.0
+    max_eq = args.max_equity / 100.0
+    min_eq = args.min_equity / 100.0
+    base_eq = args.base / 100.0
+    sfx = f"_{args.tag}" if args.tag else ""
+    out_tag = f"vol08{sfx}" if args.tag else None
+
+    if min_eq > max_eq:
+        raise SystemExit(f"下限 {min_eq:.0%} 高于上限 {max_eq:.0%}，参数不成立")
+    if not (0 < base_eq <= max_eq):
+        raise SystemExit(f"基准 {base_eq:.0%} 必须大于 0 且不高于上限 {max_eq:.0%}")
+
+    print(f"参数：目标波动 {vol_target:.0%}　基准 {base_eq:.0%}　"
+          f"区间 [{min_eq:.0%}, {max_eq:.0%}]　窗口 {args.window} 日"
+          + (f"　输出后缀 _{args.tag}" if args.tag else "　（主线口径）"))
+
     os.makedirs("output", exist_ok=True)
     os.makedirs("charts", exist_ok=True)   # 换到干净目录时 charts/ 不存在，不建会直接崩在图那一步
 
@@ -49,7 +86,13 @@ def main():
         cfg = bt.VERSIONS[ver]
         ins_end = pd.Timestamp(cfg["insample_end"])
 
-        alloc, alloc_path = al.build(ver, al.DEFAULT_MODE)
+        alloc, alloc_path = al.build(ver, al.DEFAULT_MODE,
+                                     base_equity=base_eq,
+                                     vol_window=args.window,
+                                     out_tag=out_tag,
+                                     vol_target=vol_target,
+                                     max_equity=max_eq,
+                                     min_equity=min_eq)
         op, cl = bt.load_prices(cfg["prices"])
         nav, fee = bt.simulate(alloc, op, cl, cfg["exec_price"])
 
@@ -58,7 +101,7 @@ def main():
             px = cl[asset].reindex(out.index).ffill()
             out[bm] = (px / px.iloc[0]).values
         out = out.ffill().dropna()
-        out.to_csv(f"output/final_nav_{ver}.csv", encoding="utf-8")
+        out.to_csv(f"output/final_nav_{ver}{sfx}.csv", encoding="utf-8")
 
         rows = []
         for seg, sub in [("全区间", out),
@@ -70,7 +113,7 @@ def main():
                                ("bm_dividend", "红利低波买入持有")]:
                 rows.append({"区间": seg, "对象": cname, **bt.metrics(sub[col])})
         mdf = pd.DataFrame(rows)
-        mdf.to_csv(f"output/final_metrics_{ver}.csv", index=False, encoding="utf-8")
+        mdf.to_csv(f"output/final_metrics_{ver}{sfx}.csv", index=False, encoding="utf-8")
 
         print()
         print("=" * 88)
@@ -87,10 +130,10 @@ def main():
         print(f"累计手续费 {fee:.2%}　平均红利仓位 {alloc['w_dividend'].mean():.0%}　"
               f"波动触发收缩的月份 {int((alloc['scale'] < 1).sum())}/{len(alloc)}")
 
-        plot(ver, out, alloc, mdf)
+        plot(ver, out, alloc, mdf, vol_target=vol_target, suffix=sfx)
 
 
-def plot(ver, out, alloc, mdf):
+def plot(ver, out, alloc, mdf, vol_target=None, suffix=""):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.dates as mdates
@@ -105,7 +148,8 @@ def plot(ver, out, alloc, mdf):
 
     idx = out.index
     ins_end = pd.Timestamp(bt.VERSIONS[ver]["insample_end"])
-    vol_target = al.MODES[al.DEFAULT_MODE]["vol_target"]
+    if vol_target is None:
+        vol_target = al.MODES[al.DEFAULT_MODE]["vol_target"]
 
     # ---- 面板 A：净值 ----
     ax1 = fig.add_subplot(gs[0])
@@ -177,7 +221,7 @@ def plot(ver, out, alloc, mdf):
                handlelength=1.6, columnspacing=1.2)
 
     ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    path = f"charts/14_最终策略_{ver}.png"
+    path = f"charts/14_最终策略_{ver}{suffix}.png"
     fig.savefig(path, bbox_inches="tight")
     plt.close(fig)
     print(f"图已保存：{path}")

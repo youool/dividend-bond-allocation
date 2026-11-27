@@ -102,7 +102,8 @@
 │   │
 │   ├── allocation.py       ★ 主流程：生成目标比例表（40/60 + 波动率目标化）
 │   ├── backtest.py         ★ 回测内核（份额法 + 双边万2），自带自检
-│   ├── run_strategy.py     ★ 主流程入口：回测 → 指标表 → 三面板图
+│   ├── run_strategy.py     ★ 主流程入口：回测 → 指标表 → 三面板图（支持 --vol-target 等参数）
+│   ├── webapp.py           参数看板后端（标准库 HTTP，实时重算）
 │   ├── plot_architecture.py     系统架构图（报告图 1、汇报第 5 页）
 │   │
 │   ├── fetch_bond_duration.py   拉十年/三十年国债 ETF（支线用的数据）
@@ -147,6 +148,15 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 **Windows 上不想敲命令**：双击仓库根目录的 `00_start_demo.bat`，
 它会自动找到本机的 `.venv`，依次跑主线回测与未来函数三关，约 12 秒，结束后直接打开 `charts/`。
 没有 `.venv` 时会退回系统 Python，缺依赖会给出安装提示而不是报错堆栈。
+
+**参数看板（本地 Web 应用）**：双击 `01_start_board.bat`，浏览器会自动打开
+`http://127.0.0.1:8777/`。页面上拖动「目标波动 / 权益上限 / 基准仓位 / 波动窗口」，
+**每一次拖动都会让 Python 后端用同一套内核重算一遍**，净值曲线、仓位阶梯与指标表实时刷新，
+页脚会显示本次计算耗时。它不是预先画好的图，也不是前端假数据。
+
+- 后端：标准库 `http.server`，零第三方依赖，断网可用
+- 接口：`GET /api/run?ver=trade&vol=8&cap=50&base=40&window=60`
+- 默认参数下返回的指标与 `output/final_metrics_*.csv` 完全一致（同一函数、同一条数据）
 
 **复现最终结果，只要三步：**
 
