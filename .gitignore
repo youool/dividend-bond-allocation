@@ -23,3 +23,6 @@ report/_backup*.docx
 report/*.zip
 # 例外：课程提交用的 v6 代码包，需要随仓库提供下载
 !report/红利低波与国债配置策略_代码包_v6.zip
+
+# 便携版（217MB，含 Python 运行时，只在本地/U 盘分发）
+dist/

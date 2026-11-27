@@ -503,4 +503,5 @@ v2 的诊断是「用沪深300 的 PE 判断组合贵贱，但底仓是红利低
 - [x] 逐页讲稿（`report/汇报讲稿_18分钟.docx`，同时写在每页 PPT 备注里）
 - [x] 可下载代码包（`report/红利低波与国债配置策略_代码包_v6.zip`，0.93 MB，含 src／data／启动器／验证清单，解压即跑）
 - [x] 旧版归档（`report/历史版本/`，v3／v4／v5 及其说明；**提交以 v6 为准**，旧版数字口径已作废）
+- [x] 免安装便携版（`dist/board-portable/`，217 MB，含 Python 运行时与依赖；教室电脑插 U 盘双击即用，不进仓库）
 - [x] **远程仓库推送：https://github.com/youool/dividend-bond-allocation**（main，9 次提交）
