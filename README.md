@@ -144,6 +144,10 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 > 国内直连 pypi 很慢（实测单页 24 秒），务必加清华镜像，否则会卡在下载上十几分钟。
 
+**Windows 上不想敲命令**：双击仓库根目录的 `00_start_demo.bat`，
+它会自动找到本机的 `.venv`，依次跑主线回测与未来函数三关，约 12 秒，结束后直接打开 `charts/`。
+没有 `.venv` 时会退回系统 Python，缺依赖会给出安装提示而不是报错堆栈。
+
 **复现最终结果，只要三步：**
 
 ```bash
