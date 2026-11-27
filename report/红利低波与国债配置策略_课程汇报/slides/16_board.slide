@@ -1,0 +1,52 @@
+<Slide
+  style={{ width: 1280, height: 720, background: '#FFFFFF', padding: 60, position: 'relative', fontFamily: 'Microsoft YaHei' }}
+  notes={`前面这些数字，你们可能有一个疑问：是不是提前跑好、写死在表里的。这张图就是回答。\n左边四条滑块，右边是净值曲线。我拖一下目标波动，从 8% 拉到 12%，后端的 Python 就重新跑一遍回测，年化从 8.4% 变成 9.4%，回撤从 −6.5% 变成 −8.1%，曲线也整条上移。\n注意底部那行小字：本次计算 1.8 秒。这是服务器算的，不是我切了一张图。\n技术上它没有多神秘——后端只用 Python 标准库，没用 Flask，因为答辩现场不一定能联网装包。但它的价值在于：它让「内核是活的」这句话可以被当场验证，而不是靠我说。\n如果时间不够，这一段可以跳过，直接翻到下一页讲结论。`}
+>
+  <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#1A3D6D' }} />
+  <Text style={{ position: 'absolute', top: 22, right: 60, fontSize: 18, color: '#8B97A8' }}>03 回测结果</Text>
+
+  <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#1A2230', lineHeight: 1.3 }}>
+    这些数字不是念出来的，是刚刚算出来的
+  </Text>
+  <Box style={{ width: 1160, height: 1, background: '#D6DCE5', marginTop: 16 }} />
+
+  <Box style={{ flexDirection: 'row', gap: 26, marginTop: 22 }}>
+    <Box style={{ flexDirection: 'column', width: 340 }}>
+      <Box style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 16 }}>
+        <Box style={{ width: 5, height: 40, background: '#1A3D6D', marginTop: 3 }} />
+        <Text style={{ fontSize: 18, color: '#1A2230', lineHeight: 1.4 }}>
+          拖参数 → 后端重算<br />
+          <Text style={{ fontSize: 15, color: '#5A6675' }}>不是播放预渲染的图</Text>
+        </Text>
+      </Box>
+      <Box style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 16 }}>
+        <Box style={{ width: 5, height: 40, background: '#1A3D6D', marginTop: 3 }} />
+        <Text style={{ fontSize: 18, color: '#1A2230', lineHeight: 1.4 }}>
+          与命令行同一个函数<br />
+          <Text style={{ fontSize: 15, color: '#5A6675' }}>build + simulate，无第二套口径</Text>
+        </Text>
+      </Box>
+      <Box style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+        <Box style={{ width: 5, height: 40, background: '#8B2E2E', marginTop: 3 }} />
+        <Text style={{ fontSize: 18, color: '#1A2230', lineHeight: 1.4 }}>
+          默认参数与指标表<br />
+          <Text style={{ fontSize: 15, color: '#5A6675' }}>83.38／8.41／−6.54 逐项一致</Text>
+        </Text>
+      </Box>
+      <Box style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginTop: 16 }}>
+        <Box style={{ width: 5, height: 40, background: '#8B97A8', marginTop: 3 }} />
+        <Text style={{ fontSize: 18, color: '#1A2230', lineHeight: 1.4 }}>
+          现场就能打开<br />
+          <Text style={{ fontSize: 15, color: '#5A6675' }}>双击 01_start_board.bat，不需联网</Text>
+        </Text>
+      </Box>
+    </Box>
+
+    <Box style={{ flexDirection: 'column', alignItems: 'center', width: 736 }}>
+      <Image src="assets/board.png" style={{ width: 700, height: 437, objectFit: 'contain' }} />
+      <Text style={{ fontSize: 14, color: '#8B97A8', marginTop: 4 }}>
+        本地看板：目标波动 8% 对应 8.41%／−6.54%，拉到 12% 立刻变成 9.44%／−8.10%
+      </Text>
+    </Box>
+  </Box>
+</Slide>
